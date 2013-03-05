@@ -324,7 +324,7 @@
       <field type="int"    name="ReqCreatureOrGOId" />
       <field type="int"    name="ReqCreatureOrGOCount" />
       <field type="int"    name="condition_unk5" />
-      <field type="string" name="ObjectiveText1" />
+      <field type="string" name="ObjectiveText" />
       <field type="byte"   name="condition_unk6" />
       <field type="list" name="unk_count" counttype="byte" maxcount="10">
         <field type="int"  name="condition_unk8" />
