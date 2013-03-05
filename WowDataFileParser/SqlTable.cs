@@ -6,9 +6,9 @@ using System.Xml;
 
 namespace WowDataFileParser
 {
-    internal class StaructureTable
+    internal class SqlTable
     {
-        internal StaructureTable()
+        internal SqlTable()
         {
             var xml = new XmlDocument();
             xml.Load(Parser.DEF);

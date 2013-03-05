@@ -57,7 +57,7 @@ namespace WowDataFileParser
             Console.WriteLine("╠═══════════════════════════════════╬═════════════════║");
             try
             {
-                new StaructureTable();
+                new SqlTable();
             }
             catch (Exception ex)
             {

@@ -52,7 +52,7 @@
     <Compile Include="Readers\DBCReader.cs" />
     <Compile Include="Readers\IWowClientDBReader.cs" />
     <Compile Include="Readers\WDBReader.cs" />
-    <Compile Include="StaructureTable.cs" />
+    <Compile Include="SqlTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="definitions.xml">
