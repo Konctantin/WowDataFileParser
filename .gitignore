@@ -1,0 +1,15 @@
+
+!*/Profiles/*
+*.suo
+*.user
+bin/*
+*/bin/*
+*/obj/*
+obj/*
+*.orig
+*.rej
+*.patch
+*.log
+*.opensdf
+*.sdf
+*.rar
