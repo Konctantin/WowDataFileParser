@@ -241,32 +241,32 @@
   <questcache tablename="quest_template">
     <field type="int"    name="entry"  key="true" />
     <field type="int"    name="doubleEntry" />
-    <field type="int"    name="f_3" />
-    <field type="int"    name="f_4" />
+    <field type="int"    name="Method" />
+    <field type="int"    name="QuestLevel" />
     <field type="int"    name="f_5" />
-    <field type="int"    name="f_6" />
-    <field type="int"    name="f_7" />
-    <field type="int"    name="f_8" />
-    <field type="int"    name="f_9" />
-    <field type="int"    name="f_10" />
-    <field type="int"    name="f_11" />
-    <field type="int"    name="f_12" />
-    <field type="int"    name="f_13" />
-    <field type="int"    name="f_14" />
-    <field type="int"    name="f_15" />
-    <field type="int"    name="f_16" />
+    <field type="int"    name="MinLevel" />
+    <field type="int"    name="ZoneOrSort" />
+    <field type="int"    name="Type" />
+    <field type="int"    name="SuggestedPlayers" />
+    <field type="int"    name="NextQuestInChain" />
+    <field type="int"    name="RewXPId" />
+    <field type="int"    name="RewOrReqMoney" />
+    <field type="int"    name="RewMoneyMaxLevel" />
+    <field type="int"    name="RewSpell" />
+    <field type="int"    name="RewSpellCast" />
+    <field type="int"    name="RewHonorAddition" />
     <field type="float"  name="RewHonorMultiplier" />
-    <field type="int"    name="f_18" />
-    <field type="int"    name="f_19" />
-    <field type="int"    name="f_20" />
-    <field type="int"    name="f_21" />
-    <field type="int"    name="f_22" />
+    <field type="int"    name="SrcItemId" />
+    <field type="int"    name="QuestFlags" />
+    <field type="int"    name="QuestFlags2" />
+    <field type="int"    name="CharTitleId" />
+    <field type="int"    name="PlayersSlain" />
     <field type="int"    name="f_23" />
-    <field type="int"    name="f_24" />
-    <field type="int"    name="f_25" />
+    <field type="int"    name="RewSkill" />
+    <field type="int"    name="RewSkillValue" />
     <field type="int"    name="f_26" />
-    <field type="int"    name="f_27" />
-    <field type="int"    name="f_28" />
+    <field type="int"    name="PortraitGiver" />
+    <field type="int"    name="PortraitTurnIn" />
 
     <field type="list" maxcount="4">
       <field type="int" name="RewItemId" />
@@ -279,20 +279,20 @@
     </field>
 
     <field type="list" maxcount="5">
-      <field type="int" name="RawFactionId" />
+      <field type="int" name="RewRepFaction" />
     </field>
     
     <field type="list" maxcount="5">
-      <field type="int" name="RawFactionVal" />
+      <field type="int" name="RewRepValueId" />
     </field>
     
     <field type="list" maxcount="5">
-      <field type="int" name="RawFactionValOverride" />
+      <field type="int" name="RewRepValue" />
     </field>
 
     <field type="list" maxcount="4">
-      <field type="int" name="unk1" />
-      <field type="int" name="unk2" />
+      <field type="int" name="RewCurrencyId" />
+      <field type="int" name="RewCurrencyCount" />
     </field>
 
     <field type="int"    name="PointMapId" />
@@ -310,21 +310,21 @@
     <field type="string" name="npc_frame_access_text3" />
     <field type="string" name="npc_frame_access_text4" />
 
-    <field type="int"    name="f_85" />
-    <field type="int"    name="f_86" />
+    <field type="int"    name="SoundAccept" />
+    <field type="int"    name="SoundTurnIn" />
 
     <field type="list" maxcount="4">
-      <field type="int" name="unk3" />
-      <field type="int" name="unk4" />
+      <field type="int" name="ReqSourceId" />
+      <field type="int" name="ReqSourceCount" />
     </field>
 
     <field type="list" name="condition_count" counttype="byte" maxcount="10">
       <field type="int"    name="condition_unk1" />
-      <field type="byte"   name="condition_unk2" />
-      <field type="int"    name="condition_unk3" />
-      <field type="int"    name="condition_unk4" />
+      <field type="byte"   name="condition" />
+      <field type="int"    name="ReqCreatureOrGOId" />
+      <field type="int"    name="ReqCreatureOrGOCount" />
       <field type="int"    name="condition_unk5" />
-      <field type="string" name="condition_text" />
+      <field type="string" name="ObjectiveText1" />
       <field type="byte"   name="condition_unk6" />
       <field type="list" name="unk_count" counttype="byte" maxcount="10">
         <field type="int"  name="condition_unk8" />
