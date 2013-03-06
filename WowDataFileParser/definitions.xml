@@ -1,385 +1,416 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Definitions build="13596">
-  <Item tablename="item_additional">
-    <field type="uint"   name="entry" key="true"/>
-    <field type="uint"   name="class"/>
-    <field type="uint"   name="subclass"/>
-    <field type="int"    name="unk0"/>
-    <field type="int"    name="material"/>
-    <field type="uint"   name="displayid"/>
-    <field type="uint"   name="inventorytype"/>
-    <field type="uint"   name="sheath"/>
-  </Item>
-  
-  <Item-sparse tablename="item_sparse">
-    <field type="int"    name="entry" key="true"/>
-    <field type="int"    name="quality"/>
-    <field type="uint"   name="flags"/>
-    <field type="uint"   name="flags2"/>
-    <field type="int"    name="UNK431"/>
-    <field type="int"    name="UNK432"/>
-    <field type="int"    name="BuyCount"/>
-    <field type="int"    name="buyprice"/>
-    <field type="int"    name="sellprice"/>
-    <field type="int"    name="inventorytype"/>
-    <field type="int"    name="allowableclass"/>
-    <field type="int"    name="allowablerace"/>
-    <field type="int"    name="itemlevel"/>
-    <field type="int"    name="requiredlevel"/>
-    <field type="int"    name="requiredskill"/>
-    <field type="int"    name="requiredskillrank"/>
-    <field type="int"    name="requiredspell"/>
-    <field type="int"    name="requiredhonorrank"/>
-    <field type="int"    name="requiredcityrank"/>
-    <field type="int"    name="requiredreputationfaction"/>
-    <field type="int"    name="requiredreputationrank"/>
-    <field type="int"    name="maxcount"/>
-    <field type="int"    name="stackable"/>
-    <field type="int"    name="containerslots"/>
-    <field type="int"    name="stat_type1"/>
-    <field type="int"    name="stat_type2"/>
-    <field type="int"    name="stat_type3"/>
-    <field type="int"    name="stat_type4"/>
-    <field type="int"    name="stat_type5"/>
-    <field type="int"    name="stat_type6"/>
-    <field type="int"    name="stat_type7"/>
-    <field type="int"    name="stat_type8"/>
-    <field type="int"    name="stat_type9"/>
-    <field type="int"    name="stat_type10"/>
-    <field type="int"    name="stat_value1"/>
-    <field type="int"    name="stat_value2"/>
-    <field type="int"    name="stat_value3"/>
-    <field type="int"    name="stat_value4"/>
-    <field type="int"    name="stat_value5"/>
-    <field type="int"    name="stat_value6"/>
-    <field type="int"    name="stat_value7"/>
-    <field type="int"    name="stat_value8"/>
-    <field type="int"    name="stat_value9"/>
-    <field type="int"    name="stat_value10"/>
-    <field type="int"    name="stat_unk1_1"/>
-    <field type="int"    name="stat_unk1_2"/>
-    <field type="int"    name="stat_unk1_3"/>
-    <field type="int"    name="stat_unk1_4"/>
-    <field type="int"    name="stat_unk1_5"/>
-    <field type="int"    name="stat_unk1_6"/>
-    <field type="int"    name="stat_unk1_7"/>
-    <field type="int"    name="stat_unk1_8"/>
-    <field type="int"    name="stat_unk1_9"/>
-    <field type="int"    name="stat_unk1_10"/>
-    <field type="int"    name="stat_unk2_1"/>
-    <field type="int"    name="stat_unk2_2"/>
-    <field type="int"    name="stat_unk2_3"/>
-    <field type="int"    name="stat_unk2_4"/>
-    <field type="int"    name="stat_unk2_5"/>
-    <field type="int"    name="stat_unk2_6"/>
-    <field type="int"    name="stat_unk2_7"/>
-    <field type="int"    name="stat_unk2_8"/>
-    <field type="int"    name="stat_unk2_9"/>
-    <field type="int"    name="stat_unk2_10"/>
-    <field type="int"    name="scalingstatdistribution"/>
-    <field type="int"    name="damagetype"/>
-    <field type="int"    name="delay"/>
-    <field type="float"  name="rangedmodrange"/>
-    <field type="int"    name="spellid_1"/>
-    <field type="int"    name="spellid_2"/>
-    <field type="int"    name="spellid_3"/>
-    <field type="int"    name="spellid_4"/>
-    <field type="int"    name="spellid_5"/>
-    <field type="int"    name="spelltrigger_1"/>
-    <field type="int"    name="spelltrigger_2"/>
-    <field type="int"    name="spelltrigger_3"/>
-    <field type="int"    name="spelltrigger_4"/>
-    <field type="int"    name="spelltrigger_5"/>
-    <field type="int"    name="spellcharges_1"/>
-    <field type="int"    name="spellcharges_2"/>
-    <field type="int"    name="spellcharges_3"/>
-    <field type="int"    name="spellcharges_4"/>
-    <field type="int"    name="spellcharges_5"/>
-    <field type="int"    name="spellcooldown_1"/>
-    <field type="int"    name="spellcooldown_2"/>
-    <field type="int"    name="spellcooldown_3"/>
-    <field type="int"    name="spellcooldown_4"/>
-    <field type="int"    name="spellcooldown_5"/>
-    <field type="int"    name="spellcategory_1"/>
-    <field type="int"    name="spellcategory_2"/>
-    <field type="int"    name="spellcategory_3"/>
-    <field type="int"    name="spellcategory_4"/>
-    <field type="int"    name="spellcategory_5"/>
-    <field type="int"    name="spellcategorycooldown_1"/>
-    <field type="int"    name="spellcategorycooldown_2"/>
-    <field type="int"    name="spellcategorycooldown_3"/>
-    <field type="int"    name="spellcategorycooldown_4"/>
-    <field type="int"    name="spellcategorycooldown_5"/>
-    <field type="int"    name="bonding"/>
-    <field type="string" name="name"/>
-    <field type="string" name="name2"/>
-    <field type="string" name="name3"/>
-    <field type="string" name="name4"/>
-    <field type="string" name="description"/>
-    <field type="int"    name="UNK01"/>
-    <field type="int"    name="pagetext"/>
-    <field type="int"    name="languageid"/>
-    <field type="int"    name="pagematerial"/>
-    <field type="int"    name="startquest"/>
-    <field type="int"    name="lockid"/>
-    <field type="int"    name="material"/>
-    <field type="int"    name="sheath"/>
-    <field type="int"    name="randomproperty"/>
-    <field type="int"    name="randomsuffix"/>
-    <field type="int"    name="itemset"/>
-    <field type="int"    name="area"/>
-    <field type="int"    name="map"/>
-    <field type="int"    name="bagfamily"/>
-    <field type="int"    name="totemcategory"/>
-    <field type="int"    name="socketcolor_1"/>
-    <field type="int"    name="socketcolor_2"/>
-    <field type="int"    name="socketcolor_3"/>
-    <field type="int"    name="socketcontent_1"/>
-    <field type="int"    name="socketcontent_2"/>
-    <field type="int"    name="socketcontent_3"/>
-    <field type="int"    name="socketbonus"/>
-    <field type="int"    name="gemproperties"/>
-    <field type="float"  name="armordamagemodifier"/>
-    <field type="int"    name="duration"/>
-    <field type="int"    name="itemlimitcategory"/>
-    <field type="int"    name="holidayid"/>
-    <field type="float"  name="statscalingfactor"/>
-    <field type="int"    name="field_130"/>
-    <field type="int"    name="field_131"/>
-  </Item-sparse>
-  
-  <creaturecache tablename="creature_template">
-    <field type="uint"   name="entry" max="100000" key="true"/>
-    <field type="string" name="name"/>
-    <field type="string" name="name2"/>
-    <field type="string" name="name3"/>
-    <field type="string" name="name4"/>
-    <field type="string" name="UnkStr1"/>
-    <field type="string" name="UnkStr2"/>
-    <field type="string" name="UnkStr3"/>
-    <field type="string" name="UnkStr4"/>
-    <field type="string" name="subname"/>
-    <field type="string" name="IconName"/>
-    <field type="string" name="Unk501"/>
-    <field type="uint"   name="type_flag"/>
-    <field type="uint"   name="type"/>
-    <field type="int"    name="family"/>
-    <field type="uint"   name="rank"/>
-    <field type="uint"   name="Unk2"/>
-    <field type="uint"   name="KillCredit1"/>
-    <field type="uint"   name="KillCredit2"/>
-    <field type="uint"   name="modelId1"/>
-    <field type="uint"   name="modelId2"/>
-    <field type="uint"   name="modelId3"/>
-    <field type="uint"   name="modelId4"/>
-    <field type="float"  name="HealthModifier"/>
-    <field type="float"  name="PowerModifier"/>
-    <field type="sbyte"  name="RacialLeader"/>
-    <field type="uint"   name="QuestItem1"/>
-    <field type="uint"   name="QuestItem2"/>
-    <field type="uint"   name="QuestItem3"/>
-    <field type="uint"   name="QuestItem4"/>
-    <field type="uint"   name="QuestItem5"/>
-    <field type="uint"   name="QuestItem6"/>
-    <field type="uint"   name="MovementId"/>
-    <field type="uint"   name="Unk"/>
-  </creaturecache>
-  
-  <gameobjectcache tablename="gameobject_template">
-    <field type="uint"   name="entry" max="300000" key="true"/>
-    <field type="uint"   name="type"/>
-    <field type="uint"   name="displayId"/>
-    <field type="string" name="name"/>
-    <field type="string" name="name1"/>
-    <field type="string" name="name2"/>
-    <field type="string" name="name3"/>
-    <field type="string" name="name4"/>
-    <field type="string" name="castBarCaption"/>
-    <field type="string" name="name6"/>
-    <field type="uint"   name="data0"/>
-    <field type="uint"   name="data1"/>
-    <field type="uint"   name="data2"/>
-    <field type="uint"   name="data3"/>
-    <field type="uint"   name="data4"/>
-    <field type="uint"   name="data5"/>
-    <field type="uint"   name="data6"/>
-    <field type="uint"   name="data7"/>
-    <field type="uint"   name="data8"/>
-    <field type="uint"   name="data9"/>
-    <field type="uint"   name="data10"/>
-    <field type="uint"   name="data11"/>
-    <field type="uint"   name="data12"/>
-    <field type="uint"   name="data13"/>
-    <field type="uint"   name="data14"/>
-    <field type="uint"   name="data15"/>
-    <field type="uint"   name="data16"/>
-    <field type="uint"   name="data17"/>
-    <field type="uint"   name="data18"/>
-    <field type="uint"   name="data19"/>
-    <field type="uint"   name="data20"/>
-    <field type="uint"   name="data21"/>
-    <field type="uint"   name="data22"/>
-    <field type="uint"   name="data23"/>
-    <field type="uint"   name="data24"/>
-    <field type="uint"   name="data25"/>
-    <field type="uint"   name="data26"/>
-    <field type="uint"   name="data27"/>
-    <field type="uint"   name="data28"/>
-    <field type="uint"   name="data29"/>
-    <field type="uint"   name="data30"/>
-    <field type="uint"   name="data31"/>
-    <field type="float"  name="Size"/>
-    <field type="uint"   name="QuestItem1"/>
-    <field type="uint"   name="QuestItem2"/>
-    <field type="uint"   name="QuestItem3"/>
-    <field type="uint"   name="QuestItem4"/>
-    <field type="uint"   name="QuestItem5"/>
-    <field type="uint"   name="QuestItem6"/>
-    <field type="uint"   name="Unk"/>
-  </gameobjectcache>
+    <Item tablename="item_additional">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="class"/>
+        <field type="uint"   name="subclass"/>
+        <field type="int"    name="unk0"/>
+        <field type="int"    name="material"/>
+        <field type="uint"   name="displayid"/>
+        <field type="uint"   name="inventorytype"/>
+        <field type="uint"   name="sheath"/>
+    </Item>
 
-  <questcache tablename="quest_template">
-    <field type="int"    name="entry"  key="true" />
-    <field type="int"    name="doubleEntry" />
-    <field type="int"    name="Method" />
-    <field type="int"    name="QuestLevel" />
-    <field type="int"    name="f_5" />
-    <field type="int"    name="MinLevel" />
-    <field type="int"    name="ZoneOrSort" />
-    <field type="int"    name="Type" />
-    <field type="int"    name="SuggestedPlayers" />
-    <field type="int"    name="NextQuestInChain" />
-    <field type="int"    name="RewXPId" />
-    <field type="int"    name="RewOrReqMoney" />
-    <field type="int"    name="RewMoneyMaxLevel" />
-    <field type="int"    name="RewSpell" />
-    <field type="int"    name="RewSpellCast" />
-    <field type="int"    name="RewHonorAddition" />
-    <field type="float"  name="RewHonorMultiplier" />
-    <field type="int"    name="SrcItemId" />
-    <field type="int"    name="QuestFlags" />
-    <field type="int"    name="QuestFlags2" />
-    <field type="int"    name="CharTitleId" />
-    <field type="int"    name="PlayersSlain" />
-    <field type="int"    name="f_23" />
-    <field type="int"    name="RewSkill" />
-    <field type="int"    name="RewSkillValue" />
-    <field type="int"    name="f_26" />
-    <field type="int"    name="PortraitGiver" />
-    <field type="int"    name="PortraitTurnIn" />
+    <Item-sparse tablename="item_sparse">
+        <field type="int"    name="entry" key="true"/>
+        <field type="int"    name="quality"/>
+        <field type="uint"   name="flags"/>
+        <field type="uint"   name="flags2"/>
+        <field type="int"    name="UNK431"/>
+        <field type="int"    name="UNK432"/>
+        <field type="int"    name="BuyCount"/>
+        <field type="int"    name="buyprice"/>
+        <field type="int"    name="sellprice"/>
+        <field type="int"    name="inventorytype"/>
+        <field type="int"    name="allowableclass"/>
+        <field type="int"    name="allowablerace"/>
+        <field type="int"    name="itemlevel"/>
+        <field type="int"    name="requiredlevel"/>
+        <field type="int"    name="requiredskill"/>
+        <field type="int"    name="requiredskillrank"/>
+        <field type="int"    name="requiredspell"/>
+        <field type="int"    name="requiredhonorrank"/>
+        <field type="int"    name="requiredcityrank"/>
+        <field type="int"    name="requiredreputationfaction"/>
+        <field type="int"    name="requiredreputationrank"/>
+        <field type="int"    name="maxcount"/>
+        <field type="int"    name="stackable"/>
+        <field type="int"    name="containerslots"/>
+        <field type="int"    name="stat_type1"/>
+        <field type="int"    name="stat_type2"/>
+        <field type="int"    name="stat_type3"/>
+        <field type="int"    name="stat_type4"/>
+        <field type="int"    name="stat_type5"/>
+        <field type="int"    name="stat_type6"/>
+        <field type="int"    name="stat_type7"/>
+        <field type="int"    name="stat_type8"/>
+        <field type="int"    name="stat_type9"/>
+        <field type="int"    name="stat_type10"/>
+        <field type="int"    name="stat_value1"/>
+        <field type="int"    name="stat_value2"/>
+        <field type="int"    name="stat_value3"/>
+        <field type="int"    name="stat_value4"/>
+        <field type="int"    name="stat_value5"/>
+        <field type="int"    name="stat_value6"/>
+        <field type="int"    name="stat_value7"/>
+        <field type="int"    name="stat_value8"/>
+        <field type="int"    name="stat_value9"/>
+        <field type="int"    name="stat_value10"/>
+        <field type="int"    name="stat_unk1_1"/>
+        <field type="int"    name="stat_unk1_2"/>
+        <field type="int"    name="stat_unk1_3"/>
+        <field type="int"    name="stat_unk1_4"/>
+        <field type="int"    name="stat_unk1_5"/>
+        <field type="int"    name="stat_unk1_6"/>
+        <field type="int"    name="stat_unk1_7"/>
+        <field type="int"    name="stat_unk1_8"/>
+        <field type="int"    name="stat_unk1_9"/>
+        <field type="int"    name="stat_unk1_10"/>
+        <field type="int"    name="stat_unk2_1"/>
+        <field type="int"    name="stat_unk2_2"/>
+        <field type="int"    name="stat_unk2_3"/>
+        <field type="int"    name="stat_unk2_4"/>
+        <field type="int"    name="stat_unk2_5"/>
+        <field type="int"    name="stat_unk2_6"/>
+        <field type="int"    name="stat_unk2_7"/>
+        <field type="int"    name="stat_unk2_8"/>
+        <field type="int"    name="stat_unk2_9"/>
+        <field type="int"    name="stat_unk2_10"/>
+        <field type="int"    name="scalingstatdistribution"/>
+        <field type="int"    name="damagetype"/>
+        <field type="int"    name="delay"/>
+        <field type="float"  name="rangedmodrange"/>
+        <field type="int"    name="spellid_1"/>
+        <field type="int"    name="spellid_2"/>
+        <field type="int"    name="spellid_3"/>
+        <field type="int"    name="spellid_4"/>
+        <field type="int"    name="spellid_5"/>
+        <field type="int"    name="spelltrigger_1"/>
+        <field type="int"    name="spelltrigger_2"/>
+        <field type="int"    name="spelltrigger_3"/>
+        <field type="int"    name="spelltrigger_4"/>
+        <field type="int"    name="spelltrigger_5"/>
+        <field type="int"    name="spellcharges_1"/>
+        <field type="int"    name="spellcharges_2"/>
+        <field type="int"    name="spellcharges_3"/>
+        <field type="int"    name="spellcharges_4"/>
+        <field type="int"    name="spellcharges_5"/>
+        <field type="int"    name="spellcooldown_1"/>
+        <field type="int"    name="spellcooldown_2"/>
+        <field type="int"    name="spellcooldown_3"/>
+        <field type="int"    name="spellcooldown_4"/>
+        <field type="int"    name="spellcooldown_5"/>
+        <field type="int"    name="spellcategory_1"/>
+        <field type="int"    name="spellcategory_2"/>
+        <field type="int"    name="spellcategory_3"/>
+        <field type="int"    name="spellcategory_4"/>
+        <field type="int"    name="spellcategory_5"/>
+        <field type="int"    name="spellcategorycooldown_1"/>
+        <field type="int"    name="spellcategorycooldown_2"/>
+        <field type="int"    name="spellcategorycooldown_3"/>
+        <field type="int"    name="spellcategorycooldown_4"/>
+        <field type="int"    name="spellcategorycooldown_5"/>
+        <field type="int"    name="bonding"/>
+        <field type="string" name="name"/>
+        <field type="string" name="name2"/>
+        <field type="string" name="name3"/>
+        <field type="string" name="name4"/>
+        <field type="string" name="description"/>
+        <field type="int"    name="UNK01"/>
+        <field type="int"    name="pagetext"/>
+        <field type="int"    name="languageid"/>
+        <field type="int"    name="pagematerial"/>
+        <field type="int"    name="startquest"/>
+        <field type="int"    name="lockid"/>
+        <field type="int"    name="material"/>
+        <field type="int"    name="sheath"/>
+        <field type="int"    name="randomproperty"/>
+        <field type="int"    name="randomsuffix"/>
+        <field type="int"    name="itemset"/>
+        <field type="int"    name="area"/>
+        <field type="int"    name="map"/>
+        <field type="int"    name="bagfamily"/>
+        <field type="int"    name="totemcategory"/>
+        <field type="int"    name="socketcolor_1"/>
+        <field type="int"    name="socketcolor_2"/>
+        <field type="int"    name="socketcolor_3"/>
+        <field type="int"    name="socketcontent_1"/>
+        <field type="int"    name="socketcontent_2"/>
+        <field type="int"    name="socketcontent_3"/>
+        <field type="int"    name="socketbonus"/>
+        <field type="int"    name="gemproperties"/>
+        <field type="float"  name="armordamagemodifier"/>
+        <field type="int"    name="duration"/>
+        <field type="int"    name="itemlimitcategory"/>
+        <field type="int"    name="holidayid"/>
+        <field type="float"  name="statscalingfactor"/>
+        <field type="int"    name="field_130"/>
+        <field type="int"    name="field_131"/>
+    </Item-sparse>
 
-    <field type="list" maxcount="4">
-      <field type="int" name="RewItemId" />
-      <field type="int" name="RewItemCount" />
-    </field>
+    <creaturecache tablename="creature_template">
+        <field type="uint"   name="entry" max="100000" key="true"/>
+        <field type="string" name="name"/>
+        <field type="string" name="name2"/>
+        <field type="string" name="name3"/>
+        <field type="string" name="name4"/>
+        <field type="string" name="UnkStr1"/>
+        <field type="string" name="UnkStr2"/>
+        <field type="string" name="UnkStr3"/>
+        <field type="string" name="UnkStr4"/>
+        <field type="string" name="subname"/>
+        <field type="string" name="IconName"/>
+        <field type="string" name="Unk501"/>
+        <field type="uint"   name="type_flag"/>
+        <field type="uint"   name="type"/>
+        <field type="int"    name="family"/>
+        <field type="uint"   name="rank"/>
+        <field type="uint"   name="Unk2"/>
+        <field type="uint"   name="KillCredit1"/>
+        <field type="uint"   name="KillCredit2"/>
+        <field type="uint"   name="modelId1"/>
+        <field type="uint"   name="modelId2"/>
+        <field type="uint"   name="modelId3"/>
+        <field type="uint"   name="modelId4"/>
+        <field type="float"  name="HealthModifier"/>
+        <field type="float"  name="PowerModifier"/>
+        <field type="sbyte"  name="RacialLeader"/>
+        <field type="uint"   name="QuestItem1"/>
+        <field type="uint"   name="QuestItem2"/>
+        <field type="uint"   name="QuestItem3"/>
+        <field type="uint"   name="QuestItem4"/>
+        <field type="uint"   name="QuestItem5"/>
+        <field type="uint"   name="QuestItem6"/>
+        <field type="uint"   name="MovementId"/>
+        <field type="uint"   name="Unk"/>
+    </creaturecache>
 
-    <field type="list" maxcount="6">
-      <field type="int" name="RewChoiceItemId" />
-      <field type="int" name="RewChoiceItemCount" />
-    </field>
+    <gameobjectcache tablename="gameobject_template">
+        <field type="uint"   name="entry" max="300000" key="true"/>
+        <field type="uint"   name="type"/>
+        <field type="uint"   name="displayId"/>
+        <field type="string" name="name"/>
+        <field type="string" name="name1"/>
+        <field type="string" name="name2"/>
+        <field type="string" name="name3"/>
+        <field type="string" name="name4"/>
+        <field type="string" name="castBarCaption"/>
+        <field type="string" name="name6"/>
+        <field type="uint"   name="data0"/>
+        <field type="uint"   name="data1"/>
+        <field type="uint"   name="data2"/>
+        <field type="uint"   name="data3"/>
+        <field type="uint"   name="data4"/>
+        <field type="uint"   name="data5"/>
+        <field type="uint"   name="data6"/>
+        <field type="uint"   name="data7"/>
+        <field type="uint"   name="data8"/>
+        <field type="uint"   name="data9"/>
+        <field type="uint"   name="data10"/>
+        <field type="uint"   name="data11"/>
+        <field type="uint"   name="data12"/>
+        <field type="uint"   name="data13"/>
+        <field type="uint"   name="data14"/>
+        <field type="uint"   name="data15"/>
+        <field type="uint"   name="data16"/>
+        <field type="uint"   name="data17"/>
+        <field type="uint"   name="data18"/>
+        <field type="uint"   name="data19"/>
+        <field type="uint"   name="data20"/>
+        <field type="uint"   name="data21"/>
+        <field type="uint"   name="data22"/>
+        <field type="uint"   name="data23"/>
+        <field type="uint"   name="data24"/>
+        <field type="uint"   name="data25"/>
+        <field type="uint"   name="data26"/>
+        <field type="uint"   name="data27"/>
+        <field type="uint"   name="data28"/>
+        <field type="uint"   name="data29"/>
+        <field type="uint"   name="data30"/>
+        <field type="uint"   name="data31"/>
+        <field type="float"  name="Size"/>
+        <field type="uint"   name="QuestItem1"/>
+        <field type="uint"   name="QuestItem2"/>
+        <field type="uint"   name="QuestItem3"/>
+        <field type="uint"   name="QuestItem4"/>
+        <field type="uint"   name="QuestItem5"/>
+        <field type="uint"   name="QuestItem6"/>
+        <field type="uint"   name="Unk"/>
+    </gameobjectcache>
 
-    <field type="list" maxcount="5">
-      <field type="int" name="RewRepFaction" />
-    </field>
-    
-    <field type="list" maxcount="5">
-      <field type="int" name="RewRepValueId" />
-    </field>
-    
-    <field type="list" maxcount="5">
-      <field type="int" name="RewRepValue" />
-    </field>
+    <questcache tablename="quest_template">
+        <field type="int"    name="entry"  key="true" />
+        <field type="int"    name="doubleEntry" />
+        <field type="int"    name="Method" />
+        <field type="int"    name="QuestLevel" />
+        <field type="int"    name="f_5" />
+        <field type="int"    name="MinLevel" />
+        <field type="int"    name="ZoneOrSort" />
+        <field type="int"    name="Type" />
+        <field type="int"    name="SuggestedPlayers" />
+        <field type="int"    name="NextQuestInChain" />
+        <field type="int"    name="RewXPId" />
+        <field type="int"    name="RewOrReqMoney" />
+        <field type="int"    name="RewMoneyMaxLevel" />
+        <field type="int"    name="RewSpell" />
+        <field type="int"    name="RewSpellCast" />
+        <field type="int"    name="RewHonorAddition" />
+        <field type="float"  name="RewHonorMultiplier" />
+        <field type="int"    name="SrcItemId" />
+        <field type="int"    name="QuestFlags" />
+        <field type="int"    name="QuestFlags2" />
+        <field type="int"    name="CharTitleId" />
+        <field type="int"    name="PlayersSlain" />
+        <field type="int"    name="f_23" />
+        <field type="int"    name="RewSkill" />
+        <field type="int"    name="RewSkillValue" />
+        <field type="int"    name="f_26" />
+        <field type="int"    name="PortraitGiver" />
+        <field type="int"    name="PortraitTurnIn" />
 
-    <field type="list" maxcount="4">
-      <field type="int" name="RewCurrencyId" />
-      <field type="int" name="RewCurrencyCount" />
-    </field>
+        <field type="list" maxcount="4">
+            <field type="int" name="RewItemId" />
+            <field type="int" name="RewItemCount" />
+        </field>
 
-    <field type="int"    name="PointMapId" />
-    <field type="float"  name="PointX" />
-    <field type="float"  name="PointY" />
-    <field type="int"    name="PointOpt" />
+        <field type="list" maxcount="6">
+            <field type="int" name="RewChoiceItemId" />
+            <field type="int" name="RewChoiceItemCount" />
+        </field>
 
-    <field type="string" name="title" />
-    <field type="string" name="objectives" />
-    <field type="string" name="details" />
-    <field type="string" name="end_text" />
-    <field type="string" name="completed_text" />
-    <field type="string" name="npc_frame_access_text1" />
-    <field type="string" name="npc_frame_access_text2" />
-    <field type="string" name="npc_frame_access_text3" />
-    <field type="string" name="npc_frame_access_text4" />
+        <field type="list" maxcount="5">
+            <field type="int" name="RewRepFaction" />
+        </field>
 
-    <field type="int"    name="SoundAccept" />
-    <field type="int"    name="SoundTurnIn" />
+        <field type="list" maxcount="5">
+            <field type="int" name="RewRepValueId" />
+        </field>
 
-    <field type="list" maxcount="4">
-      <field type="int" name="ReqSourceId" />
-      <field type="int" name="ReqSourceCount" />
-    </field>
+        <field type="list" maxcount="5">
+            <field type="int" name="RewRepValue" />
+        </field>
 
-    <field type="list" name="condition_count" counttype="byte" maxcount="10">
-      <field type="int"    name="condition_unk1" />
-      <field type="byte"   name="condition" />
-      <field type="int"    name="ReqCreatureOrGOId" />
-      <field type="int"    name="ReqCreatureOrGOCount" />
-      <field type="int"    name="condition_unk5" />
-      <field type="string" name="ObjectiveText" />
-      <field type="byte"   name="condition_unk6" />
-      <field type="list" name="unk_count" counttype="byte" maxcount="10">
-        <field type="int"  name="condition_unk8" />
-      </field>
-    </field>
-  </questcache>
-  
-  <npccache tablename="npc_text">
-    <field type="uint"   name="Id" key="true"/>
+        <field type="list" maxcount="4">
+            <field type="int" name="RewCurrencyId" />
+            <field type="int" name="RewCurrencyCount" />
+        </field>
 
-    <field type="float"  name="prob1"/>
-    <field type="float"  name="prob2"/>
-    <field type="float"  name="prob3"/>
-    <field type="float"  name="prob4"/>
-    <field type="float"  name="prob5"/>
-    <field type="float"  name="prob6"/>
-    <field type="float"  name="prob7"/>
-    <field type="float"  name="prob8"/>
+        <field type="int"    name="PointMapId" />
+        <field type="float"  name="PointX" />
+        <field type="float"  name="PointY" />
+        <field type="int"    name="PointOpt" />
 
-    <field type="uint"  name="textId1"/>
-    <field type="uint"  name="textId2"/>
-    <field type="uint"  name="textId3"/>
-    <field type="uint"  name="textId4"/>
-    <field type="uint"  name="textId5"/>
-    <field type="uint"  name="textId6"/>
-    <field type="uint"  name="textId7"/>
-    <field type="uint"  name="textId8"/>
-  </npccache>
+        <field type="string" name="title" />
+        <field type="string" name="objectives" />
+        <field type="string" name="details" />
+        <field type="string" name="end_text" />
+        <field type="string" name="completed_text" />
+        <field type="string" name="npc_frame_access_text1" />
+        <field type="string" name="npc_frame_access_text2" />
+        <field type="string" name="npc_frame_access_text3" />
+        <field type="string" name="npc_frame_access_text4" />
 
-  <BroadcastText tablename="broadcast_text">
-    <field type="uint"   name="entry" key="true"/>
-    <field type="uint"   name="lang" />
-    <field type="string" name="text1" />
-    <field type="string" name="text2" />
-    <field type="uint"   name="unk1" />
-    <field type="uint"   name="unk2" />
-    <field type="uint"   name="unk3" />
-    <field type="uint"   name="unk4" />
-    <field type="uint"   name="unk5" />
-    <field type="uint"   name="unk6" />
-    <field type="uint"   name="unk7" />
-    <field type="uint"   name="unk8" />
-    <field type="uint"   name="unk9" />
-  </BroadcastText>
-  
-  <pagetextcache tablename="page_text">
-    <field type="uint"   name="entry"  key="true"/>
-    <field type="string" name="Text"/>
-    <field type="uint"   name="next_page"/>
-  </pagetextcache>
-  
-  <QueryFinalPack>
-    <query text=""/>
-    <query text="-- Merge 2 table (Item and Item-sparse) INSERT IGNORE INTO `item_template` (`locale`, `entry`, `quality`, `flags`, `flags2`, `UNK431`, `UNK432`, `BuyCount`, `buyprice`, `sellprice`, `inventorytype`, `allowableclass`, `allowablerace`, `itemlevel`, `requiredlevel`, `requiredskill`, `requiredskillrank`, `requiredspell`, `requiredhonorrank`, `requiredcityrank`, `requiredreputationfaction`, `requiredreputationrank`, `maxcount`, `stackable`, `containerslots`, `stat_type1`, `stat_type2`, `stat_type3`, `stat_type4`, `stat_type5`, `stat_type6`, `stat_type7`, `stat_type8`, `stat_type9`, `stat_type10`, `stat_value1`, `stat_value2`, `stat_value3`, `stat_value4`, `stat_value5`, `stat_value6`, `stat_value7`, `stat_value8`, `stat_value9`, `stat_value10`, `stat_unk1_1`, `stat_unk1_2`, `stat_unk1_3`, `stat_unk1_4`, `stat_unk1_5`, `stat_unk1_6`, `stat_unk1_7`, `stat_unk1_8`, `stat_unk1_9`, `stat_unk1_10`, `stat_unk2_1`, `stat_unk2_2`, `stat_unk2_3`, `stat_unk2_4`, `stat_unk2_5`, `stat_unk2_6`, `stat_unk2_7`, `stat_unk2_8`, `stat_unk2_9`, `stat_unk2_10`, `scalingstatdistribution`, `damagetype`, `delay`, `rangedmodrange`, `spellid_1`, `spellid_2`, `spellid_3`, `spellid_4`, `spellid_5`, `spelltrigger_1`, `spelltrigger_2`, `spelltrigger_3`, `spelltrigger_4`, `spelltrigger_5`, `spellcharges_1`, `spellcharges_2`, `spellcharges_3`, `spellcharges_4`, `spellcharges_5`, `spellcooldown_1`, `spellcooldown_2`, `spellcooldown_3`, `spellcooldown_4`, `spellcooldown_5`, `spellcategory_1`, `spellcategory_2`, `spellcategory_3`, `spellcategory_4`, `spellcategory_5`, `spellcategorycooldown_1`, `spellcategorycooldown_2`, `spellcategorycooldown_3`, `spellcategorycooldown_4`, `spellcategorycooldown_5`, `bonding`, `name`, `name2`, `name3`, `name4`, `description`, `UNK01`, `pagetext`, `languageid`, `pagematerial`, `startquest`, `lockid`, `material`, `sheath`, `randomproperty`, `randomsuffix`, `itemset`, `area`, `map`, `bagfamily`, `totemcategory`, `socketcolor_1`, `socketcolor_2`, `socketcolor_3`, `socketcontent_1`, `socketcontent_2`, `socketcontent_3`, `socketbonus`, `gemproperties`, `armordamagemodifier`, `duration`, `itemlimitcategory`, `holidayid`, `statscalingfactor`, `field_130`, `field_131`) SELECT `locale`, `entry`, `quality`, `flags`, `flags2`, `UNK431`, `UNK432`, `BuyCount`, `buyprice`, `sellprice`, `inventorytype`, `allowableclass`, `allowablerace`, `itemlevel`, `requiredlevel`, `requiredskill`, `requiredskillrank`, `requiredspell`, `requiredhonorrank`, `requiredcityrank`, `requiredreputationfaction`, `requiredreputationrank`, `maxcount`, `stackable`, `containerslots`, `stat_type1`, `stat_type2`, `stat_type3`, `stat_type4`, `stat_type5`, `stat_type6`, `stat_type7`, `stat_type8`, `stat_type9`, `stat_type10`, `stat_value1`, `stat_value2`, `stat_value3`, `stat_value4`, `stat_value5`, `stat_value6`, `stat_value7`, `stat_value8`, `stat_value9`, `stat_value10`, `stat_unk1_1`, `stat_unk1_2`, `stat_unk1_3`, `stat_unk1_4`, `stat_unk1_5`, `stat_unk1_6`, `stat_unk1_7`, `stat_unk1_8`, `stat_unk1_9`, `stat_unk1_10`, `stat_unk2_1`, `stat_unk2_2`, `stat_unk2_3`, `stat_unk2_4`, `stat_unk2_5`, `stat_unk2_6`, `stat_unk2_7`, `stat_unk2_8`, `stat_unk2_9`, `stat_unk2_10`, `scalingstatdistribution`, `damagetype`, `delay`, `rangedmodrange`, `spellid_1`, `spellid_2`, `spellid_3`, `spellid_4`, `spellid_5`, `spelltrigger_1`, `spelltrigger_2`, `spelltrigger_3`, `spelltrigger_4`, `spelltrigger_5`, `spellcharges_1`, `spellcharges_2`, `spellcharges_3`, `spellcharges_4`, `spellcharges_5`, `spellcooldown_1`, `spellcooldown_2`, `spellcooldown_3`, `spellcooldown_4`, `spellcooldown_5`, `spellcategory_1`, `spellcategory_2`, `spellcategory_3`, `spellcategory_4`, `spellcategory_5`, `spellcategorycooldown_1`, `spellcategorycooldown_2`, `spellcategorycooldown_3`, `spellcategorycooldown_4`, `spellcategorycooldown_5`, `bonding`, `name`, `name2`, `name3`, `name4`, `description`, `UNK01`, `pagetext`, `languageid`, `pagematerial`, `startquest`, `lockid`, `material`, `sheath`, `randomproperty`, `randomsuffix`, `itemset`, `area`, `map`, `bagfamily`, `totemcategory`, `socketcolor_1`, `socketcolor_2`, `socketcolor_3`, `socketcontent_1`, `socketcontent_2`, `socketcontent_3`, `socketbonus`, `gemproperties`, `armordamagemodifier`, `duration`, `itemlimitcategory`, `holidayid`, `statscalingfactor`, `field_130`, `field_131` FROM `item_sparse`; UPDATE `item_template`, `item_sparse` SET `item_template`.`locale`=`item_sparse`.`locale`, `item_template`.`entry`=`item_sparse`.`entry`, `item_template`.`quality`=`item_sparse`.`quality`, `item_template`.`flags`=`item_sparse`.`flags`, `item_template`.`flags2`=`item_sparse`.`flags2`, `item_template`.`UNK431`=`item_sparse`.`UNK431`, `item_template`.`UNK432`=`item_sparse`.`UNK432`, `item_template`.`BuyCount`=`item_sparse`.`BuyCount`, `item_template`.`buyprice`=`item_sparse`.`buyprice`, `item_template`.`sellprice`=`item_sparse`.`sellprice`, `item_template`.`inventorytype`=`item_sparse`.`inventorytype`, `item_template`.`allowableclass`=`item_sparse`.`allowableclass`, `item_template`.`allowablerace`=`item_sparse`.`allowablerace`, `item_template`.`itemlevel`=`item_sparse`.`itemlevel`, `item_template`.`requiredlevel`=`item_sparse`.`requiredlevel`, `item_template`.`requiredskill`=`item_sparse`.`requiredskill`, `item_template`.`requiredskillrank`=`item_sparse`.`requiredskillrank`, `item_template`.`requiredspell`=`item_sparse`.`requiredspell`, `item_template`.`requiredhonorrank`=`item_sparse`.`requiredhonorrank`, `item_template`.`requiredcityrank`=`item_sparse`.`requiredcityrank`, `item_template`.`requiredreputationfaction`=`item_sparse`.`requiredreputationfaction`, `item_template`.`requiredreputationrank`=`item_sparse`.`requiredreputationrank`, `item_template`.`maxcount`=`item_sparse`.`maxcount`, `item_template`.`stackable`=`item_sparse`.`stackable`, `item_template`.`containerslots`=`item_sparse`.`containerslots`, `item_template`.`stat_type1`=`item_sparse`.`stat_type1`, `item_template`.`stat_type2`=`item_sparse`.`stat_type2`, `item_template`.`stat_type3`=`item_sparse`.`stat_type3`, `item_template`.`stat_type4`=`item_sparse`.`stat_type4`, `item_template`.`stat_type5`=`item_sparse`.`stat_type5`, `item_template`.`stat_type6`=`item_sparse`.`stat_type6`, `item_template`.`stat_type7`=`item_sparse`.`stat_type7`, `item_template`.`stat_type8`=`item_sparse`.`stat_type8`, `item_template`.`stat_type9`=`item_sparse`.`stat_type9`, `item_template`.`stat_type10`=`item_sparse`.`stat_type10`, `item_template`.`stat_value1`=`item_sparse`.`stat_value1`, `item_template`.`stat_value2`=`item_sparse`.`stat_value2`, `item_template`.`stat_value3`=`item_sparse`.`stat_value3`, `item_template`.`stat_value4`=`item_sparse`.`stat_value4`, `item_template`.`stat_value5`=`item_sparse`.`stat_value5`, `item_template`.`stat_value6`=`item_sparse`.`stat_value6`, `item_template`.`stat_value7`=`item_sparse`.`stat_value7`, `item_template`.`stat_value8`=`item_sparse`.`stat_value8`, `item_template`.`stat_value9`=`item_sparse`.`stat_value9`, `item_template`.`stat_value10`=`item_sparse`.`stat_value10`, `item_template`.`stat_unk1_1`=`item_sparse`.`stat_unk1_1`, `item_template`.`stat_unk1_2`=`item_sparse`.`stat_unk1_2`, `item_template`.`stat_unk1_3`=`item_sparse`.`stat_unk1_3`, `item_template`.`stat_unk1_4`=`item_sparse`.`stat_unk1_4`, `item_template`.`stat_unk1_5`=`item_sparse`.`stat_unk1_5`, `item_template`.`stat_unk1_6`=`item_sparse`.`stat_unk1_6`, `item_template`.`stat_unk1_7`=`item_sparse`.`stat_unk1_7`, `item_template`.`stat_unk1_8`=`item_sparse`.`stat_unk1_8`, `item_template`.`stat_unk1_9`=`item_sparse`.`stat_unk1_9`, `item_template`.`stat_unk1_10`=`item_sparse`.`stat_unk1_10`, `item_template`.`stat_unk2_1`=`item_sparse`.`stat_unk2_1`, `item_template`.`stat_unk2_2`=`item_sparse`.`stat_unk2_2`, `item_template`.`stat_unk2_3`=`item_sparse`.`stat_unk2_3`, `item_template`.`stat_unk2_4`=`item_sparse`.`stat_unk2_4`, `item_template`.`stat_unk2_5`=`item_sparse`.`stat_unk2_5`, `item_template`.`stat_unk2_6`=`item_sparse`.`stat_unk2_6`, `item_template`.`stat_unk2_7`=`item_sparse`.`stat_unk2_7`, `item_template`.`stat_unk2_8`=`item_sparse`.`stat_unk2_8`, `item_template`.`stat_unk2_9`=`item_sparse`.`stat_unk2_9`, `item_template`.`stat_unk2_10`=`item_sparse`.`stat_unk2_10`, `item_template`.`scalingstatdistribution`=`item_sparse`.`scalingstatdistribution`, `item_template`.`damagetype`=`item_sparse`.`damagetype`, `item_template`.`delay`=`item_sparse`.`delay`, `item_template`.`rangedmodrange`=`item_sparse`.`rangedmodrange`, `item_template`.`spellid_1`=`item_sparse`.`spellid_1`, `item_template`.`spellid_2`=`item_sparse`.`spellid_2`, `item_template`.`spellid_3`=`item_sparse`.`spellid_3`, `item_template`.`spellid_4`=`item_sparse`.`spellid_4`, `item_template`.`spellid_5`=`item_sparse`.`spellid_5`, `item_template`.`spelltrigger_1`=`item_sparse`.`spelltrigger_1`, `item_template`.`spelltrigger_2`=`item_sparse`.`spelltrigger_2`, `item_template`.`spelltrigger_3`=`item_sparse`.`spelltrigger_3`, `item_template`.`spelltrigger_4`=`item_sparse`.`spelltrigger_4`, `item_template`.`spelltrigger_5`=`item_sparse`.`spelltrigger_5`, `item_template`.`spellcharges_1`=`item_sparse`.`spellcharges_1`, `item_template`.`spellcharges_2`=`item_sparse`.`spellcharges_2`, `item_template`.`spellcharges_3`=`item_sparse`.`spellcharges_3`, `item_template`.`spellcharges_4`=`item_sparse`.`spellcharges_4`, `item_template`.`spellcharges_5`=`item_sparse`.`spellcharges_5`, `item_template`.`spellcooldown_1`=`item_sparse`.`spellcooldown_1`, `item_template`.`spellcooldown_2`=`item_sparse`.`spellcooldown_2`, `item_template`.`spellcooldown_3`=`item_sparse`.`spellcooldown_3`, `item_template`.`spellcooldown_4`=`item_sparse`.`spellcooldown_4`, `item_template`.`spellcooldown_5`=`item_sparse`.`spellcooldown_5`, `item_template`.`spellcategory_1`=`item_sparse`.`spellcategory_1`, `item_template`.`spellcategory_2`=`item_sparse`.`spellcategory_2`, `item_template`.`spellcategory_3`=`item_sparse`.`spellcategory_3`, `item_template`.`spellcategory_4`=`item_sparse`.`spellcategory_4`, `item_template`.`spellcategory_5`=`item_sparse`.`spellcategory_5`, `item_template`.`spellcategorycooldown_1`=`item_sparse`.`spellcategorycooldown_1`, `item_template`.`spellcategorycooldown_2`=`item_sparse`.`spellcategorycooldown_2`, `item_template`.`spellcategorycooldown_3`=`item_sparse`.`spellcategorycooldown_3`, `item_template`.`spellcategorycooldown_4`=`item_sparse`.`spellcategorycooldown_4`, `item_template`.`spellcategorycooldown_5`=`item_sparse`.`spellcategorycooldown_5`, `item_template`.`bonding`=`item_sparse`.`bonding`, `item_template`.`name`=`item_sparse`.`name`, `item_template`.`name2`=`item_sparse`.`name2`, `item_template`.`name3`=`item_sparse`.`name3`, `item_template`.`name4`=`item_sparse`.`name4`, `item_template`.`description`=`item_sparse`.`description`, `item_template`.`UNK01`=`item_sparse`.`UNK01`, `item_template`.`pagetext`=`item_sparse`.`pagetext`, `item_template`.`languageid`=`item_sparse`.`languageid`, `item_template`.`pagematerial`=`item_sparse`.`pagematerial`, `item_template`.`startquest`=`item_sparse`.`startquest`, `item_template`.`lockid`=`item_sparse`.`lockid`, `item_template`.`material`=`item_sparse`.`material`, `item_template`.`sheath`=`item_sparse`.`sheath`, `item_template`.`randomproperty`=`item_sparse`.`randomproperty`, `item_template`.`randomsuffix`=`item_sparse`.`randomsuffix`, `item_template`.`itemset`=`item_sparse`.`itemset`, `item_template`.`area`=`item_sparse`.`area`, `item_template`.`map`=`item_sparse`.`map`, `item_template`.`bagfamily`=`item_sparse`.`bagfamily`, `item_template`.`totemcategory`=`item_sparse`.`totemcategory`, `item_template`.`socketcolor_1`=`item_sparse`.`socketcolor_1`, `item_template`.`socketcolor_2`=`item_sparse`.`socketcolor_2`, `item_template`.`socketcolor_3`=`item_sparse`.`socketcolor_3`, `item_template`.`socketcontent_1`=`item_sparse`.`socketcontent_1`, `item_template`.`socketcontent_2`=`item_sparse`.`socketcontent_2`, `item_template`.`socketcontent_3`=`item_sparse`.`socketcontent_3`, `item_template`.`socketbonus`=`item_sparse`.`socketbonus`, `item_template`.`gemproperties`=`item_sparse`.`gemproperties`, `item_template`.`armordamagemodifier`=`item_sparse`.`armordamagemodifier`, `item_template`.`duration`=`item_sparse`.`duration`, `item_template`.`itemlimitcategory`=`item_sparse`.`itemlimitcategory`, `item_template`.`holidayid`=`item_sparse`.`holidayid`, `item_template`.`statscalingfactor`=`item_sparse`.`statscalingfactor`, `item_template`.`field_130`=`item_sparse`.`field_130`, `item_template`.`field_131`=`item_sparse`.`field_131` WHERE `item_sparse`.`locale`=`item_template`.`locale` AND `item_sparse`.`entry`=`item_template`.`entry`; UPDATE `item_template`, `item_additional` SET `item_template`.`locale`=`item_additional`.`locale`, `item_template`.`entry`=`item_additional`.`entry`, `item_template`.`class`=`item_additional`.`class`, `item_template`.`subclass`=`item_additional`.`subclass`, `item_template`.`unk0`=`item_additional`.`unk0`, `item_template`.`material`=`item_additional`.`material`, `item_template`.`displayid`=`item_additional`.`displayid`, `item_template`.`inventorytype`=`item_additional`.`inventorytype`, `item_template`.`sheath`=`item_additional`.`sheath` WHERE `item_additional`.`locale`=`item_template`.`locale` AND `item_additional`.`entry`=`item_template`.`entry`; TRUNCATE TABLE item_additional; TRUNCATE TABLE item_sparse; # UPDATE `gameobject_template` SET `data1` = `entry` WHERE `type` = 3; # UPDATE `gameobject_template` SET `data1` = `entry` WHERE `type` = 25;"/>
-    <query text="-- Exchample"/>
-  </QueryFinalPack>
-  
+        <field type="int"    name="SoundAccept" />
+        <field type="int"    name="SoundTurnIn" />
+
+        <field type="list" maxcount="4">
+            <field type="int" name="ReqSourceId" />
+            <field type="int" name="ReqSourceCount" />
+        </field>
+
+        <field type="list" name="condition_count" counttype="byte" maxcount="10">
+            <field type="int"    name="condition_unk1" />
+            <field type="byte"   name="condition" />
+            <field type="int"    name="ReqCreatureOrGOId" />
+            <field type="int"    name="ReqCreatureOrGOCount" />
+            <field type="int"    name="condition_unk5" />
+            <field type="string" name="ObjectiveText" />
+            <field type="byte"   name="condition_unk6" />
+            <field type="list" name="unk_count" counttype="byte" maxcount="10">
+                <field type="int"  name="condition_unk8" />
+            </field>
+        </field>
+    </questcache>
+
+    <npccache tablename="npc_text">
+        <field type="uint"   name="Id" key="true"/>
+
+        <field type="float"  name="prob1"/>
+        <field type="float"  name="prob2"/>
+        <field type="float"  name="prob3"/>
+        <field type="float"  name="prob4"/>
+        <field type="float"  name="prob5"/>
+        <field type="float"  name="prob6"/>
+        <field type="float"  name="prob7"/>
+        <field type="float"  name="prob8"/>
+
+        <field type="uint"  name="textId1"/>
+        <field type="uint"  name="textId2"/>
+        <field type="uint"  name="textId3"/>
+        <field type="uint"  name="textId4"/>
+        <field type="uint"  name="textId5"/>
+        <field type="uint"  name="textId6"/>
+        <field type="uint"  name="textId7"/>
+        <field type="uint"  name="textId8"/>
+    </npccache>
+
+    <BroadcastText tablename="broadcast_text">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="lang" />
+        <field type="string" name="text1" />
+        <field type="string" name="text2" />
+        <field type="uint"   name="unk1" />
+        <field type="uint"   name="unk2" />
+        <field type="uint"   name="unk3" />
+        <field type="uint"   name="unk4" />
+        <field type="uint"   name="unk5" />
+        <field type="uint"   name="unk6" />
+        <field type="uint"   name="unk7" />
+        <field type="uint"   name="unk8" />
+        <field type="uint"   name="unk9" />
+    </BroadcastText>
+
+    <BattlePetAbility tablename="battle_pet_ability">
+        <field type="int"    name="entry" />
+        <field type="int"    name="index" />
+        <field type="int"    name="newField3" />
+        <field type="int"    name="index2" />
+        <field type="int"    name="newField5" />
+        <field type="int"    name="newField6" />
+        <field type="string" name="spell_name" />
+        <field type="string" name="spell_description" />
+    </BattlePetAbility>
+
+    <BattlePetSpecies tablename="battle_pet_species">
+        <field type="int"    name="newField1" />
+        <field type="int"    name="newField2" />
+        <field type="int"    name="newField3" />
+        <field type="int"    name="newField4" />
+        <field type="int"    name="newField5" />
+        <field type="int"    name="newField6" />
+        <field type="int"    name="newField7" />
+        <field type="string" name="title" />
+        <field type="string" name="description" />
+    </BattlePetSpecies>
+
+    <SceneScript tablename="scene_script">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="string" name="Name"/>
+        <field type="string" name="Script"/>
+        <field type="int"    name="Unk1"/>
+        <field type="int"    name="Unk2"/>
+    </SceneScript>
+
+    <pagetextcache tablename="page_text">
+        <field type="uint"   name="entry"  key="true"/>
+        <field type="string" name="Text"/>
+        <field type="uint"   name="next_page"/>
+    </pagetextcache>
+
+    <QueryFinalPack>
+        <query text=""/>
+        <query text="-- Merge 2 table (Item and Item-sparse) INSERT IGNORE INTO `item_template` (`locale`, `entry`, `quality`, `flags`, `flags2`, `UNK431`, `UNK432`, `BuyCount`, `buyprice`, `sellprice`, `inventorytype`, `allowableclass`, `allowablerace`, `itemlevel`, `requiredlevel`, `requiredskill`, `requiredskillrank`, `requiredspell`, `requiredhonorrank`, `requiredcityrank`, `requiredreputationfaction`, `requiredreputationrank`, `maxcount`, `stackable`, `containerslots`, `stat_type1`, `stat_type2`, `stat_type3`, `stat_type4`, `stat_type5`, `stat_type6`, `stat_type7`, `stat_type8`, `stat_type9`, `stat_type10`, `stat_value1`, `stat_value2`, `stat_value3`, `stat_value4`, `stat_value5`, `stat_value6`, `stat_value7`, `stat_value8`, `stat_value9`, `stat_value10`, `stat_unk1_1`, `stat_unk1_2`, `stat_unk1_3`, `stat_unk1_4`, `stat_unk1_5`, `stat_unk1_6`, `stat_unk1_7`, `stat_unk1_8`, `stat_unk1_9`, `stat_unk1_10`, `stat_unk2_1`, `stat_unk2_2`, `stat_unk2_3`, `stat_unk2_4`, `stat_unk2_5`, `stat_unk2_6`, `stat_unk2_7`, `stat_unk2_8`, `stat_unk2_9`, `stat_unk2_10`, `scalingstatdistribution`, `damagetype`, `delay`, `rangedmodrange`, `spellid_1`, `spellid_2`, `spellid_3`, `spellid_4`, `spellid_5`, `spelltrigger_1`, `spelltrigger_2`, `spelltrigger_3`, `spelltrigger_4`, `spelltrigger_5`, `spellcharges_1`, `spellcharges_2`, `spellcharges_3`, `spellcharges_4`, `spellcharges_5`, `spellcooldown_1`, `spellcooldown_2`, `spellcooldown_3`, `spellcooldown_4`, `spellcooldown_5`, `spellcategory_1`, `spellcategory_2`, `spellcategory_3`, `spellcategory_4`, `spellcategory_5`, `spellcategorycooldown_1`, `spellcategorycooldown_2`, `spellcategorycooldown_3`, `spellcategorycooldown_4`, `spellcategorycooldown_5`, `bonding`, `name`, `name2`, `name3`, `name4`, `description`, `UNK01`, `pagetext`, `languageid`, `pagematerial`, `startquest`, `lockid`, `material`, `sheath`, `randomproperty`, `randomsuffix`, `itemset`, `area`, `map`, `bagfamily`, `totemcategory`, `socketcolor_1`, `socketcolor_2`, `socketcolor_3`, `socketcontent_1`, `socketcontent_2`, `socketcontent_3`, `socketbonus`, `gemproperties`, `armordamagemodifier`, `duration`, `itemlimitcategory`, `holidayid`, `statscalingfactor`, `field_130`, `field_131`) SELECT `locale`, `entry`, `quality`, `flags`, `flags2`, `UNK431`, `UNK432`, `BuyCount`, `buyprice`, `sellprice`, `inventorytype`, `allowableclass`, `allowablerace`, `itemlevel`, `requiredlevel`, `requiredskill`, `requiredskillrank`, `requiredspell`, `requiredhonorrank`, `requiredcityrank`, `requiredreputationfaction`, `requiredreputationrank`, `maxcount`, `stackable`, `containerslots`, `stat_type1`, `stat_type2`, `stat_type3`, `stat_type4`, `stat_type5`, `stat_type6`, `stat_type7`, `stat_type8`, `stat_type9`, `stat_type10`, `stat_value1`, `stat_value2`, `stat_value3`, `stat_value4`, `stat_value5`, `stat_value6`, `stat_value7`, `stat_value8`, `stat_value9`, `stat_value10`, `stat_unk1_1`, `stat_unk1_2`, `stat_unk1_3`, `stat_unk1_4`, `stat_unk1_5`, `stat_unk1_6`, `stat_unk1_7`, `stat_unk1_8`, `stat_unk1_9`, `stat_unk1_10`, `stat_unk2_1`, `stat_unk2_2`, `stat_unk2_3`, `stat_unk2_4`, `stat_unk2_5`, `stat_unk2_6`, `stat_unk2_7`, `stat_unk2_8`, `stat_unk2_9`, `stat_unk2_10`, `scalingstatdistribution`, `damagetype`, `delay`, `rangedmodrange`, `spellid_1`, `spellid_2`, `spellid_3`, `spellid_4`, `spellid_5`, `spelltrigger_1`, `spelltrigger_2`, `spelltrigger_3`, `spelltrigger_4`, `spelltrigger_5`, `spellcharges_1`, `spellcharges_2`, `spellcharges_3`, `spellcharges_4`, `spellcharges_5`, `spellcooldown_1`, `spellcooldown_2`, `spellcooldown_3`, `spellcooldown_4`, `spellcooldown_5`, `spellcategory_1`, `spellcategory_2`, `spellcategory_3`, `spellcategory_4`, `spellcategory_5`, `spellcategorycooldown_1`, `spellcategorycooldown_2`, `spellcategorycooldown_3`, `spellcategorycooldown_4`, `spellcategorycooldown_5`, `bonding`, `name`, `name2`, `name3`, `name4`, `description`, `UNK01`, `pagetext`, `languageid`, `pagematerial`, `startquest`, `lockid`, `material`, `sheath`, `randomproperty`, `randomsuffix`, `itemset`, `area`, `map`, `bagfamily`, `totemcategory`, `socketcolor_1`, `socketcolor_2`, `socketcolor_3`, `socketcontent_1`, `socketcontent_2`, `socketcontent_3`, `socketbonus`, `gemproperties`, `armordamagemodifier`, `duration`, `itemlimitcategory`, `holidayid`, `statscalingfactor`, `field_130`, `field_131` FROM `item_sparse`; UPDATE `item_template`, `item_sparse` SET `item_template`.`locale`=`item_sparse`.`locale`, `item_template`.`entry`=`item_sparse`.`entry`, `item_template`.`quality`=`item_sparse`.`quality`, `item_template`.`flags`=`item_sparse`.`flags`, `item_template`.`flags2`=`item_sparse`.`flags2`, `item_template`.`UNK431`=`item_sparse`.`UNK431`, `item_template`.`UNK432`=`item_sparse`.`UNK432`, `item_template`.`BuyCount`=`item_sparse`.`BuyCount`, `item_template`.`buyprice`=`item_sparse`.`buyprice`, `item_template`.`sellprice`=`item_sparse`.`sellprice`, `item_template`.`inventorytype`=`item_sparse`.`inventorytype`, `item_template`.`allowableclass`=`item_sparse`.`allowableclass`, `item_template`.`allowablerace`=`item_sparse`.`allowablerace`, `item_template`.`itemlevel`=`item_sparse`.`itemlevel`, `item_template`.`requiredlevel`=`item_sparse`.`requiredlevel`, `item_template`.`requiredskill`=`item_sparse`.`requiredskill`, `item_template`.`requiredskillrank`=`item_sparse`.`requiredskillrank`, `item_template`.`requiredspell`=`item_sparse`.`requiredspell`, `item_template`.`requiredhonorrank`=`item_sparse`.`requiredhonorrank`, `item_template`.`requiredcityrank`=`item_sparse`.`requiredcityrank`, `item_template`.`requiredreputationfaction`=`item_sparse`.`requiredreputationfaction`, `item_template`.`requiredreputationrank`=`item_sparse`.`requiredreputationrank`, `item_template`.`maxcount`=`item_sparse`.`maxcount`, `item_template`.`stackable`=`item_sparse`.`stackable`, `item_template`.`containerslots`=`item_sparse`.`containerslots`, `item_template`.`stat_type1`=`item_sparse`.`stat_type1`, `item_template`.`stat_type2`=`item_sparse`.`stat_type2`, `item_template`.`stat_type3`=`item_sparse`.`stat_type3`, `item_template`.`stat_type4`=`item_sparse`.`stat_type4`, `item_template`.`stat_type5`=`item_sparse`.`stat_type5`, `item_template`.`stat_type6`=`item_sparse`.`stat_type6`, `item_template`.`stat_type7`=`item_sparse`.`stat_type7`, `item_template`.`stat_type8`=`item_sparse`.`stat_type8`, `item_template`.`stat_type9`=`item_sparse`.`stat_type9`, `item_template`.`stat_type10`=`item_sparse`.`stat_type10`, `item_template`.`stat_value1`=`item_sparse`.`stat_value1`, `item_template`.`stat_value2`=`item_sparse`.`stat_value2`, `item_template`.`stat_value3`=`item_sparse`.`stat_value3`, `item_template`.`stat_value4`=`item_sparse`.`stat_value4`, `item_template`.`stat_value5`=`item_sparse`.`stat_value5`, `item_template`.`stat_value6`=`item_sparse`.`stat_value6`, `item_template`.`stat_value7`=`item_sparse`.`stat_value7`, `item_template`.`stat_value8`=`item_sparse`.`stat_value8`, `item_template`.`stat_value9`=`item_sparse`.`stat_value9`, `item_template`.`stat_value10`=`item_sparse`.`stat_value10`, `item_template`.`stat_unk1_1`=`item_sparse`.`stat_unk1_1`, `item_template`.`stat_unk1_2`=`item_sparse`.`stat_unk1_2`, `item_template`.`stat_unk1_3`=`item_sparse`.`stat_unk1_3`, `item_template`.`stat_unk1_4`=`item_sparse`.`stat_unk1_4`, `item_template`.`stat_unk1_5`=`item_sparse`.`stat_unk1_5`, `item_template`.`stat_unk1_6`=`item_sparse`.`stat_unk1_6`, `item_template`.`stat_unk1_7`=`item_sparse`.`stat_unk1_7`, `item_template`.`stat_unk1_8`=`item_sparse`.`stat_unk1_8`, `item_template`.`stat_unk1_9`=`item_sparse`.`stat_unk1_9`, `item_template`.`stat_unk1_10`=`item_sparse`.`stat_unk1_10`, `item_template`.`stat_unk2_1`=`item_sparse`.`stat_unk2_1`, `item_template`.`stat_unk2_2`=`item_sparse`.`stat_unk2_2`, `item_template`.`stat_unk2_3`=`item_sparse`.`stat_unk2_3`, `item_template`.`stat_unk2_4`=`item_sparse`.`stat_unk2_4`, `item_template`.`stat_unk2_5`=`item_sparse`.`stat_unk2_5`, `item_template`.`stat_unk2_6`=`item_sparse`.`stat_unk2_6`, `item_template`.`stat_unk2_7`=`item_sparse`.`stat_unk2_7`, `item_template`.`stat_unk2_8`=`item_sparse`.`stat_unk2_8`, `item_template`.`stat_unk2_9`=`item_sparse`.`stat_unk2_9`, `item_template`.`stat_unk2_10`=`item_sparse`.`stat_unk2_10`, `item_template`.`scalingstatdistribution`=`item_sparse`.`scalingstatdistribution`, `item_template`.`damagetype`=`item_sparse`.`damagetype`, `item_template`.`delay`=`item_sparse`.`delay`, `item_template`.`rangedmodrange`=`item_sparse`.`rangedmodrange`, `item_template`.`spellid_1`=`item_sparse`.`spellid_1`, `item_template`.`spellid_2`=`item_sparse`.`spellid_2`, `item_template`.`spellid_3`=`item_sparse`.`spellid_3`, `item_template`.`spellid_4`=`item_sparse`.`spellid_4`, `item_template`.`spellid_5`=`item_sparse`.`spellid_5`, `item_template`.`spelltrigger_1`=`item_sparse`.`spelltrigger_1`, `item_template`.`spelltrigger_2`=`item_sparse`.`spelltrigger_2`, `item_template`.`spelltrigger_3`=`item_sparse`.`spelltrigger_3`, `item_template`.`spelltrigger_4`=`item_sparse`.`spelltrigger_4`, `item_template`.`spelltrigger_5`=`item_sparse`.`spelltrigger_5`, `item_template`.`spellcharges_1`=`item_sparse`.`spellcharges_1`, `item_template`.`spellcharges_2`=`item_sparse`.`spellcharges_2`, `item_template`.`spellcharges_3`=`item_sparse`.`spellcharges_3`, `item_template`.`spellcharges_4`=`item_sparse`.`spellcharges_4`, `item_template`.`spellcharges_5`=`item_sparse`.`spellcharges_5`, `item_template`.`spellcooldown_1`=`item_sparse`.`spellcooldown_1`, `item_template`.`spellcooldown_2`=`item_sparse`.`spellcooldown_2`, `item_template`.`spellcooldown_3`=`item_sparse`.`spellcooldown_3`, `item_template`.`spellcooldown_4`=`item_sparse`.`spellcooldown_4`, `item_template`.`spellcooldown_5`=`item_sparse`.`spellcooldown_5`, `item_template`.`spellcategory_1`=`item_sparse`.`spellcategory_1`, `item_template`.`spellcategory_2`=`item_sparse`.`spellcategory_2`, `item_template`.`spellcategory_3`=`item_sparse`.`spellcategory_3`, `item_template`.`spellcategory_4`=`item_sparse`.`spellcategory_4`, `item_template`.`spellcategory_5`=`item_sparse`.`spellcategory_5`, `item_template`.`spellcategorycooldown_1`=`item_sparse`.`spellcategorycooldown_1`, `item_template`.`spellcategorycooldown_2`=`item_sparse`.`spellcategorycooldown_2`, `item_template`.`spellcategorycooldown_3`=`item_sparse`.`spellcategorycooldown_3`, `item_template`.`spellcategorycooldown_4`=`item_sparse`.`spellcategorycooldown_4`, `item_template`.`spellcategorycooldown_5`=`item_sparse`.`spellcategorycooldown_5`, `item_template`.`bonding`=`item_sparse`.`bonding`, `item_template`.`name`=`item_sparse`.`name`, `item_template`.`name2`=`item_sparse`.`name2`, `item_template`.`name3`=`item_sparse`.`name3`, `item_template`.`name4`=`item_sparse`.`name4`, `item_template`.`description`=`item_sparse`.`description`, `item_template`.`UNK01`=`item_sparse`.`UNK01`, `item_template`.`pagetext`=`item_sparse`.`pagetext`, `item_template`.`languageid`=`item_sparse`.`languageid`, `item_template`.`pagematerial`=`item_sparse`.`pagematerial`, `item_template`.`startquest`=`item_sparse`.`startquest`, `item_template`.`lockid`=`item_sparse`.`lockid`, `item_template`.`material`=`item_sparse`.`material`, `item_template`.`sheath`=`item_sparse`.`sheath`, `item_template`.`randomproperty`=`item_sparse`.`randomproperty`, `item_template`.`randomsuffix`=`item_sparse`.`randomsuffix`, `item_template`.`itemset`=`item_sparse`.`itemset`, `item_template`.`area`=`item_sparse`.`area`, `item_template`.`map`=`item_sparse`.`map`, `item_template`.`bagfamily`=`item_sparse`.`bagfamily`, `item_template`.`totemcategory`=`item_sparse`.`totemcategory`, `item_template`.`socketcolor_1`=`item_sparse`.`socketcolor_1`, `item_template`.`socketcolor_2`=`item_sparse`.`socketcolor_2`, `item_template`.`socketcolor_3`=`item_sparse`.`socketcolor_3`, `item_template`.`socketcontent_1`=`item_sparse`.`socketcontent_1`, `item_template`.`socketcontent_2`=`item_sparse`.`socketcontent_2`, `item_template`.`socketcontent_3`=`item_sparse`.`socketcontent_3`, `item_template`.`socketbonus`=`item_sparse`.`socketbonus`, `item_template`.`gemproperties`=`item_sparse`.`gemproperties`, `item_template`.`armordamagemodifier`=`item_sparse`.`armordamagemodifier`, `item_template`.`duration`=`item_sparse`.`duration`, `item_template`.`itemlimitcategory`=`item_sparse`.`itemlimitcategory`, `item_template`.`holidayid`=`item_sparse`.`holidayid`, `item_template`.`statscalingfactor`=`item_sparse`.`statscalingfactor`, `item_template`.`field_130`=`item_sparse`.`field_130`, `item_template`.`field_131`=`item_sparse`.`field_131` WHERE `item_sparse`.`locale`=`item_template`.`locale` AND `item_sparse`.`entry`=`item_template`.`entry`; UPDATE `item_template`, `item_additional` SET `item_template`.`locale`=`item_additional`.`locale`, `item_template`.`entry`=`item_additional`.`entry`, `item_template`.`class`=`item_additional`.`class`, `item_template`.`subclass`=`item_additional`.`subclass`, `item_template`.`unk0`=`item_additional`.`unk0`, `item_template`.`material`=`item_additional`.`material`, `item_template`.`displayid`=`item_additional`.`displayid`, `item_template`.`inventorytype`=`item_additional`.`inventorytype`, `item_template`.`sheath`=`item_additional`.`sheath` WHERE `item_additional`.`locale`=`item_template`.`locale` AND `item_additional`.`entry`=`item_template`.`entry`; TRUNCATE TABLE item_additional; TRUNCATE TABLE item_sparse; # UPDATE `gameobject_template` SET `data1` = `entry` WHERE `type` = 3; # UPDATE `gameobject_template` SET `data1` = `entry` WHERE `type` = 25;"/>
+        <query text="-- Exchample"/>
+    </QueryFinalPack>
+
 </Definitions>
