@@ -78,9 +78,10 @@ namespace WowDataFileParser
                 {
                     var counttype = record.Attributes["name"].Value;
                     var fname = record.Attributes["name"].Value;
-                    if (char.IsDigit(fname[fname.Length - 1]))
+
+                    if (!char.IsDigit(fname[fname.Length - 1]))
                     {
-                        if (suffix[0] == '_')
+                        if (suffix.Length > 0 && suffix[0] == '_')
                             fname += suffix.Substring(1);
                         else
                             fname += suffix;
