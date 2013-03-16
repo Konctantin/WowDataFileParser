@@ -31,7 +31,7 @@ namespace WowDataFileParser
             {
                 new Parser();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");

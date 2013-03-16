@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
+using WDReader.Reader;
+using Kamilla.IO;
 
 namespace WowDataFileParser
 {
@@ -14,7 +16,7 @@ namespace WowDataFileParser
         public static readonly string DEF           = "definitions.xml";
         public static readonly string OUTPUT_FILE   = "output.sql";
 
-        private BinaryReader RowReader;
+        private StreamHandler RowReader;
         private XmlDocument  xmlstruct;
 
         internal Parser()
@@ -50,23 +52,23 @@ namespace WowDataFileParser
                     var file_name = Path.GetFileNameWithoutExtension(file.Name);
                     foreach (XmlElement element in xmlstruct.GetElementsByTagName(file_name))
                     {
-                        IWowClientDBReader reader;
+                        BaseReader reader;
                         try
                         {
                             switch (file.Extension)
                             {
                                 case ".wdb":
-                                    reader = new WDBReader(file.FullName);
+                                    reader = new WdbReader(file.FullName);
                                     break;
                                 case ".adb":
-                                    reader = new ADBReader(file.FullName);
+                                    reader = new AdbReader(file.FullName);
                                     break;
                                 case ".db2":
-                                    reader = new DB2Reader(file.FullName);
+                                    reader = new Db2Reader(file.FullName);
                                     break;
-                                //case ".dbc":
-                                //    reader = new DBCReader(file.FullName);
-                                //    break;
+                                case ".dbc":
+                                    reader = new DbcReader(file.FullName);
+                                    break;
                                 default:
                                     continue;
                             }
@@ -82,6 +84,8 @@ namespace WowDataFileParser
                             for (int i = 0; i < reader.RecordsCount; ++i)
                             {
                                 RowReader = reader[i];
+
+                                var str_hex = string.Join("", reader.GetRowAsByteArray(i).Select(n => n.ToString("X2")));
                                 var str = string.Format("REPLACE INTO {0} VALUES ('{1}'", tableName, reader.Locale);
 
                                 foreach (XmlElement recordInfo in element.ChildNodes.OfType<XmlElement>())
@@ -118,7 +122,7 @@ namespace WowDataFileParser
                             Console.ForegroundColor = ConsoleColor.Red;
                             var info = string.Format("ERROR: Read: {0}", file.Name);
                             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-                            Console.WriteLine("║ {0, -70}║{1}║ {2, -70}║", info, Environment.NewLine, ex.Message);
+                            Console.WriteLine("║ {0, -70}║{1}║ {2, -70}║", info, Environment.NewLine, ex.Message + " " + (ex.InnerException != null ? ex.InnerException.ToString() : ""));
                             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
                             Console.ForegroundColor = ConsoleColor.Cyan;
                         }
@@ -168,16 +172,22 @@ namespace WowDataFileParser
                     value = isNullable ? 0f : RowReader.ReadSingle();
                     str += value.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     break;
+                case "bstring":
+                    {
+                        var raw_str = isNullable ? string.Empty : RowReader.ReadPascalString12Bit();
+                        str += raw_str.EscapeSqlSumbols();
+                    } break;
                 case "string":
-                    var raw_str = string.Empty;
+                    {
+                        var raw_str = string.Empty;
 
-                    if (table == null)
-                        raw_str = isNullable ? string.Empty : RowReader.ReadCString();
-                    else
-                        raw_str = table[isNullable ? 0 : RowReader.ReadInt32()];
+                        if (table == null)
+                            raw_str = isNullable ? string.Empty : RowReader.ReadCString();
+                        else
+                            raw_str = /*table[*/(isNullable ? 0 : RowReader.ReadInt32()).ToString()/*]*/;
 
-                    str += @"'" + raw_str.Replace(@"'", @"\'").Replace("\"", "\\\"") + @"'";
-                    break;
+                        str += raw_str.EscapeSqlSumbols();
+                    } break;
                 case "list":
                     {
                         if (elem.Attributes["maxcount"] == null)
@@ -210,7 +220,7 @@ namespace WowDataFileParser
                 error = true;
         }
 
-        private int ReadSimpleType(ref BinaryReader reader, string type)
+        private int ReadSimpleType(ref StreamHandler reader, string type)
         {
             switch (type)
             {

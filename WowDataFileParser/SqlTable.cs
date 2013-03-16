@@ -155,6 +155,7 @@ namespace WowDataFileParser
                     writer.WriteLine(" DOUBLE NOT NULL DEFAULT '0',");
                     break;
                 case "string":
+                case "bstring":
                     writer.WriteLine(" TEXT NOT NULL,");
                     break;
                 case "list":

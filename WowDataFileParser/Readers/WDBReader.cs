@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* tomrus88 */
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WowDataFileParser
+namespace WDReader.Reader
 {
-    class WDBReader : IWowClientDBReader
+    public class WdbReader : BaseReader
     {
         private const int HeaderSize = 24;
         private uint[] WDBSigs = new uint[]
@@ -22,68 +22,39 @@ namespace WowDataFileParser
             0x5752444E  // wowcache.wdb
         };
 
-        public int RecordsCount         { get; private set; }
-        public int FieldsCount          { get; private set; }
-        public int RecordSize           { get; private set; }
-        public int StringTableSize      { get; private set; }
-        public uint Build               { get; private set; }
-        public string Locale            { get; private set; }
-
-        public Dictionary<int, string> StringTable { get; private set; }
-
-        private Dictionary<int, byte[]> m_rows;
-
-        public byte[] GetRowAsByteArray(int row)
+        public WdbReader(string fileName) 
+            : base(fileName)
         {
-            return m_rows[row];
-        }
+            if (reader.BaseStream.Length < HeaderSize)
+                throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
-        public BinaryReader this[int row]
-        {
-            get { return new BinaryReader(new MemoryStream(m_rows.ElementAt(row).Value), Encoding.UTF8); }
-        }
+            if (!WDBSigs.Contains(this.Magic))
+                throw new InvalidDataException(string.Format("File {0} isn't valid WDB file!", new FileInfo(fileName).Name));
 
-        public WDBReader(string fileName)
-        {
-            using (var reader = new BinaryReader(new FileStream(fileName, FileMode.Open), Encoding.UTF8))
+            Build  = reader.ReadUInt32();
+            Locale = Encoding.ASCII.GetString(reader.ReadBytes(4).Reverse().ToArray());
+
+            var unk1    = reader.ReadInt32();
+            var unk2    = reader.ReadInt32();
+            var version = reader.ReadInt32();
+
+            while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                if (reader.BaseStream.Length < HeaderSize)
-                {
-                    throw new InvalidDataException(String.Format("File {0} is corrupted!", fileName.GetFileName()));
-                }
+                var entry = reader.ReadInt32();
+                var size  = reader.ReadInt32();
 
-                var signature = reader.ReadUInt32();
+                if ((entry == 0 && size == 0) || reader.BaseStream.Position == reader.BaseStream.Length)
+                    break;
 
-                if (!WDBSigs.Contains(signature))
-                {
-                    throw new InvalidDataException(String.Format("File {0} isn't valid WDB file!", fileName.GetFileName()));
-                }
+                var row = new byte[0]
+                    .Concat(BitConverter.GetBytes(entry))
+                    .Concat(reader.ReadBytes(size))
+                    .ToArray();
 
-                Build           = reader.ReadUInt32();
-                Locale          = Encoding.ASCII.GetString(reader.ReadBytes(4).Reverse().ToArray());
-                var unk1        = reader.ReadInt32();
-                var unk2        = reader.ReadInt32();
-                var version     = reader.ReadInt32();
-
-                m_rows = new Dictionary<int, byte[]>();
-
-                while (reader.BaseStream.Position != reader.BaseStream.Length)
-                {
-                    var entry = reader.ReadInt32();
-                    var size = reader.ReadInt32();
-                    if ((entry == 0 && size == 0) || reader.BaseStream.Position == reader.BaseStream.Length)
-                        break;
-
-                    var row = new byte[0]
-                        .Concat(BitConverter.GetBytes(entry))
-                        .Concat(reader.ReadBytes(size))
-                        .ToArray();
-
-                    m_rows.Add(entry, row);
-                }
-
-                RecordsCount = m_rows.Count;
+                m_rows.Add(entry, row);
             }
+
+            RecordsCount = m_rows.Count;
         }
     }
 }

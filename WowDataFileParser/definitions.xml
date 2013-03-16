@@ -229,12 +229,9 @@
         <field type="uint"   name="data30"/>
         <field type="uint"   name="data31"/>
         <field type="float"  name="Size"/>
-        <field type="uint"   name="QuestItem1"/>
-        <field type="uint"   name="QuestItem2"/>
-        <field type="uint"   name="QuestItem3"/>
-        <field type="uint"   name="QuestItem4"/>
-        <field type="uint"   name="QuestItem5"/>
-        <field type="uint"   name="QuestItem6"/>
+        <field type="list" name="QuestItemCount" counttype="byte" maxcount="6">
+            <field type="int"  name="QuestItem" />
+        </field>
         <field type="uint"   name="Unk"/>
     </gameobjectcache>
 
@@ -402,9 +399,10 @@
     </SceneScript>
 
     <pagetextcache tablename="page_text">
-        <field type="uint"   name="entry"  key="true"/>
-        <field type="string" name="Text"/>
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="doubleEntry"/>
         <field type="uint"   name="next_page"/>
+        <field type="bstring" name="Text"/>
     </pagetextcache>
 
     <QueryFinalPack>

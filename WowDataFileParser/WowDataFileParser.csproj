@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -43,15 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryReaderExtensions.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Readers\ADBReader.cs" />
-    <Compile Include="Readers\DB2Reader.cs" />
-    <Compile Include="Readers\DBCReader.cs" />
-    <Compile Include="Readers\IWowClientDBReader.cs" />
-    <Compile Include="Readers\WDBReader.cs" />
+    <Compile Include="Readers\AdbReader.cs" />
+    <Compile Include="Readers\BaseReader.cs" />
+    <Compile Include="Readers\Db2Reader.cs" />
+    <Compile Include="Readers\DbcReader.cs" />
+    <Compile Include="Readers\StreamHandler.cs" />
+    <Compile Include="Readers\StreamHandlerExtension.cs" />
+    <Compile Include="Readers\StructHelper.cs" />
+    <Compile Include="Readers\WdbReader.cs" />
     <Compile Include="SqlTable.cs" />
   </ItemGroup>
   <ItemGroup>
