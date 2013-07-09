@@ -28,14 +28,18 @@ namespace WDReader.Reader
 
             // WDB2 specific fields
             uint tableHash      = reader.ReadUInt32();   // new field in WDB2
-            uint build          = reader.ReadUInt32();   // new field in WDB2
+            this.Build          = reader.ReadUInt32();   // new field in WDB2
             uint unk1           = reader.ReadUInt32();   // new field in WDB2
 
-            if (build > 12880) // new extended header
+            if (this.Build > 12880) // new extended header
             {
                 int MinId       = reader.ReadInt32();    // new field in WDB2
                 int MaxId       = reader.ReadInt32();    // new field in WDB2
-                int locale      = reader.ReadInt32();    // new field in WDB2
+                this.Locale     = ((Locale)reader.ReadUInt32()).ToString();
+#warning small hack
+                if (this.Locale == "")
+                    Locale = "xxXX";
+
                 int unk5        = reader.ReadInt32();    // new field in WDB2
 
                 if (MaxId != 0)

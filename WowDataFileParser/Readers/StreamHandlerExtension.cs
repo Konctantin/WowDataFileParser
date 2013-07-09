@@ -75,45 +75,12 @@ namespace WDReader.Reader
             return writer;
         }
 
-        public static string ReadPascalString32(this StreamHandler sh)
-        {
-            return PascalStringReader(sh, sh.ReadInt32());
-        }
-
-        public static string ReadPascalString16(this StreamHandler sh)
-        {
-            return PascalStringReader(sh, sh.ReadUInt16());
-        }
-
-        public static string ReadPascalString8(this StreamHandler sh)
-        {
-            return PascalStringReader(sh, sh.ReadByte());
-        }
-
-        public static string ReadPascalString12Bit(this StreamHandler sh)
-        {
-            var val1 = sh.UnalignedReadTinyInt(8);
-            var val2 = sh.UnalignedReadTinyInt(4);
-
-            var len = 16 * val1 | val2;
-
-            if (len == 0)
-                return string.Empty;
-
-            return PascalStringReader(sh, len - 1);
-        }
-
-        private static string PascalStringReader(StreamHandler sh, int length)
+        public static string ReadPascalString(this StreamHandler sh, int length)
         {
             if (length > 0)
             {
-                byte[] bytes = sh.ReadBytes(length + 1);
-
-                int len = length + 1;
-                if (bytes[bytes.Length - 1] == 0x00)
-                    --len;
-
-                return Encoding.UTF8.GetString(bytes, 0, len);
+                byte[] bytes = sh.ReadBytes(length);
+                return Encoding.UTF8.GetString(bytes);
             }
             else
                 return string.Empty;

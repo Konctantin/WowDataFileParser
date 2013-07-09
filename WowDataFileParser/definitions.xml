@@ -402,7 +402,7 @@
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="doubleEntry"/>
         <field type="uint"   name="next_page"/>
-        <field type="bstring" name="Text"/>
+        <field type="pstring" name="Text" bit="12"/>
     </pagetextcache>
 
     <QueryFinalPack>

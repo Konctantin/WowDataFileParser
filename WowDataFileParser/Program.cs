@@ -14,7 +14,7 @@ namespace WowDataFileParser
 {
     class Program
     {
-        const string VERSION = "2.0";
+        const string VERSION = "2.2";
 
         static void Main(string[] args)
         {

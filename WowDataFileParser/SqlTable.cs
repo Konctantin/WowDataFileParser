@@ -155,14 +155,14 @@ namespace WowDataFileParser
                     writer.WriteLine(" DOUBLE NOT NULL DEFAULT '0',");
                     break;
                 case "string":
-                case "bstring":
+                case "pstring":
                     writer.WriteLine(" TEXT NOT NULL,");
                     break;
                 case "list":
                     writeList();
                     break;
                 default:
-                    throw new Exception(String.Format("Unknown field type {0}!", fieldType));
+                    throw new Exception(string.Format("Unknown field type {0}!", fieldType));
             }
             #endregion
         }

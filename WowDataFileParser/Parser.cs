@@ -12,7 +12,6 @@ namespace WowDataFileParser
     internal class Parser
     {
         public static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
-        public static readonly string WDB_FOLDER    = "wdb";
         public static readonly string DEF           = "definitions.xml";
         public static readonly string OUTPUT_FILE   = "output.sql";
 
@@ -88,7 +87,7 @@ namespace WowDataFileParser
                                 var str_hex = string.Join("", reader.GetRowAsByteArray(i).Select(n => n.ToString("X2")));
                                 var str = string.Format("REPLACE INTO {0} VALUES ('{1}'", tableName, reader.Locale);
 
-                                foreach (XmlElement recordInfo in element.ChildNodes.OfType<XmlElement>())
+                                foreach (var recordInfo in element.ChildNodes.OfType<XmlElement>())
                                 {
                                     str += ", ";
                                     ReadType(ref str, recordInfo, ref error, reader.StringTable);
@@ -117,12 +116,13 @@ namespace WowDataFileParser
                             writer.Flush();
                             Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║", file.Name, reader.Locale, reader.Build, reader.RecordsCount, (error ? "ERROR" : "OK"));
                         }
-                        catch (Exception ex) 
+                        catch (Exception ex)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             var info = string.Format("ERROR: Read: {0}", file.Name);
+                            var exMessage = ex.Message + " " + (ex.InnerException != null ? ex.InnerException.ToString() : "");
                             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-                            Console.WriteLine("║ {0, -70}║{1}║ {2, -70}║", info, Environment.NewLine, ex.Message + " " + (ex.InnerException != null ? ex.InnerException.ToString() : ""));
+                            Console.WriteLine("║ {0, -70}║{1}║ {2, -70}║", info, Environment.NewLine, exMessage);
                             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
                             Console.ForegroundColor = ConsoleColor.Cyan;
                         }
@@ -141,40 +141,143 @@ namespace WowDataFileParser
 
         private void ReadType(ref string str, XmlElement elem, ref bool error, Dictionary<int, string> table, bool isNullable = false)
         {
-            double maxVal = double.MaxValue;
-            double value  = 0;
+            var maxVal   = double.MaxValue;
+            var value    = 0d;
+            var bitcount = 0;
 
             if (elem.Attributes["max"] != null)
                 maxVal = double.Parse(elem.Attributes["max"].Value);
 
-            string type = elem.Attributes["type"].Value;
+            if (elem.Attributes["bit"] != null)
+                bitcount = int.Parse(elem.Attributes["bit"].Value);
+
+
+            var type = elem.Attributes["type"].Value;
 
             switch (type)
             {
                 case "byte":
-                    value = isNullable ? 0 : RowReader.ReadByte();
-                    str += value;
+                    {
+                        if (isNullable)
+                            value = 0;
+                        else
+                        {
+                            value = bitcount == 0 
+                                ? RowReader.ReadByte() 
+                                : RowReader.UnalignedReadTinyInt(bitcount);
+                        }
+                        str += value;
+                    }
                     break;
                 case "sbyte":
-                    value = isNullable ? 0 : RowReader.ReadSByte();
-                    str += value;
+                    {
+                        if (isNullable)
+                            value = 0;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadSByte()
+                                : (sbyte)RowReader.UnalignedReadTinyInt(bitcount);
+                        }
+                        str += value;
+                    }
+                    break;
+                case "short":
+                    {
+                        if (isNullable)
+                            value = 0;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadInt16()
+                                : (short)RowReader.UnalignedReadSmallInt(bitcount);
+                        }
+                        str += value;
+                    }
+                    break;
+                case "ushort":
+                    {
+                        if (isNullable)
+                            value = 0;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadUInt16()
+                                : RowReader.UnalignedReadSmallInt(bitcount);
+                        }
+                        str += value;
+                    }
                     break;
                 case "int":
-                    value = isNullable ? 0 : RowReader.ReadInt32();
-                    str += value;
+                    {
+                        if (isNullable)
+                            value = 0;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadInt32()
+                                : (int)RowReader.UnalignedReadInt(bitcount);
+                        }
+                        str += value;
+                    }
                     break;
                 case "uint":
-                    uint uires = isNullable ? 0u : RowReader.ReadUInt32();
-                    if (uires > maxVal) error = true;
-                    str += uires;
+                    {
+                        if (isNullable)
+                            value = 0u;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadUInt32()
+                                : RowReader.UnalignedReadInt(bitcount);
+                        }
+                        if (value > maxVal)
+                            error = true;
+                        str += value;
+                    }
+                    break;
+                case "long":
+                    {
+                        if (isNullable)
+                            value = 0u;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadInt64()
+                                : (long)RowReader.UnalignedReadBigInt(bitcount);
+                        }
+                        str += value;
+                    }
+                    break;
+                case "ulong":
+                    {
+                        if (isNullable)
+                            value = 0u;
+                        else
+                        {
+                            value = bitcount == 0
+                                ? RowReader.ReadUInt64()
+                                : RowReader.UnalignedReadBigInt(bitcount);
+                        }
+                        str += value;
+                    }
                     break;
                 case "float":
                     value = isNullable ? 0f : RowReader.ReadSingle();
                     str += value.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     break;
-                case "bstring":
+                case "double":
+                    value = isNullable ? 0d : RowReader.ReadDouble();
+                    str += value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    break;
+                case "pstring":
                     {
-                        var raw_str = isNullable ? string.Empty : RowReader.ReadPascalString12Bit();
+                        var raw_str = string.Empty;
+                        if (!isNullable)
+                        {
+                            int count = (int)RowReader.UnalignedReadInt(bitcount);
+                            raw_str = RowReader.ReadPascalString(count);
+                        }
                         str += raw_str.EscapeSqlSumbols();
                     } break;
                 case "string":
@@ -184,8 +287,10 @@ namespace WowDataFileParser
                         if (table == null)
                             raw_str = isNullable ? string.Empty : RowReader.ReadCString();
                         else
-                            raw_str = /*table[*/(isNullable ? 0 : RowReader.ReadInt32()).ToString()/*]*/;
-
+                        {
+                            var offset = isNullable ? 0 : RowReader.ReadInt32();
+                            raw_str = table.ContainsKey(offset) ? table[offset] : string.Empty;
+                        }
                         str += raw_str.EscapeSqlSumbols();
                     } break;
                 case "list":
@@ -194,8 +299,8 @@ namespace WowDataFileParser
                             throw new NullReferenceException("maxcount");
 
                         str = str.Remove(str.Length - 2);
-                        int elementCount = int.Parse(elem.Attributes["maxcount"].Value);
-                        int readElement = elementCount;
+                        var elementCount = int.Parse(elem.Attributes["maxcount"].Value);
+                        var readElement = elementCount;
 
                         if (elem.Attributes["counttype"] != null && elem.Attributes["name"] != null)
                         {
