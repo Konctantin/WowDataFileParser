@@ -95,9 +95,9 @@ namespace WowDataFileParser
 
                                 str += ");";
 
-                                if (RowReader.BaseStream.Position != RowReader.BaseStream.Length)
-                                    throw new Exception(string.Format("Row Length ({0}) != Row End Position ({1}); difference: {2}",
-                                        RowReader.BaseStream.Length, RowReader.BaseStream.Position, RowReader.BaseStream.Length - RowReader.BaseStream.Position));
+                                //if (RowReader.BaseStream.Position != RowReader.BaseStream.Length)
+                                //    throw new Exception(string.Format("Row Length ({0}) != Row End Position ({1}); difference: {2}",
+                                //        RowReader.BaseStream.Length, RowReader.BaseStream.Position, RowReader.BaseStream.Length - RowReader.BaseStream.Position));
 
                                 writer.WriteLine(str);
 
@@ -126,14 +126,6 @@ namespace WowDataFileParser
                             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
                             Console.ForegroundColor = ConsoleColor.Cyan;
                         }
-                    }
-                }
-
-                foreach (XmlElement element in xmlstruct.GetElementsByTagName("QueryFinalPack")[0])
-                {
-                    if (element.Attributes["text"] != null)
-                    {
-                        writer.WriteLine(element.Attributes["text"].Value);
                     }
                 }
             }

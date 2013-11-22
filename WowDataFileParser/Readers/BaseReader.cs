@@ -33,7 +33,7 @@ namespace WDReader.Reader
         public uint Build           { get; protected set; }
         public string Locale        { get; protected set; }
 
-        public Dictionary<int, string> StringTable { get; private set; }
+        public Dictionary<int, string> StringTable { get; protected set; }
 
         public StreamHandler this[int row] 
         {
@@ -42,9 +42,7 @@ namespace WDReader.Reader
 
         public BaseReader(string fileName)
         {
-            this.StringTable = new Dictionary<int, string>();
-            this.m_rows      = new Dictionary<int, byte[]>();
-
+            this.m_rows = new Dictionary<int, byte[]>();
             this.reader = new StreamHandler(new FileStream(fileName, FileMode.Open), Encoding.UTF8);
 
             if (this.reader.BaseStream.Length <= 4)

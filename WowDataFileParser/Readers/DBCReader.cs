@@ -15,6 +15,8 @@ namespace WDReader.Reader
         public DbcReader(string fileName)
             : base(fileName)
         {
+            this.StringTable = new Dictionary<int, string>();
+
             if (reader.BaseStream.Length < HeaderSize)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
