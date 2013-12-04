@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Kamilla.IO;
 
 namespace WDReader.Reader
 {
@@ -22,7 +21,7 @@ namespace WDReader.Reader
 
     public abstract class BaseReader : IDisposable
     {
-        protected StreamHandler reader;
+        protected BinaryReader reader;
         protected Dictionary<int, byte[]> m_rows;
 
         public uint Magic           { get; protected set; }
@@ -35,15 +34,15 @@ namespace WDReader.Reader
 
         public Dictionary<int, string> StringTable { get; protected set; }
 
-        public StreamHandler this[int row] 
+        public byte[] this[int row] 
         {
-            get { return new StreamHandler(new MemoryStream(m_rows.ElementAt(row).Value), Encoding.UTF8); } 
+            get { return m_rows.ElementAt(row).Value; } 
         }
 
         public BaseReader(string fileName)
         {
             this.m_rows = new Dictionary<int, byte[]>();
-            this.reader = new StreamHandler(new FileStream(fileName, FileMode.Open), Encoding.UTF8);
+            this.reader = new BinaryReader(new FileStream(fileName, FileMode.Open), Encoding.UTF8);
 
             if (this.reader.BaseStream.Length <= 4)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));

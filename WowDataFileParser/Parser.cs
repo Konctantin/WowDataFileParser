@@ -5,7 +5,6 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using WDReader.Reader;
-using Kamilla.IO;
 
 namespace WowDataFileParser
 {
@@ -15,7 +14,7 @@ namespace WowDataFileParser
         public static readonly string DEF           = "definitions.xml";
         public static readonly string OUTPUT_FILE   = "output.sql";
 
-        private StreamHandler RowReader;
+        private BitStreamReader RowReader;
         private XmlDocument  xmlstruct;
 
         internal Parser()
@@ -82,7 +81,7 @@ namespace WowDataFileParser
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             for (int i = 0; i < reader.RecordsCount; ++i)
                             {
-                                RowReader = reader[i];
+                                RowReader = new BitStreamReader( reader[i] );
 
                                 var str_hex = string.Join("", reader.GetRowAsByteArray(i).Select(n => n.ToString("X2")));
                                 var str = string.Format("REPLACE INTO {0} VALUES ('{1}'", tableName, reader.Locale);
@@ -156,20 +155,7 @@ namespace WowDataFileParser
                         {
                             value = bitcount == 0 
                                 ? RowReader.ReadByte() 
-                                : RowReader.UnalignedReadTinyInt(bitcount);
-                        }
-                        str += value;
-                    }
-                    break;
-                case "sbyte":
-                    {
-                        if (isNullable)
-                            value = 0;
-                        else
-                        {
-                            value = bitcount == 0
-                                ? RowReader.ReadSByte()
-                                : (sbyte)RowReader.UnalignedReadTinyInt(bitcount);
+                                : (int)RowReader.ReadUInt16Reverse(bitcount);
                         }
                         str += value;
                     }
@@ -181,21 +167,8 @@ namespace WowDataFileParser
                         else
                         {
                             value = bitcount == 0
-                                ? RowReader.ReadInt16()
-                                : (short)RowReader.UnalignedReadSmallInt(bitcount);
-                        }
-                        str += value;
-                    }
-                    break;
-                case "ushort":
-                    {
-                        if (isNullable)
-                            value = 0;
-                        else
-                        {
-                            value = bitcount == 0
-                                ? RowReader.ReadUInt16()
-                                : RowReader.UnalignedReadSmallInt(bitcount);
+                                ? RowReader.ReadInt32()
+                                : (int)RowReader.ReadUInt16Reverse(bitcount);
                         }
                         str += value;
                     }
@@ -208,7 +181,7 @@ namespace WowDataFileParser
                         {
                             value = bitcount == 0
                                 ? RowReader.ReadInt32()
-                                : (int)RowReader.UnalignedReadInt(bitcount);
+                                : (int)RowReader.ReadUInt32Reverse(bitcount);
                         }
                         str += value;
                     }
@@ -220,46 +193,16 @@ namespace WowDataFileParser
                         else
                         {
                             value = bitcount == 0
-                                ? RowReader.ReadUInt32()
-                                : RowReader.UnalignedReadInt(bitcount);
+                                ? RowReader.ReadUInt32Reverse(32)
+                                : RowReader.ReadUInt32Reverse(bitcount);
                         }
                         if (value > maxVal)
                             error = true;
                         str += value;
                     }
                     break;
-                case "long":
-                    {
-                        if (isNullable)
-                            value = 0u;
-                        else
-                        {
-                            value = bitcount == 0
-                                ? RowReader.ReadInt64()
-                                : (long)RowReader.UnalignedReadBigInt(bitcount);
-                        }
-                        str += value;
-                    }
-                    break;
-                case "ulong":
-                    {
-                        if (isNullable)
-                            value = 0u;
-                        else
-                        {
-                            value = bitcount == 0
-                                ? RowReader.ReadUInt64()
-                                : RowReader.UnalignedReadBigInt(bitcount);
-                        }
-                        str += value;
-                    }
-                    break;
                 case "float":
-                    value = isNullable ? 0f : RowReader.ReadSingle();
-                    str += value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    break;
-                case "double":
-                    value = isNullable ? 0d : RowReader.ReadDouble();
+                    value = isNullable ? 0f : RowReader.ReadFloat();
                     str += value.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     break;
                 case "pstring":
@@ -267,7 +210,7 @@ namespace WowDataFileParser
                         var raw_str = string.Empty;
                         if (!isNullable)
                         {
-                            int count = (int)RowReader.UnalignedReadInt(bitcount);
+                            int count = (int)RowReader.ReadUInt32Reverse(bitcount);
                             raw_str = RowReader.ReadPascalString(count);
                         }
                         str += raw_str.EscapeSqlSumbols();
@@ -277,7 +220,21 @@ namespace WowDataFileParser
                         var raw_str = string.Empty;
 
                         if (table == null)
-                            raw_str = isNullable ? string.Empty : RowReader.ReadCString();
+                        {
+                            if (bitcount > 0)
+                            {
+                                int count = (int)RowReader.ReadUInt32Reverse(bitcount);
+                                raw_str = isNullable
+                                    ? string.Empty
+                                    : RowReader.ReadPascalString(count);
+                            }
+                            else
+                            {
+                                raw_str = isNullable 
+                                    ? string.Empty
+                                    : RowReader.ReadCString();
+                            }
+                        }
                         else
                         {
                             var offset = isNullable ? 0 : RowReader.ReadInt32();
@@ -311,13 +268,35 @@ namespace WowDataFileParser
                             }
                         }
                     } break;
+                case "stringlist":
+                    {
+                        List<int> counts = new List<int>();
+                        foreach (XmlElement listElement in elem.ChildNodes.OfType<XmlElement>())
+                        {
+                            var bitCount = int.Parse(listElement.Attributes["bit"].Value);
+                            if (listElement.Attributes["reverse"] != null && listElement.Attributes["reverse"].Value == "true")
+                                counts.Add((int)RowReader.ReadUInt32Reverse(bitCount));
+                            else
+                                counts.Add((int)RowReader.ReadUInt32(bitCount));
+                        }
+                        for (int i = 0; i < counts.Count; ++i)
+                        {
+                            var sstr = string.Empty;
+                            if (RowReader.RemainigLength >= counts[i])
+                                sstr = RowReader.ReadString(counts[i]).EscapeSqlSumbols();
+
+                            if (i < counts.Count - 1)
+                                sstr += ", ";
+                            str += sstr;
+                        }
+                    }break;
             }
 
             if (value > maxVal) 
                 error = true;
         }
 
-        private int ReadSimpleType(ref StreamHandler reader, string type)
+        private int ReadSimpleType(ref BitStreamReader reader, string type)
         {
             switch (type)
             {

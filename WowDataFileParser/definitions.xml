@@ -238,99 +238,96 @@
         <field type="uint"   name="Unk"/>
     </gameobjectcache>
 
-    <questcache tablename="quest_template">
-        <field type="int"    name="entry"  key="true" />
-        <field type="int"    name="doubleEntry" />
-        <field type="int"    name="Method" />
-        <field type="int"    name="QuestLevel" />
-        <field type="int"    name="f_5" />
-        <field type="int"    name="MinLevel" />
-        <field type="int"    name="ZoneOrSort" />
-        <field type="int"    name="Type" />
-        <field type="int"    name="SuggestedPlayers" />
-        <field type="int"    name="NextQuestInChain" />
-        <field type="int"    name="RewXPId" />
-        <field type="int"    name="RewOrReqMoney" />
-        <field type="int"    name="RewMoneyMaxLevel" />
-        <field type="int"    name="RewSpell" />
-        <field type="int"    name="RewSpellCast" />
-        <field type="int"    name="RewHonorAddition" />
-        <field type="float"  name="RewHonorMultiplier" />
-        <field type="int"    name="SrcItemId" />
-        <field type="int"    name="QuestFlags" />
-        <field type="int"    name="QuestFlags2" />
-        <field type="int"    name="CharTitleId" />
-        <field type="int"    name="PlayersSlain" />
-        <field type="int"    name="f_23" />
-        <field type="int"    name="RewSkill" />
-        <field type="int"    name="RewSkillValue" />
-        <field type="int"    name="f_26" />
-        <field type="int"    name="PortraitGiver" />
-        <field type="int"    name="PortraitTurnIn" />
+  <questcache tablename="quest_template">
+    <field type="int"    name="entry"  key="true" />
+    <field type="int"    name="doubleEntry" />
+    <field type="int"    name="Method" />
+    <field type="int"    name="QuestLevel" />
+    <field type="int"    name="f_5" />
+    <field type="int"    name="MinLevel" />
+    <field type="int"    name="ZoneOrSort" />
+    <field type="int"    name="Type" />
+    <field type="int"    name="SuggestedPlayers" />
+    <field type="int"    name="NextQuestInChain" />
+    <field type="int"    name="RewXPId" />
+    <field type="int"    name="RewOrReqMoney" />
+    <field type="int"    name="RewMoneyMaxLevel" />
+    <field type="int"    name="RewSpell" />
+    <field type="int"    name="RewSpellCast" />
+    <field type="int"    name="RewHonorAddition" />
+    <field type="float"  name="RewHonorMultiplier" />
+    <field type="int"    name="unk1" />
+    <field type="int"    name="unk2" />
+    <field type="int"    name="unk3" />
 
-        <field type="list" maxcount="4">
-            <field type="int" name="RewItemId" />
-            <field type="int" name="RewItemCount" />
-        </field>
+    <field type="list" maxcount="4">
+      <field type="int" name="unk_1_1" />
+      <field type="int" name="unk_1_2" />
+      <field type="int" name="unk_1_3" />
+      <field type="int" name="unk_1_4" />
+    </field>
 
-        <field type="list" maxcount="6">
-            <field type="int" name="RewChoiceItemId" />
-            <field type="int" name="RewChoiceItemCount" />
-        </field>
+    <field type="list" maxcount="6">
+      <field type="int" name="unk_2_1" />
+      <field type="int" name="unk_2_2" />
+      <field type="int" name="unk_2_3" />
+    </field>
 
-        <field type="list" maxcount="5">
-            <field type="int" name="RewRepFaction" />
-        </field>
+    <field type="int"    name="PointMapId" />
+    <field type="float"  name="PointX" />
+    <field type="float"  name="PointY" />
+    <field type="int"    name="PointOpt" />
+    <field type="int"    name="unk4" />
+    <field type="int"    name="unk5" />
+    <field type="int"    name="unk6" />
+    <field type="int"    name="unk7" />
+    <field type="int"    name="unk8" />
+    <field type="int"    name="unk9" />
+    <field type="int"    name="unk10" />
 
-        <field type="list" maxcount="5">
-            <field type="int" name="RewRepValueId" />
-        </field>
+    <field type="list" maxcount="5">
+      <field type="int" name="unk_3_1" />
+      <field type="int" name="unk_3_2" />
+      <field type="int" name="unk_3_3" />
+    </field>
 
-        <field type="list" maxcount="5">
-            <field type="int" name="RewRepValue" />
-        </field>
+    <field type="int"    name="unk11" />
 
-        <field type="list" maxcount="4">
-            <field type="int" name="RewCurrencyId" />
-            <field type="int" name="RewCurrencyCount" />
-        </field>
+    <field type="list" maxcount="4">
+      <field type="int" name="unk_4_1" />
+      <field type="int" name="unk_4_2" />
+    </field>
 
-        <field type="int"    name="PointMapId" />
-        <field type="float"  name="PointX" />
-        <field type="float"  name="PointY" />
-        <field type="int"    name="PointOpt" />
+    <field type="int"    name="unk12" />
+    <field type="int"    name="unk13" />
+    <field type="int"    name="unk14" />
 
-        <field type="string" name="title" />
-        <field type="string" name="objectives" />
-        <field type="string" name="details" />
-        <field type="string" name="end_text" />
-        <field type="string" name="completed_text" />
-        <field type="string" name="npc_frame_access_text1" />
-        <field type="string" name="npc_frame_access_text2" />
-        <field type="string" name="npc_frame_access_text3" />
-        <field type="string" name="npc_frame_access_text4" />
+    <field type="list" name="condition_count" counttype="int" maxcount="10">
+      <field type="int"  name="unk_5_1" />
+      <field type="byte" name="unk_5_2" />
+      <field type="byte" name="unk_5_3" />
+      <field type="int"  name="unk_5_4" />
+      <field type="int"  name="unk_5_5" />
+      <field type="int"  name="unk_5_6" />
+      <field type="list" name="unk_count" counttype="int" maxcount="10">
+        <field type="int" name="condition_unk" />
+      </field>
+      <field type="pstring" name="condition_text" bit="8"/>
+    </field>
 
-        <field type="int"    name="SoundAccept" />
-        <field type="int"    name="SoundTurnIn" />
+    <field type="stringlist">
+      <field name="title"                  reverse="false" bit="9" />
+      <field name="objectives"             reverse="false" bit="12"/>
+      <field name="details"                reverse="false" bit="12"/>
+      <field name="end_text"               reverse="false" bit="9" />
+      <field name="completed_text"         reverse="false" bit="10"/>
+      <field name="npc_frame_access_text1" reverse="false" bit="8" />
+      <field name="npc_frame_access_text2" reverse="false" bit="10"/>
+      <field name="npc_frame_access_text3" reverse="false" bit="8" />
+      <field name="npc_frame_access_text4" reverse="false" bit="11"/>
+    </field>
 
-        <field type="list" maxcount="4">
-            <field type="int" name="ReqSourceId" />
-            <field type="int" name="ReqSourceCount" />
-        </field>
-
-        <field type="list" name="condition_count" counttype="byte" maxcount="10">
-            <field type="int"    name="condition_unk1" />
-            <field type="byte"   name="condition" />
-            <field type="int"    name="ReqCreatureOrGOId" />
-            <field type="int"    name="ReqCreatureOrGOCount" />
-            <field type="int"    name="condition_unk5" />
-            <field type="string" name="ObjectiveText" />
-            <field type="byte"   name="condition_unk6" />
-            <field type="list" name="unk_count" counttype="byte" maxcount="10">
-                <field type="int"  name="condition_unk8" />
-            </field>
-        </field>
-    </questcache>
+  </questcache>
 
     <npccache tablename="npc_text">
         <field type="uint"   name="Id" key="true"/>

@@ -101,6 +101,14 @@ namespace WowDataFileParser
                 }
             };
 
+            Action writeStringList = () => {
+                foreach (XmlElement element in record.ChildNodes.OfType<XmlElement>())
+                {
+                    var name = element.Attributes["name"].Value;
+                    writer.WriteLine("    `{0,-30} TEXT,", name + '`');
+                }
+            };
+
             if (record.Attributes["type"] == null)
                 return;
 
@@ -113,6 +121,8 @@ namespace WowDataFileParser
             {
                 if (fieldType.ToLower() == "list")
                     writeList();
+                if (fieldType.ToLower() == "stringlist")
+                    writeStringList();
                 return;
             }
 
@@ -156,10 +166,13 @@ namespace WowDataFileParser
                     break;
                 case "string":
                 case "pstring":
-                    writer.WriteLine(" TEXT NOT NULL,");
+                    writer.WriteLine(" TEXT,");
                     break;
                 case "list":
                     writeList();
+                    break;
+                case "stringlist":
+                    writeStringList();
                     break;
                 default:
                     throw new Exception(string.Format("Unknown field type {0}!", fieldType));
