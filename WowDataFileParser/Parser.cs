@@ -232,7 +232,7 @@ namespace WowDataFileParser
                             {
                                 raw_str = isNullable 
                                     ? string.Empty
-                                    : RowReader.ReadCString();
+                                    : RowReader.ReadString();
                             }
                         }
                         else

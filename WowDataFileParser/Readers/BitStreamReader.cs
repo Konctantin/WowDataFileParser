@@ -207,7 +207,6 @@ namespace WowDataFileParser
         internal string ReadPString(int hsize)
         {
             var size = ReadUInt32(hsize);
-
             var str = Encoding.UTF8.GetString(buffer, index, (int)size);
             index += (int)size;
             return str;
@@ -252,13 +251,12 @@ namespace WowDataFileParser
             return *(float*)&val;
         }
 
-        public string ReadCString()
+        public string ReadString()
         {
-            List<byte> list = new List<byte>();
-            byte b;
-            while ((b = this.ReadByte()) != 0)
-                list.Add(b);
-            return Encoding.UTF8.GetString(list.ToArray());
+            int count = 0, start = index;
+            while (this.ReadByte() != 0)
+                count++;
+            return Encoding.UTF8.GetString(buffer, start, count);
         }
 
         public string ReadPascalString(int len)
