@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WDReader.Reader
+namespace WowDataFileParser.Readers
 {
     public class WdbReader : BaseReader
     {
         private const int HeaderSize = 24;
-        private uint[] WDBSigs = new uint[]
-        {
+        private uint[] WDBSigs = new uint[] {
             0x574D4F42, // creaturecache.wdb
             0x57474F42, // gameobjectcache.wdb
             0x57494442, // itemcache.wdb

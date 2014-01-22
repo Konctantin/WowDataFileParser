@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WDReader.Reader
+namespace WowDataFileParser.Readers
 {
     public enum Locale : uint
     {

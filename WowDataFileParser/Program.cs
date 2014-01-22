@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
+using MS.Internal.Ink;
+using WowDataFileParser.Definitions;
+using WowDataFileParser.Readers;
 /*
     9552 = ═    9553 = ║    9554 = ╒    9555 = ╓    9556 = ╔    9557 = ╕    9558 = ╖    9559 = ╗
   
@@ -14,10 +20,34 @@ namespace WowDataFileParser
 {
     class Program
     {
-        const string VERSION = "2.2";
+        static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
+        const string DEF         = "definitions.xml";
+        const string OUTPUT_FILE = "output.sql";
+        const string VERSION     = "2.2";
+
+        static Definition definition;
 
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (o, ex) => {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║ ERROR: {0,-63}║", (ex.ExceptionObject as Exception).Message);
+                Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+            };
+
+            File.Delete(OUTPUT_FILE);
+
+            if (!File.Exists(DEF))
+                throw new FileNotFoundException(DEF);
+
+            using (var stream = File.OpenRead(DEF))
+            {
+                definition = (Definition)new XmlSerializer(typeof(Definition))
+                    .Deserialize(stream);
+            }
+
             Console.Title = "WoW data file parser";
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
@@ -27,22 +57,14 @@ namespace WowDataFileParser
             Console.WriteLine("╔═══════════════════════════════╦═════════╦═════════╦═════════╦═════════╗");
             Console.WriteLine("║           Name                ║ Locale  ║  Build  ║  Count  ║ Status  ║");
             Console.WriteLine("╠═══════════════════════════════╬═════════╬═════════╬═════════╬═════════╣");
-            try
-            {
-                new Parser();
-            }
-            catch (Exception ex)
-            {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║ ERROR: {0,-63}║", ex.Message);
-            Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            }
+
+            Parse();
+
             Console.WriteLine("╚═══════════════════════════════╩═════════╩═════════╩═════════╩═════════╝");
             Console.WriteLine();
             Console.Write("Please, press the \"F5\" to generate a database structure: ");
 
+            return;
             if (Console.ReadKey().Key != ConsoleKey.F5)
                 return;
 
@@ -55,20 +77,143 @@ namespace WowDataFileParser
             Console.WriteLine("╔═══════════════════════════════════╦═════════════════╗");
             Console.WriteLine("║ Element name                      ║      Type       ║");
             Console.WriteLine("╠═══════════════════════════════════╬═════════════════║");
-            try
-            {
-                new SqlTable();
-            }
-            catch (Exception ex)
-            {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("╔═════════════════════════════════════════════════════╗");
-            Console.WriteLine("║ ERROR: {0,-45}║", ex.Message);
-            Console.WriteLine("╚═════════════════════════════════════════════════════╝");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            }
+
+               // new SqlTable();
+
             Console.WriteLine("╚═══════════════════════════════════╩═════════════════╝");
             Console.ReadKey();
+        }
+
+        static void Parse()
+        {
+            var files = new DirectoryInfo(Environment.CurrentDirectory)
+                .GetFiles("*.*", SearchOption.AllDirectories);
+
+            if (files.Length == 0)
+                throw new Exception("Folder is Empty");
+
+            using (var writer = new StreamWriter(OUTPUT_FILE, false))
+            {
+                foreach (var file in files)
+                {
+                    if (!FILE_FILTER.Contains(file.Extension))
+                        continue;
+
+                    var file_name = Path.GetFileNameWithoutExtension(file.Name);
+                    BaseReader baseReader = null;
+                    switch (file.Extension)
+                    {
+                        case ".wdb": baseReader = new WdbReader(file.FullName); break;
+                        case ".adb": baseReader = new AdbReader(file.FullName); break;
+                        case ".db2": baseReader = new Db2Reader(file.FullName); break;
+                        case ".dbc": baseReader = new DbcReader(file.FullName); break;
+                        default: continue;
+                    }
+
+                    FileStruct fstruct = definition.GetStructure(file.Name, baseReader.Build);
+
+                    var ssp = 0;
+                    for (int i = 0; i < baseReader.RecordsCount; ++i)
+                    {
+                        fstruct.Init();
+                        var reader = new BitStreamReader(baseReader[i]);
+
+                        foreach (var field in fstruct.Fields)
+                            ReadType(fstruct.Fields, field, ref reader, baseReader.StringTable);
+
+                        if (reader.Remains > 0)
+                        {
+                            throw new Exception();
+                        }
+
+                        var sql_text = fstruct.ToSqlString(baseReader.Locale);
+                        writer.WriteLine(sql_text);
+
+                        int perc = i * 100 / baseReader.RecordsCount;
+                        if (perc != ssp)
+                        {
+                            ssp = perc;
+                            int cp = Console.CursorTop;
+                            Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
+                                file.Name, baseReader.Locale, baseReader.Build, i, perc + "%");
+                            Console.SetCursorPosition(0, cp);
+                        }
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    writer.Flush();
+                    Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
+                        file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount, "OK");
+                }
+            }
+        }
+
+        static void ReadType(IList<Field> fstore, Field field, ref BitStreamReader reader, Dictionary<int, string> stringTable, int index = 0)
+        {
+            var count = field.Size;
+            if (count == 0)
+                count = fstore.GetValueByName(field.SizeLink);
+
+            Action<object> SetVal = (value) => {
+                //if (field.Value is object[])
+                //    ((object[])field.Value)[index] = value;
+                //else
+                    field.Value = value;
+            };
+
+            switch (field.Type)
+            {
+                case DataType.Bool:    SetVal(reader.ReadBit());          break;
+                case DataType.Byte:    SetVal(reader.ReadByte(count));    break;
+                case DataType.Short:   SetVal(reader.ReadInt16(count));   break;
+                case DataType.Ushort:  SetVal(reader.ReadUInt16(count));  break;
+                case DataType.Int:     SetVal(reader.ReadInt32(count));   break;
+                case DataType.Uint:    SetVal(reader.ReadUInt32(count));  break;
+                case DataType.Long:    SetVal(reader.ReadInt64(count));   break;
+                case DataType.Ulong:   SetVal(reader.ReadUInt64(count));  break;
+                case DataType.Float:   SetVal(reader.ReadFloat());        break;
+                case DataType.Double:  SetVal(reader.ReadDouble());       break;
+                case DataType.Pstring: SetVal(reader.ReadPString(count)); break;
+                case DataType.String2: SetVal(reader.ReadString3(count)); break;
+                case DataType.String:
+                    {
+                        if (stringTable != null)
+                        {
+                            var offset = reader.ReadInt32();
+                            SetVal(stringTable[offset]);
+                        }
+                        else
+                        {
+                            if (count == 0 && field.SizeLink == null)
+                                SetVal(reader.ReadCString());
+                            else
+                                SetVal(reader.ReadString2(count));
+                        }
+                    } break;
+                case DataType.List:
+                    {
+                        var size = 0;
+                        if (field.Size > 0)
+                        {
+                            size = reader.ReadSize(field.Size);
+                            SetVal(size);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(field.SizeLink))
+                            size = fstore.GetValueByName(field.SizeLink);
+                        else if (field.Maxsize > 0)
+                            size = field.Maxsize;
+
+                        for (int i = 0; i < size; ++i)
+                        {
+                            foreach (var subfield in field.Fields)
+                            {
+                                ReadType(field.Fields, subfield, ref reader, stringTable, i);
+                            }
+                        }
+                    } break;
+
+                default: break;
+            }
         }
     }
 }

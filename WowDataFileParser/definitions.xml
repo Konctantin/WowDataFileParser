@@ -1,6 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Definitions build="13596">
-    <Item tablename="item_additional">
+﻿<?xml version="1.0"?>
+<Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <file name="Item.adb" table="item_additional" build="17538">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="class"/>
         <field type="uint"   name="subclass"/>
@@ -9,9 +10,9 @@
         <field type="uint"   name="displayid"/>
         <field type="uint"   name="inventorytype"/>
         <field type="uint"   name="sheath"/>
-    </Item>
+    </file>
 
-    <Item-sparse tablename="item_sparse">
+    <file name="Item-sparse.adb" table="item_sparse" build="17538">
         <field type="int"    name="entry" key="true"/>
         <field type="int"    name="quality"/>
         <field type="uint"   name="flags"/>
@@ -146,49 +147,66 @@
         <field type="float"  name="statscalingfactor"/>
         <field type="int"    name="field_130"/>
         <field type="int"    name="field_131"/>
-    </Item-sparse>
+    </file>
 
-    <creaturecache tablename="creature_template">
+    <file name="creaturecache.wdb" table="creature_template" build="17538">
         <field type="uint"   name="entry" max="100000" key="true"/>
-        <field type="uint"   name="type_flag2" bit="12"/>
-        <field type="uint"   name="type_flag3" bit="12"/>
-        <field type="uint"   name="type_flag4" bit="12"/>
-        <field type="string" name="name" bit="10"/>
-        <field type="string" name="name2" bit="12"/>
-        <field type="string" name="name3"/>
-        <field type="string" name="name4"/>
-        <field type="string" name="UnkStr1"/>
-        <field type="string" name="UnkStr2"/>
-        <field type="string" name="UnkStr3"/>
-        <field type="string" name="UnkStr4"/>
-        <field type="string" name="subname"/>
-        <field type="string" name="IconName"/>
-        <field type="string" name="Unk501"/>
+
+        <field type="int"    name="subname_len"        size="11"/>
+        <field type="int"    name="unk_text_len"       size="11"/>
+        <field type="int"    name="icon_name_len"      size="6"/>
+
+        <field type="byte"   name="racial_leader"      size="1" />
+
+        <field type="int"    name="male_names_len_1"   size="11"/>
+        <field type="int"    name="female_names_len_1" size="11"/>
+        <field type="int"    name="male_names_len_2"   size="11"/>
+        <field type="int"    name="female_names_len_2" size="11"/>
+        <field type="int"    name="male_names_len_3"   size="11"/>
+        <field type="int"    name="female_names_len_3" size="11"/>
+        <field type="int"    name="male_names_len_4"   size="11"/>
+        <field type="int"    name="female_names_len_4" size="11"/>
+
+        <field type="string2" name="male_name_1"       sizelink="male_names_len_1"/>
+        <field type="string2" name="female_name_1"     sizelink="female_names_len_1"/>
+        <field type="string2" name="male_name_2"       sizelink="male_names_len_2"/>
+        <field type="string2" name="female_name_2"     sizelink="female_names_len_2"/>
+        <field type="string2" name="male_name_3"       sizelink="male_names_len_3"/>
+        <field type="string2" name="female_name_3"     sizelink="female_names_len_3"/>
+        <field type="string2" name="male_name_4"       sizelink="male_names_len_4"/>
+        <field type="string2" name="female_name_4"     sizelink="female_names_len_4"/>
+
         <field type="uint"   name="type_flag"/>
+        <field type="uint"   name="unk_541"/>
         <field type="uint"   name="type"/>
         <field type="int"    name="family"/>
         <field type="uint"   name="rank"/>
-        <field type="uint"   name="Unk2"/>
+
         <field type="uint"   name="KillCredit1"/>
         <field type="uint"   name="KillCredit2"/>
+
         <field type="uint"   name="modelId1"/>
         <field type="uint"   name="modelId2"/>
         <field type="uint"   name="modelId3"/>
         <field type="uint"   name="modelId4"/>
+
         <field type="float"  name="HealthModifier"/>
         <field type="float"  name="PowerModifier"/>
-        <field type="sbyte"  name="RacialLeader"/>
-        <field type="uint"   name="QuestItem1"/>
-        <field type="uint"   name="QuestItem2"/>
-        <field type="uint"   name="QuestItem3"/>
-        <field type="uint"   name="QuestItem4"/>
-        <field type="uint"   name="QuestItem5"/>
-        <field type="uint"   name="QuestItem6"/>
-        <field type="uint"   name="MovementId"/>
-        <field type="uint"   name="Unk"/>
-    </creaturecache>
 
-    <gameobjectcache tablename="gameobject_template">
+        <field type="int"    name="quest_item_count"/>
+        <field type="int"    name="movement_id"/>
+        <field type="int"    name="unk543"/>
+
+        <field type="string2" name="sub_name"  sizelink="subname_len"/>
+        <field type="string2" name="unk_text"  sizelink="unk_text_len"/>
+        <field type="string2" name="icon_name" sizelink="icon_name_len"/>
+
+        <field type="list" maxcount="6" sizelink="quest_item_count">
+            <field type="uint" name="QuestItem"/>
+        </field>
+    </file>
+
+    <file name="gameobjectcache.wdb" table="gameobjectcache" build="17538">
         <field type="uint"   name="entry" max="300000" key="true"/>
         <field type="uint"   name="type"/>
         <field type="uint"   name="displayId"/>
@@ -232,103 +250,111 @@
         <field type="uint"   name="data30"/>
         <field type="uint"   name="data31"/>
         <field type="float"  name="Size"/>
-        <field type="list" name="QuestItemCount" counttype="byte" maxcount="6">
-            <field type="int"  name="QuestItem" />
+        <field type="list"   name="QuestItemCount" size="8" maxcount="6">
+            <field type="int" name="QuestItem" />
         </field>
         <field type="uint"   name="Unk"/>
-    </gameobjectcache>
+    </file>
 
-  <questcache tablename="quest_template">
-    <field type="int"    name="entry"  key="true" />
-    <field type="int"    name="doubleEntry" />
-    <field type="int"    name="Method" />
-    <field type="int"    name="QuestLevel" />
-    <field type="int"    name="f_5" />
-    <field type="int"    name="MinLevel" />
-    <field type="int"    name="ZoneOrSort" />
-    <field type="int"    name="Type" />
-    <field type="int"    name="SuggestedPlayers" />
-    <field type="int"    name="NextQuestInChain" />
-    <field type="int"    name="RewXPId" />
-    <field type="int"    name="RewOrReqMoney" />
-    <field type="int"    name="RewXPId_2" />
-    <field type="int"    name="RewMoneyMaxLevel" />
-    <field type="int"    name="RewSpell" />
-    <field type="int"    name="RewSpellCast" />
-    <field type="int"    name="RewHonorAddition" />
-    <field type="float"  name="RewHonorMultiplier" />
-    <field type="int"    name="SrcItemId" />
-    <field type="int"    name="QuestFlags" />
-    <field type="int"    name="QuestFlags2" />
+    <file name="questcache.wdb" table="questcache" build="17538">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="doubleEntry" />
+        <field type="int"    name="Method" />
+        <field type="int"    name="QuestLevel" />
+        <field type="int"    name="f_5" />
+        <field type="int"    name="MinLevel" />
+        <field type="int"    name="ZoneOrSort" />
+        <field type="int"    name="Type" />
+        <field type="int"    name="SuggestedPlayers" />
+        <field type="int"    name="NextQuestInChain" />
+        <field type="int"    name="RewXPId" />
+        <field type="int"    name="RewOrReqMoney" />
+        <field type="int"    name="RewXPId_2" />
+        <field type="int"    name="RewMoneyMaxLevel" />
+        <field type="int"    name="RewSpell" />
+        <field type="int"    name="RewSpellCast" />
+        <field type="int"    name="RewHonorAddition" />
+        <field type="float"  name="RewHonorMultiplier" />
+        <field type="int"    name="SrcItemId" />
+        <field type="int"    name="QuestFlags" />
+        <field type="int"    name="QuestFlags2" />
 
-    <field type="list" maxcount="4">
-      <field type="int" name="RewItemId" />
-      <field type="int" name="RewItemCount" />
-      <field type="int" name="ReqSourceId" />
-      <field type="int" name="ReqSourceCount" />
-    </field>
+        <field type="list" maxsize="4">
+            <field type="int" name="RewItemId" />
+            <field type="int" name="RewItemCount" />
+            <field type="int" name="ReqSourceId" />
+            <field type="int" name="ReqSourceCount" />
+        </field>
 
-    <field type="list" maxcount="6">
-      <field type="int" name="RewChoiceItemId" />
-      <field type="int" name="RewChoiceItemCount" />
-      <field type="int" name="RewChoiceItemUNK" />
-    </field>
+        <field type="list" maxsize="6">
+            <field type="int" name="RewChoiceItemId" />
+            <field type="int" name="RewChoiceItemCount" />
+            <field type="int" name="RewChoiceItemUNK" />
+        </field>
 
-    <field type="int"    name="PointMapId" />
-    <field type="float"  name="PointX" />
-    <field type="float"  name="PointY" />
-    <field type="int"    name="PointOpt" />
-    <field type="int"    name="CharTitleId" />
-    <field type="int"    name="BonusTalents_100" />
-    <field type="int"    name="PlayersSlain_25" />
-    <field type="int"    name="RewSkill" />
-    <field type="int"    name="RewSkillValue" />
-    <field type="int"    name="PortraitGiver" />
-    <field type="int"    name="PortraitTurnIn" />
+        <field type="int"    name="PointMapId" />
+        <field type="float"  name="PointX" />
+        <field type="float"  name="PointY" />
+        <field type="int"    name="PointOpt" />
+        <field type="int"    name="CharTitleId" />
+        <field type="int"    name="BonusTalents_100" />
+        <field type="int"    name="PlayersSlain_25" />
+        <field type="int"    name="RewSkill" />
+        <field type="int"    name="RewSkillValue" />
+        <field type="int"    name="PortraitGiver" />
+        <field type="int"    name="PortraitTurnIn" />
 
-    <field type="list" maxcount="5">
-      <field type="int" name="RewRepFaction" />
-      <field type="int" name="RewRepValueId" />
-      <field type="int" name="RewRepValue" />
-    </field>
+        <field type="list" maxsize="5">
+            <field type="int" name="RewRepFaction" />
+            <field type="int" name="RewRepValueId" />
+            <field type="int" name="RewRepValue" />
+        </field>
 
-    <field type="int"    name="UNK_541" />
+        <field type="int"   name="UNK_541" />
 
-    <field type="list" maxcount="4">
-      <field type="int" name="RewCurrencyId" />
-      <field type="int" name="RewCurrencyCount" />
-    </field>
+        <field type="list" maxsize="4">
+            <field type="int" name="RewCurrencyId" />
+            <field type="int" name="RewCurrencyCount" />
+        </field>
 
-    <field type="int"    name="SoundAccept" />
-    <field type="int"    name="SoundTurnIn" />
+        <field type="int"    name="SoundAccept" />
+        <field type="int"    name="SoundTurnIn" />
 
-    <field type="list" name="condition_count" counttype="int" maxcount="10">
-      <field type="int"  name="unk_5_1" />
-      <field type="byte" name="condition" />
-      <field type="byte" name="unk_5_3" />
-      <field type="int"  name="ReqCreatureOrGOId" />
-      <field type="int"  name="ReqCreatureOrGOCount" />
-      <field type="int"  name="unk_5_6" />
-      <field type="list" name="unk_count" counttype="int" maxcount="10">
-        <field type="int"  name="condition_unk" />
-      </field>
-      <field type="pstring" name="ObjectiveText" bit="8"/>
-    </field>
+        <field type="list" name="condition_count" size="32" maxsize="10">
+            <field type="int"  name="unk_5_1" />
+            <field type="byte" name="condition" />
+            <field type="byte" name="unk_5_3" />
+            <field type="int"  name="ReqCreatureOrGOId" />
+            <field type="int"  name="ReqCreatureOrGOCount" />
+            <field type="int"  name="unk_5_6" />
+            <field type="list" name="unk_count" size="32" maxsize="10">
+                <field type="int"  name="condition_unk" />
+            </field>
+            <field type="pstring" name="ObjectiveText" size="8"/>
+        </field>
 
-    <field type="stringlist">
-      <field name="Title"                  reverse="false" bit="9" />
-      <field name="Objectives"             reverse="false" bit="12"/>
-      <field name="Details"                reverse="false" bit="12"/>
-      <field name="EndText"                reverse="false" bit="9" />
-      <field name="PortraitGiverText"      reverse="false" bit="10"/>
-      <field name="PortraitGiverName"      reverse="false" bit="8" />
-      <field name="PortraitTurnInText"     reverse="false" bit="10"/>
-      <field name="PortraitTurnInName"     reverse="false" bit="8" />
-      <field name="CompletedText"          reverse="false" bit="11"/>
-    </field>
-  </questcache>
+        <field type="int" name="sTitle"               size="9" />
+        <field type="int" name="sObjectives"          size="12"/>
+        <field type="int" name="sDetails"             size="12"/>
+        <field type="int" name="sEndText"             size="9" />
+        <field type="int" name="sPortraitGiverText"   size="10"/>
+        <field type="int" name="sPortraitGiverName"   size="8" />
+        <field type="int" name="sPortraitTurnInText"  size="10"/>
+        <field type="int" name="sPortraitTurnInName"  size="8" />
+        <field type="int" name="sCompletedText"       size="11"/>
 
-    <npccache tablename="npc_text">
+        <field type="string" name="Title"               sizelink="sTitle"/>
+        <field type="string" name="Objectives"          sizelink="sObjectives"/>
+        <field type="string" name="Details"             sizelink="sDetails"/>
+        <field type="string" name="EndText"             sizelink="sEndText"/>
+        <field type="string" name="PortraitGiverText"   sizelink="sPortraitGiverText"/>
+        <field type="string" name="PortraitGiverName"   sizelink="sPortraitGiverName"/>
+        <field type="string" name="PortraitTurnInText"  sizelink="sPortraitTurnInText"/>
+        <field type="string" name="PortraitTurnInName"  sizelink="sPortraitTurnInName"/>
+        <field type="string" name="CompletedText"       sizelink="sCompletedText"/>
+    </file>
+
+    <file name="npccache.wdb" table="npc_text" build="17538">
         <field type="uint"   name="Id" key="true"/>
 
         <field type="float"  name="prob1"/>
@@ -348,9 +374,16 @@
         <field type="uint"  name="textId6"/>
         <field type="uint"  name="textId7"/>
         <field type="uint"  name="textId8"/>
-    </npccache>
+    </file>
 
-    <BroadcastText tablename="broadcast_text">
+    <file name="pagetext.wdb" table="page_text" build="17538">
+        <field type="uint"    name="entry" key="true"/>
+        <field type="uint"    name="doubleEntry"/>
+        <field type="uint"    name="next_page"/>
+        <field type="pstring" name="Text" size="12"/>
+    </file>
+
+    <file name="BroadcastText.adb" tablename="broadcast_text" build="0">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="lang" />
         <field type="string" name="text1" />
@@ -364,9 +397,9 @@
         <field type="uint"   name="unk7" />
         <field type="uint"   name="unk8" />
         <field type="uint"   name="unk9" />
-    </BroadcastText>
+    </file>
 
-    <BattlePetAbility tablename="battle_pet_ability">
+    <file name="BattlePetAbility.adb" table="battle_pet_ability" build="0">
         <field type="int"    name="entry" />
         <field type="int"    name="index" />
         <field type="int"    name="newField3" />
@@ -375,9 +408,9 @@
         <field type="int"    name="newField6" />
         <field type="string" name="spell_name" />
         <field type="string" name="spell_description" />
-    </BattlePetAbility>
+    </file>
 
-    <BattlePetSpecies tablename="battle_pet_species">
+    <file name="BattlePetSpecies.adb" table="battle_pet_species" build="0">
         <field type="int"    name="newField1" />
         <field type="int"    name="newField2" />
         <field type="int"    name="newField3" />
@@ -387,20 +420,14 @@
         <field type="int"    name="newField7" />
         <field type="string" name="title" />
         <field type="string" name="description" />
-    </BattlePetSpecies>
+    </file>
 
-    <SceneScript tablename="scene_script">
+    <file name="SceneScript.adb" table="scene_script" build="0">
         <field type="uint"   name="entry" key="true"/>
         <field type="string" name="Name"/>
         <field type="string" name="Script"/>
         <field type="int"    name="Unk1"/>
         <field type="int"    name="Unk2"/>
-    </SceneScript>
+    </file>
 
-    <pagetextcache tablename="page_text">
-        <field type="uint"   name="entry" key="true"/>
-        <field type="uint"   name="doubleEntry"/>
-        <field type="uint"   name="next_page"/>
-        <field type="pstring" name="Text" bit="12"/>
-    </pagetextcache>
-</Definitions>
+</Definition>

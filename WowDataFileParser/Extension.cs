@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using WowDataFileParser.Definitions;
 
-namespace WDReader.Reader
+namespace WowDataFileParser
 {
     public static class Extension
     {
@@ -18,12 +19,12 @@ namespace WDReader.Reader
         }
         #region String Extensions
 
-
-        public static string EscapeSqlSumbols(this string str)
+        public static int GetValueByName(this IList<Field> collection, string name)
         {
-            if (string.IsNullOrWhiteSpace(str))
-                return "NULL";
-            return @"'" + str.Replace(@"'", @"\'").Replace("\"", "\\\"") + @"'";
+            foreach (var item in collection)
+                if (item.Name == name)
+                    return Convert.ToInt32(item.Value);
+            return 0;
         }
 
         #endregion

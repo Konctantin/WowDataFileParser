@@ -1,51 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Text;
 
-namespace WowDataFileParser
+namespace MS.Internal.Ink
 {
-    internal class BitStreamReader
+    // import from MS.Internal.Ink.BitStreamReader
+    public unsafe class BitStreamReader
     {
-        private byte[] buffer;
+        public byte[] Buffer { get; private set; }
+        public int Index { get; private set; }
+
         private uint countBits;
-        private int index;
         private byte partialByte;
         private int cbitsInPartialByte;
 
-        internal bool EndOfStream
+        public bool EndOfStream
         {
             get { return 0u == this.countBits; }
         }
 
-        internal int CurrentIndex
+        public int Remains
         {
-            get { return this.index - 1; }
+            get { return Buffer.Length - Index; }
         }
 
-        public int RemainigLength
+        public BitStreamReader(byte[] buffer)
         {
-            get { return this.buffer.Length - this.index; }
-        }
-
-        internal BitStreamReader(byte[] buffer)
-        {
-            this.buffer = buffer;
+            this.Buffer = buffer;
             this.countBits = (uint)(buffer.Length * 8);
         }
 
-        internal BitStreamReader(byte[] buffer, int startIndex)
+        public BitStreamReader(byte[] buffer, int startIndex)
         {
             if (startIndex < 0 || startIndex >= buffer.Length)
                 throw new ArgumentOutOfRangeException("startIndex");
 
-            this.buffer = buffer;
-            this.index = startIndex;
+            this.Buffer = buffer;
+            this.Index = startIndex;
             this.countBits = (uint)((buffer.Length - startIndex) * 8);
         }
 
-        internal BitStreamReader(byte[] buffer, uint bufferLengthInBits)
+        public BitStreamReader(byte[] buffer, uint bufferLengthInBits)
             : this(buffer)
         {
             if ((ulong)bufferLengthInBits > (ulong)((long)(buffer.Length * 8)))
@@ -54,7 +50,7 @@ namespace WowDataFileParser
             this.countBits = bufferLengthInBits;
         }
 
-        internal long ReadUInt64(int countOfBits)
+        protected long mReadUInt64(int countOfBits)
         {
             if (countOfBits > 64 || countOfBits <= 0)
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
@@ -67,14 +63,14 @@ namespace WowDataFileParser
                     num2 = countOfBits;
 
                 num <<= num2;
-                byte b = this.ReadByte(num2);
+                byte b = this.mReadByte(num2);
                 num |= (long)((ulong)b);
                 countOfBits -= num2;
             }
             return num;
         }
 
-        internal ushort ReadUInt16(int countOfBits)
+        protected ushort mReadUInt16(int countOfBits)
         {
             if (countOfBits > 16 || countOfBits <= 0)
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
@@ -87,14 +83,14 @@ namespace WowDataFileParser
                     num2 = countOfBits;
 
                 num = (ushort)(num << num2);
-                byte b = this.ReadByte(num2);
+                byte b = this.mReadByte(num2);
                 num |= (ushort)b;
                 countOfBits -= num2;
             }
             return num;
         }
 
-        internal uint ReadUInt16Reverse(int countOfBits)
+        protected uint mReadUInt16Reverse(int countOfBits)
         {
             if (countOfBits > 16 || countOfBits <= 0)
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
@@ -107,7 +103,7 @@ namespace WowDataFileParser
                 if (countOfBits < 8)
                     num3 = countOfBits;
 
-                ushort num4 = (ushort)this.ReadByte(num3);
+                ushort num4 = (ushort)this.mReadByte(num3);
                 num4 = (ushort)(num4 << num2 * 8);
                 num |= num4;
                 num2++;
@@ -116,7 +112,7 @@ namespace WowDataFileParser
             return (uint)num;
         }
 
-        internal uint ReadUInt32(int countOfBits)
+        protected uint mReadUInt32(int countOfBits)
         {
             if (countOfBits > 32 || countOfBits <= 0)
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
@@ -129,14 +125,14 @@ namespace WowDataFileParser
                     num2 = countOfBits;
 
                 num <<= num2;
-                byte b = this.ReadByte(num2);
+                byte b = this.mReadByte(num2);
                 num |= (uint)b;
                 countOfBits -= num2;
             }
             return num;
         }
 
-        internal uint ReadUInt32Reverse(int countOfBits)
+        protected uint mReadUInt32Reverse(int countOfBits)
         {
             if (countOfBits > 32 || countOfBits <= 0)
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
@@ -149,7 +145,7 @@ namespace WowDataFileParser
                 if (countOfBits < 8)
                     num3 = countOfBits;
 
-                uint num4 = (uint)this.ReadByte(num3);
+                uint num4 = (uint)this.mReadByte(num3);
                 num4 <<= num2 * 8;
                 num |= num4;
                 num2++;
@@ -158,13 +154,13 @@ namespace WowDataFileParser
             return num;
         }
 
-        internal bool ReadBit()
+        public bool ReadBit()
         {
-            byte b = this.ReadByte(1);
+            byte b = this.mReadByte(1);
             return (b & 1) == 1;
         }
 
-        internal byte ReadByte(int countOfBits)
+        protected byte mReadByte(int countOfBits)
         {
             if (this.EndOfStream)
                 throw new EndOfStreamException("EndOfStreamReached");
@@ -187,8 +183,8 @@ namespace WowDataFileParser
             }
             else
             {
-                byte b2 = this.buffer[this.index];
-                this.index++;
+                byte b2 = this.Buffer[this.Index];
+                this.Index++;
                 int num2 = 8 - countOfBits;
                 b = (byte)(this.partialByte >> num2);
                 int num3 = Math.Abs(countOfBits - this.cbitsInPartialByte - 8);
@@ -199,72 +195,171 @@ namespace WowDataFileParser
             return b;
         }
 
-        public void SetPosition(int pos)
+        #region Extensions
+
+        public byte ReadByte(int count = 0)
         {
-            this.index = pos;
+            if (count == 0)
+            {
+                var val = Buffer[Index];
+                ++Index;
+                return val;
+            }
+            else
+                return mReadByte(count);
         }
 
-        internal string ReadPString(int hsize)
+        public short ReadInt16(int count = 0)
         {
-            var size = ReadUInt32(hsize);
-            var str = Encoding.UTF8.GetString(buffer, index, (int)size);
-            index += (int)size;
-            return str;
+            if (count == 0)
+            {
+                var val = BitConverter.ToInt16(Buffer, Index);
+                Index += 2;
+                return val;
+            }
+            else
+                return unchecked((short)mReadUInt16(count));
         }
 
-        internal string ReadString(int hsize)
+        public ushort ReadUInt16(int count = 0)
         {
-            var str = Encoding.UTF8.GetString(buffer, index, (int)hsize);
-            index += (int)hsize;
-            return str;
+            if (count == 0)
+            {
+                var val = BitConverter.ToUInt16(Buffer, Index);
+                Index += 2;
+                return val;
+            }
+            else
+                return mReadUInt16(count);
         }
 
-        internal unsafe byte ReadByte()
+        public int ReadInt32(int count = 0)
         {
-            var val = ReadUInt32Reverse(8);
-            return *(byte*)&val;
+            if (count == 0)
+            {
+                var val = BitConverter.ToInt32(Buffer, Index);
+                Index += 4;
+                return val;
+            }
+            else
+                return unchecked((int)mReadUInt32(count));
         }
 
-        internal byte[] ReadBytes(int count)
+        public uint ReadUInt32(int count = 0)
         {
-            byte[] arr = new byte[count];
-            for (int i = 0; i < count; ++i)
-                arr[i] = ReadByte(8);
-            return arr;
+            if (count == 0)
+            {
+                var val = BitConverter.ToUInt32(Buffer, Index);
+                Index += 4;
+                return val;
+            }
+            else
+                return mReadUInt32(count);
         }
 
-        internal unsafe short ReadInt16()
+        public long ReadInt64(int count = 0)
         {
-            var val = ReadUInt32Reverse(16);
-            return *(short*)&val;
+            if (count == 0)
+            {
+                var val = BitConverter.ToInt64(Buffer, Index);
+                Index += 8;
+                return val;
+            }
+            else
+                return mReadUInt64(count);
         }
 
-        internal unsafe int ReadInt32()
+        public ulong ReadUInt64(int count = 0)
         {
-            var val = ReadUInt32Reverse(32);
-            return *(int*)&val;
+            if (count == 0)
+            {
+                var val = BitConverter.ToUInt64(Buffer, Index);
+                Index += 8;
+                return val;
+            }
+            else
+                return unchecked((ulong)mReadUInt64(count));
         }
 
-        internal unsafe float ReadFloat()
+        public float ReadFloat()
         {
-            var val = ReadUInt32Reverse(32);
-            return *(float*)&val;
+            var val = BitConverter.ToSingle(Buffer, Index);
+            Index += 4;
+            return val;
         }
 
-        public string ReadString()
+        public double ReadDouble()
         {
-            int count = 0, start = index;
-            while (this.ReadByte() != 0)
-                count++;
-            return Encoding.UTF8.GetString(buffer, start, count);
+            var val = BitConverter.ToDouble(Buffer, Index);
+            Index += 8;
+            return val;
         }
 
-        public string ReadPascalString(int len)
+        public int ReadSize(int count)
         {
-            var bytes = new byte[len];
-            for (int i = 0; i < len; ++i)
-                bytes[i] = this.ReadByte();
-            return Encoding.UTF8.GetString(bytes);
+            if (count < 8)
+                return ReadByte(count);
+            else if (count == 8)
+                return ReadByte();
+            else if (count > 8 && count < 16)
+                return ReadInt16(count);
+            else if (count == 16)
+                return ReadInt16();
+            else if (count > 16 && count < 32)
+                return ReadInt32(count);
+            else if (count == 32)
+                return ReadInt32();
+            return 0;
         }
+
+        public string ReadString(int len)
+        {
+            if (len == 0)
+                return ReadCString();
+            else
+                return ReadString2(len);
+        }
+
+        public string ReadString3(int m_size)
+        {
+            if (m_size <= 1)
+                return string.Empty;
+
+            var str = Encoding.UTF8.GetString(Buffer, Index, m_size);
+            Index += (int)m_size;
+            return (str ?? "").TrimEnd('\0');
+        }
+
+        public string ReadString2(int m_size)
+        {
+            if (m_size <= 1)
+            {
+                if (m_size == 1)
+                    ++Index;
+                return string.Empty;
+            }
+
+            var str = Encoding.UTF8.GetString(Buffer, Index, m_size);
+            Index += (int)m_size;
+            return (str ?? "").TrimEnd('\0');
+        }
+
+        public string ReadCString()
+        {
+            int start = Index;
+            while (Buffer[Index++] != 0);
+            var str = Encoding.UTF8.GetString(Buffer, start, Index - start);
+            return (str ?? "").TrimEnd('\0');
+        }
+
+        public string ReadPString(int size)
+        {
+            var len = ReadSize(size);
+            var str = Encoding.UTF8.GetString(Buffer, Index, len);
+            Index += len;
+            return (str ?? "").TrimEnd('\0');
+        }
+
+        #endregion
     }
 }

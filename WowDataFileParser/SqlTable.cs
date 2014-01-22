@@ -11,7 +11,7 @@ namespace WowDataFileParser
         internal SqlTable()
         {
             var xml = new XmlDocument();
-            xml.Load(Parser.DEF);
+            //xml.Load(Parser.DEF);
 
             XmlNode root = xml.GetElementsByTagName("Definitions")[0];
             if (root.Attributes["build"] == null)

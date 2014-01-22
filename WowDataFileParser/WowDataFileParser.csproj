@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser.cs" />
+    <Compile Include="Definitions\DataType.cs" />
+    <Compile Include="Definitions\Definition.cs" />
+    <Compile Include="Definitions\Field.cs" />
+    <Compile Include="Definitions\FileStruct.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\AdbReader.cs" />
@@ -52,7 +55,7 @@
     <Compile Include="Readers\BitStreamReader.cs" />
     <Compile Include="Readers\Db2Reader.cs" />
     <Compile Include="Readers\DbcReader.cs" />
-    <Compile Include="Readers\Extension.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="Readers\WdbReader.cs" />
     <Compile Include="SqlTable.cs" />
   </ItemGroup>
