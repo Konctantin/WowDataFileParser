@@ -20,14 +20,6 @@ namespace WowDataFileParser
             return sub;
         }
 
-        public void Fill(int count)
-        {
-            for (int i = Count; i < count; ++i)
-            {
-                Add(null);
-            }
-        }
-
         public void ParseValue(ref StringBuilder sb, object element)
         {
             if (element == null)

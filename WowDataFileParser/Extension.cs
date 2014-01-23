@@ -17,7 +17,6 @@ namespace WowDataFileParser
                 list.Add(b);
             return Encoding.UTF8.GetString(list.ToArray());
         }
-        #region String Extensions
 
         public static int GetValueByName(this IList<Field> collection, string name)
         {
@@ -26,7 +25,5 @@ namespace WowDataFileParser
                     return Convert.ToInt32(item.Value);
             return 0;
         }
-
-        #endregion
     }
 }

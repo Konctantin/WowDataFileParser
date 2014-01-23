@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0"?>
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <file name="Item.adb" table="item_additional" build="17538">
+    <build>17538</build>
+
+    <file name="Item.adb" table="item_additional">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="class"/>
         <field type="uint"   name="subclass"/>
@@ -12,7 +14,7 @@
         <field type="uint"   name="sheath"/>
     </file>
 
-    <file name="Item-sparse.adb" table="item_sparse" build="17538">
+    <file name="Item-sparse.adb" table="item_sparse">
         <field type="int"    name="entry" key="true"/>
         <field type="int"    name="quality"/>
         <field type="uint"   name="flags"/>
@@ -149,7 +151,7 @@
         <field type="int"    name="field_131"/>
     </file>
 
-    <file name="creaturecache.wdb" table="creature_template" build="17538">
+    <file name="creaturecache.wdb" table="creature_template">
         <field type="uint"   name="entry" max="100000" key="true"/>
 
         <field type="int"    name="subname_len"        size="11"/>
@@ -206,7 +208,7 @@
         </field>
     </file>
 
-    <file name="gameobjectcache.wdb" table="gameobjectcache" build="17538">
+    <file name="gameobjectcache.wdb" table="gameobjectcache">
         <field type="uint"   name="entry" max="300000" key="true"/>
         <field type="uint"   name="type"/>
         <field type="uint"   name="displayId"/>
@@ -256,7 +258,7 @@
         <field type="uint"   name="Unk"/>
     </file>
 
-    <file name="questcache.wdb" table="questcache" build="17538">
+    <file name="questcache.wdb" table="questcache">
         <field type="int"    name="entry" key="true" />
         <field type="int"    name="doubleEntry" />
         <field type="int"    name="Method" />
@@ -354,7 +356,7 @@
         <field type="string" name="CompletedText"       sizelink="sCompletedText"/>
     </file>
 
-    <file name="npccache.wdb" table="npc_text" build="17538">
+    <file name="npccache.wdb" table="npc_text">
         <field type="uint"   name="Id" key="true"/>
 
         <field type="float"  name="prob1"/>
@@ -376,14 +378,14 @@
         <field type="uint"  name="textId8"/>
     </file>
 
-    <file name="pagetext.wdb" table="page_text" build="17538">
+    <file name="pagetext.wdb" table="page_text">
         <field type="uint"    name="entry" key="true"/>
         <field type="uint"    name="doubleEntry"/>
         <field type="uint"    name="next_page"/>
         <field type="pstring" name="Text" size="12"/>
     </file>
 
-    <file name="BroadcastText.adb" tablename="broadcast_text" build="0">
+    <file name="BroadcastText.adb" table="broadcast_text">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="lang" />
         <field type="string" name="text1" />
@@ -399,7 +401,7 @@
         <field type="uint"   name="unk9" />
     </file>
 
-    <file name="BattlePetAbility.adb" table="battle_pet_ability" build="0">
+    <file name="BattlePetAbility.adb" table="battle_pet_ability">
         <field type="int"    name="entry" />
         <field type="int"    name="index" />
         <field type="int"    name="newField3" />
@@ -410,19 +412,7 @@
         <field type="string" name="spell_description" />
     </file>
 
-    <file name="BattlePetSpecies.adb" table="battle_pet_species" build="0">
-        <field type="int"    name="newField1" />
-        <field type="int"    name="newField2" />
-        <field type="int"    name="newField3" />
-        <field type="int"    name="newField4" />
-        <field type="int"    name="newField5" />
-        <field type="int"    name="newField6" />
-        <field type="int"    name="newField7" />
-        <field type="string" name="title" />
-        <field type="string" name="description" />
-    </file>
-
-    <file name="SceneScript.adb" table="scene_script" build="0">
+    <file name="SceneScript.adb" table="scene_script">
         <field type="uint"   name="entry" key="true"/>
         <field type="string" name="Name"/>
         <field type="string" name="Script"/>

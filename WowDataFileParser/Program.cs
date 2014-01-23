@@ -23,7 +23,7 @@ namespace WowDataFileParser
         static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
         const string DEF         = "definitions.xml";
         const string OUTPUT_FILE = "output.sql";
-        const string VERSION     = "2.2";
+        const string VERSION     = "3.0";
 
         static Definition definition;
 
@@ -64,7 +64,6 @@ namespace WowDataFileParser
             Console.WriteLine();
             Console.Write("Please, press the \"F5\" to generate a database structure: ");
 
-            return;
             if (Console.ReadKey().Key != ConsoleKey.F5)
                 return;
 
@@ -78,7 +77,7 @@ namespace WowDataFileParser
             Console.WriteLine("║ Element name                      ║      Type       ║");
             Console.WriteLine("╠═══════════════════════════════════╬═════════════════║");
 
-               // new SqlTable();
+            SqlTable.CreateSqlTable(definition);
 
             Console.WriteLine("╚═══════════════════════════════════╩═════════════════╝");
             Console.ReadKey();
@@ -94,6 +93,8 @@ namespace WowDataFileParser
 
             using (var writer = new StreamWriter(OUTPUT_FILE, false))
             {
+                writer.AutoFlush = true;
+
                 foreach (var file in files)
                 {
                     if (!FILE_FILTER.Contains(file.Extension))
@@ -110,7 +111,7 @@ namespace WowDataFileParser
                         default: continue;
                     }
 
-                    FileStruct fstruct = definition.GetStructure(file.Name, baseReader.Build);
+                    var fstruct = definition[file.Name];
 
                     if (fstruct == null)
                         continue;
@@ -121,19 +122,18 @@ namespace WowDataFileParser
                         var reader = new BitStreamReader(baseReader[i]);
                         var data   = new TreeData();
 
-                        fstruct.Init();
-
                         foreach (var field in fstruct.Fields)
                             ReadType(fstruct.Fields, field, ref reader, baseReader.StringTable, data);
 
                         if (reader.Remains > 0)
-                        {
-                            throw new Exception();
-                        }
+                            throw new Exception("reader.Remains = " + reader.Remains);
+
+                        reader.Dispose();
+                        GC.SuppressFinalize(reader);
 
                         var sql_text = data.ToSqlString(fstruct.TableName, baseReader.Locale);
                         writer.WriteLine(sql_text);
-                        writer.Flush();
+
                         int perc = i * 100 / baseReader.RecordsCount;
                         if (perc != ssp)
                         {
@@ -145,10 +145,14 @@ namespace WowDataFileParser
                         }
                     }
 
+                    GC.Collect();
+
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     writer.Flush();
                     Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
                         file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount, "OK");
+
+                    baseReader.Dispose();
                 }
             }
         }
@@ -191,12 +195,7 @@ namespace WowDataFileParser
                             if (count == 0 && field.SizeLink == null)
                                 SetVal(reader.ReadCString());
                             else
-                            {
-                                if (count == 1024)
-                                    SetVal(reader.ReadString2(count));
-                                else
-                                    SetVal(reader.ReadString2(count));
-                            }
+                                SetVal(reader.ReadString2(count));
                         }
                         else
                         {

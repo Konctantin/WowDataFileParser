@@ -6,7 +6,7 @@ using System.Text;
 namespace MS.Internal.Ink
 {
     // import from MS.Internal.Ink.BitStreamReader
-    public unsafe class BitStreamReader
+    public class BitStreamReader : IDisposable
     {
         public byte[] Buffer { get; private set; }
         public int Index { get; private set; }
@@ -361,5 +361,14 @@ namespace MS.Internal.Ink
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            this.Buffer = null;
+            this.Index  = 0;
+            this.countBits   = 0;
+            this.partialByte = 0;
+            this.cbitsInPartialByte = 0;
+        }
     }
 }

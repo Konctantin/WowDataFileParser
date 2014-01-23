@@ -3,32 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using WowDataFileParser.Definitions;
 
 namespace WowDataFileParser
 {
     internal class SqlTable
     {
-        internal SqlTable()
+        public static void CreateSqlTable(Definition definition)
         {
-            var xml = new XmlDocument();
-            //xml.Load(Parser.DEF);
-
-            XmlNode root = xml.GetElementsByTagName("Definitions")[0];
-            if (root.Attributes["build"] == null)
+            if (definition.Build == 0)
                 throw new Exception("build is empty");
 
-            string build = root.Attributes["build"].Value;
-            string outputFileName = string.Format("table_structure_{0}.sql", build);
-            
-            var writer = new StreamWriter(outputFileName);
+            var writer = new StreamWriter(string.Format("table_structure_{0}.sql", definition.Build));
 
-            writer.WriteLine("DROP DATABASE IF EXISTS `wdb_{0}`;", build);
-            writer.WriteLine("CREATE DATABASE `wdb_{0}` CHARACTER SET utf8 COLLATE utf8_general_ci;", build);
-            writer.WriteLine("USE `wdb_{0}`;", build);
+            writer.WriteLine("DROP DATABASE IF EXISTS `wdb_{0}`;", definition.Build);
+            writer.WriteLine("CREATE DATABASE `wdb_{0}` CHARACTER SET utf8 COLLATE utf8_general_ci;", definition.Build);
+            writer.WriteLine("USE `wdb_{0}`;", definition.Build);
                 
             Console.Write("║ ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.Write("wdb_{0, -30}", build);
+            Console.Write("wdb_{0, -30}", definition.Build);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("║ ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -36,146 +30,106 @@ namespace WowDataFileParser
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("║");
 
-            var collection = xml.GetElementsByTagName("Definitions")[0].OfType<XmlElement>();
             int index = 0;
-            foreach (XmlElement element in collection)
+            foreach (var element in definition.Files)
             {
-                if (element.Attributes["tablename"] == null)
-                    continue;
-                List<string> keys = new List<string>();
+                var keys = new List<string>();
                 keys.Add("locale");
-                string tableName = element.Attributes["tablename"].Value;
-                writer.WriteLine("-- {0} structure for build {1}", tableName, build);
-                writer.WriteLine("DROP TABLE IF EXISTS `{0}`;", tableName);
-                writer.WriteLine("CREATE TABLE `{0}` (", tableName);
-                writer.WriteLine("    `locale`                        char(5) default NULL,");
-                foreach (XmlElement record in element.ChildNodes.OfType<XmlElement>())
-                {
+
+                writer.WriteLine("-- {0} structure for build {1}", element.TableName, definition.Build);
+                writer.WriteLine("DROP TABLE IF EXISTS `{0}`;", element.TableName);
+                writer.WriteLine("CREATE TABLE `{0}` (", element.TableName);
+                writer.WriteLine("    `locale`                        char(4) default NULL,");
+
+                foreach (var record in element.Fields)
                     WriteFieldByType(writer, keys, record, string.Empty);
-                }
-                writer.Write("    PRIMARY KEY (");
-                for (int i = 0; i < keys.Count; ++i)
-                    writer.Write("`{0}`{1}", keys[i], (i == keys.Count - 1)? ")" + Environment.NewLine: ", ");
-                writer.WriteLine(") ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Export of {0}';", tableName);
+
+                writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(k => "`" + k + "`")) + ")");
+                writer.WriteLine(") ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Export of {0}';", element.TableName);
                 writer.WriteLine();
                 // hack - last is empty (-1)
-                if (index < collection.Count() - 2)
-                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", tableName, "table");
+                if (index < element.Fields.Count - 2)
+                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", element.TableName, "table");
                 else
-                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", tableName, "table");
+                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", element.TableName, "table");
                 ++index;
             }
             writer.Flush();
             writer.Close();
         }
 
-        private void WriteFieldByType(StreamWriter writer, List<string> keys, XmlElement record, string suffix)
+        private static void WriteFieldByType(StreamWriter writer, List<string> keys, Field record, string suffix)
         {
-            Action writeList = () => {
-                int elementCount = int.Parse(record.Attributes["maxcount"].Value);
-
-                if (record.Attributes["name"] != null)
-                {
-                    var counttype = record.Attributes["name"].Value;
-                    var fname = record.Attributes["name"].Value;
-
-                    if (!char.IsDigit(fname[fname.Length - 1]))
-                    {
-                        if (suffix.Length > 0 && suffix[0] == '_')
-                            fname += suffix.Substring(1);
-                        else
-                            fname += suffix;
-                    }
-                    else { fname += suffix; }
-
-                    writer.WriteLine("    `{0,-30} INT NOT NULL DEFAULT '0',", fname + "`");
-                }
-
-                for (int i = 0; i < elementCount; ++i)
-                {
-                    var m_suffix = suffix + "_" + (i + 1);
-                    foreach (XmlElement element in record.ChildNodes.OfType<XmlElement>())
-                    {
-                        WriteFieldByType(writer, keys, element, m_suffix);
-                    }
-                }
-            };
-
-            Action writeStringList = () => {
-                foreach (XmlElement element in record.ChildNodes.OfType<XmlElement>())
-                {
-                    var name = element.Attributes["name"].Value;
-                    writer.WriteLine("    `{0,-30} TEXT,", name + '`');
-                }
-            };
-
-            if (record.Attributes["type"] == null)
+            if (record.Type == DataType.None)
                 return;
 
-            if (record.Attributes["key"] != null)
-                keys.Add(record.Attributes["name"].Value);
-
-            string fieldType = record.Attributes["type"].Value;
-
-            if (record.Attributes["name"] == null)
-            {
-                if (fieldType.ToLower() == "list")
-                    writeList();
-                if (fieldType.ToLower() == "stringlist")
-                    writeStringList();
-                return;
-            }
-
-            var fieldName = record.Attributes["name"].Value;
-
-            if (fieldType.ToLower() != "list")
-                writer.Write("    `{0,-30}", fieldName + suffix + '`');
+            if (record.Key)
+                keys.Add(record.Name);
 
             #region Type
-            switch (fieldType.ToLower())
+            switch (record.Type)
             {
-                case "long":
-                    writer.WriteLine(" BIGINT NOT NULL DEFAULT '0',");
+                case DataType.Long:
+                    writer.WriteLine("    `{0,-30} BIGINT NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "ulong":
-                    writer.WriteLine(" BIGINT UNSIGNED NOT NULL DEFAULT '0',");
+                case DataType.Ulong:
+                    writer.WriteLine("    `{0,-30} BIGINT UNSIGNED NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "int":
-                    writer.WriteLine(" INT NOT NULL DEFAULT '0',");
+                case DataType.Int:
+                    writer.WriteLine("    `{0,-30} INT NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "uint":
-                    writer.WriteLine(" INT UNSIGNED NOT NULL DEFAULT '0',");
+                case DataType.Uint:
+                    writer.WriteLine("    `{0,-30} INT UNSIGNED NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "short":
-                    writer.WriteLine(" SMALLINT NOT NULL DEFAULT '0',");
+                case DataType.Short:
+                    writer.WriteLine("    `{0,-30} SMALLINT NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "ushort":
-                    writer.WriteLine(" SMALLINT UNSIGNED NOT NULL DEFAULT '0',");
+                case DataType.Ushort:
+                    writer.WriteLine("    `{0,-30} SMALLINT UNSIGNED NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "sbyte":
-                    writer.WriteLine(" TINYINT NOT NULL DEFAULT '0',");
+                case DataType.Byte:
+                    writer.WriteLine("    `{0,-30} TINYINT NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "byte":
-                    writer.WriteLine(" TINYINT UNSIGNED NOT NULL DEFAULT '0',");
+                case DataType.Float:
+                    writer.WriteLine("    `{0,-30} FLOAT NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "float":
-                    writer.WriteLine(" FLOAT NOT NULL DEFAULT '0',");
+                case DataType.Double:
+                    writer.WriteLine("    `{0,-30} DOUBLE NOT NULL DEFAULT '0',", record.Name + suffix + '`');
                     break;
-                case "double":
-                    writer.WriteLine(" DOUBLE NOT NULL DEFAULT '0',");
+                case DataType.String:
+                case DataType.String2:
+                case DataType.Pstring:
+                    writer.WriteLine("    `{0,-30} TEXT,", record.Name + suffix + '`');
                     break;
-                case "string":
-                case "pstring":
-                    writer.WriteLine(" TEXT,");
-                    break;
-                case "list":
-                    writeList();
-                    break;
-                case "stringlist":
-                    writeStringList();
+                case DataType.List:
+                    {
+                        if (!string.IsNullOrWhiteSpace(record.Name))
+                        {
+                            var counttype = record.Name;
+
+                            var fname = record.Name;
+                            if (!char.IsDigit(fname[fname.Length - 1]))
+                            {
+                                if (suffix.Length > 0 && suffix[0] == '_')
+                                    fname += suffix.Substring(1);
+                                else
+                                    fname += suffix;
+                            }
+                            else { fname += suffix; }
+
+                            writer.WriteLine("    `{0,-30} INT NOT NULL DEFAULT '0',", fname + "`");
+                        }
+
+                        for (int i = 0; i < record.Maxsize; ++i)
+                        {
+                            var m_suffix = suffix + "_" + (i + 1);
+                            foreach (var element in record.Fields)
+                                WriteFieldByType(writer, keys, element, m_suffix);
+                        }
+                    }
                     break;
                 default:
-                    throw new Exception(string.Format("Unknown field type {0}!", fieldType));
+                    throw new Exception(string.Format("Unknown field type {0}!", record.Type));
             }
             #endregion
         }

@@ -21,12 +21,6 @@ namespace WowDataFileParser.Definitions
         public string TableName   { get; set; }
 
         /// <summary>
-        /// Cleint build.
-        /// </summary>
-        [XmlAttribute("build")]
-        public int Build          { get; set; }
-
-        /// <summary>
         /// Field list.
         /// </summary>
         [XmlElement("field")]
@@ -35,25 +29,6 @@ namespace WowDataFileParser.Definitions
         public FileStruct()
         {
             Fields = new List<Field>();
-        }
-
-        private void Clean(Field field)
-        {
-            field.Value = null;
-            if (field.Fields != null)
-            {
-
-                foreach (var item in field.Fields)
-                {
-                    Clean(item);
-                }
-            }
-        }
-
-        public void Init()
-        {
-            foreach (var item in this.Fields)
-                Clean(item);
         }
     }
 }

@@ -86,13 +86,5 @@ namespace WowDataFileParser.Readers
                 StringTable.Clear();
             StringTable = null;
         }
-
-        public byte[] GetRowAsByteArray(int row)
-        {
-            if (row < 0)
-                return new byte[0];
-
-            return m_rows.ElementAt(row).Value;
-        }
     }
 }
