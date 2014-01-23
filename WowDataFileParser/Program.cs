@@ -112,23 +112,28 @@ namespace WowDataFileParser
 
                     FileStruct fstruct = definition.GetStructure(file.Name, baseReader.Build);
 
+                    if (fstruct == null)
+                        continue;
+
                     var ssp = 0;
                     for (int i = 0; i < baseReader.RecordsCount; ++i)
                     {
-                        fstruct.Init();
                         var reader = new BitStreamReader(baseReader[i]);
+                        var data   = new TreeData();
+
+                        fstruct.Init();
 
                         foreach (var field in fstruct.Fields)
-                            ReadType(fstruct.Fields, field, ref reader, baseReader.StringTable);
+                            ReadType(fstruct.Fields, field, ref reader, baseReader.StringTable, data);
 
                         if (reader.Remains > 0)
                         {
                             throw new Exception();
                         }
 
-                        var sql_text = fstruct.ToSqlString(baseReader.Locale);
+                        var sql_text = data.ToSqlString(fstruct.TableName, baseReader.Locale);
                         writer.WriteLine(sql_text);
-
+                        writer.Flush();
                         int perc = i * 100 / baseReader.RecordsCount;
                         if (perc != ssp)
                         {
@@ -148,33 +153,32 @@ namespace WowDataFileParser
             }
         }
 
-        static void ReadType(IList<Field> fstore, Field field, ref BitStreamReader reader, Dictionary<int, string> stringTable, int index = 0)
+        static void ReadType(IList<Field> fstore, Field field, ref BitStreamReader reader, Dictionary<int, string> stringTable, TreeData data, bool read = true)
         {
             var count = field.Size;
             if (count == 0)
                 count = fstore.GetValueByName(field.SizeLink);
 
             Action<object> SetVal = (value) => {
-                //if (field.Value is object[])
-                //    ((object[])field.Value)[index] = value;
-                //else
                     field.Value = value;
+                    if (!string.IsNullOrWhiteSpace(field.Name))
+                        data.Add(value);
             };
 
             switch (field.Type)
             {
-                case DataType.Bool:    SetVal(reader.ReadBit());          break;
-                case DataType.Byte:    SetVal(reader.ReadByte(count));    break;
-                case DataType.Short:   SetVal(reader.ReadInt16(count));   break;
-                case DataType.Ushort:  SetVal(reader.ReadUInt16(count));  break;
-                case DataType.Int:     SetVal(reader.ReadInt32(count));   break;
-                case DataType.Uint:    SetVal(reader.ReadUInt32(count));  break;
-                case DataType.Long:    SetVal(reader.ReadInt64(count));   break;
-                case DataType.Ulong:   SetVal(reader.ReadUInt64(count));  break;
-                case DataType.Float:   SetVal(reader.ReadFloat());        break;
-                case DataType.Double:  SetVal(reader.ReadDouble());       break;
-                case DataType.Pstring: SetVal(reader.ReadPString(count)); break;
-                case DataType.String2: SetVal(reader.ReadString3(count)); break;
+                case DataType.Bool:    SetVal(read ? reader.ReadBit()          : false); break;
+                case DataType.Byte:    SetVal(read ? reader.ReadByte(count)    : 0    ); break;
+                case DataType.Short:   SetVal(read ? reader.ReadInt16(count)   : 0    ); break;
+                case DataType.Ushort:  SetVal(read ? reader.ReadUInt16(count)  : 0    ); break;
+                case DataType.Int:     SetVal(read ? reader.ReadInt32(count)   : 0    ); break;
+                case DataType.Uint:    SetVal(read ? reader.ReadUInt32(count)  : 0    ); break;
+                case DataType.Long:    SetVal(read ? reader.ReadInt64(count)   : 0    ); break;
+                case DataType.Ulong:   SetVal(read ? reader.ReadUInt64(count)  : 0    ); break;
+                case DataType.Float:   SetVal(read ? reader.ReadFloat()        : 0f   ); break;
+                case DataType.Double:  SetVal(read ? reader.ReadDouble()       : 0d   ); break;
+                case DataType.Pstring: SetVal(read ? reader.ReadPString(count) :null  ); break;
+                case DataType.String2: SetVal(read ? reader.ReadString3(count) :null  ); break;
                 case DataType.String:
                     {
                         if (stringTable != null)
@@ -182,12 +186,21 @@ namespace WowDataFileParser
                             var offset = reader.ReadInt32();
                             SetVal(stringTable[offset]);
                         }
-                        else
+                        else if (read)
                         {
                             if (count == 0 && field.SizeLink == null)
                                 SetVal(reader.ReadCString());
                             else
-                                SetVal(reader.ReadString2(count));
+                            {
+                                if (count == 1024)
+                                    SetVal(reader.ReadString2(count));
+                                else
+                                    SetVal(reader.ReadString2(count));
+                            }
+                        }
+                        else
+                        {
+                            SetVal(null);
                         }
                     } break;
                 case DataType.List:
@@ -195,23 +208,28 @@ namespace WowDataFileParser
                         var size = 0;
                         if (field.Size > 0)
                         {
-                            size = reader.ReadSize(field.Size);
+                            size = read ? reader.ReadSize(field.Size) : 0;
                             SetVal(size);
                         }
                         else if (!string.IsNullOrWhiteSpace(field.SizeLink))
-                            size = fstore.GetValueByName(field.SizeLink);
-                        else if (field.Maxsize > 0)
-                            size = field.Maxsize;
-
-                        for (int i = 0; i < size; ++i)
                         {
+                            size = fstore.GetValueByName(field.SizeLink);
+                        }
+                        else if (field.Maxsize > 0)
+                        {
+                            size = field.Maxsize;
+                        }
+
+                        var subdata = data.Alloc();
+                        for (int i = 0; i < field.Maxsize; ++i)
+                        {
+                            read = i < size;
                             foreach (var subfield in field.Fields)
                             {
-                                ReadType(field.Fields, subfield, ref reader, stringTable, i);
+                                ReadType(field.Fields, subfield, ref reader, stringTable, subdata, read);
                             }
                         }
                     } break;
-
                 default: break;
             }
         }

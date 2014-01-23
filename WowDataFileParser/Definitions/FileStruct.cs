@@ -55,38 +55,5 @@ namespace WowDataFileParser.Definitions
             foreach (var item in this.Fields)
                 Clean(item);
         }
-
-        private void GetValue(ref StringBuilder content, Field field)
-        {
-            var val = field.GetEscapedSqlValue();
-
-            if (field.Type != DataType.List || field.Value != null)
-            {
-                content.Append(val);
-                content.Append(", ");
-            }
-
-            if (field.Fields != null)
-            {
-                foreach (var item in field.Fields)
-                {
-                    GetValue(ref content, item);
-                }
-            }
-        }
-
-        public string ToSqlString(string locale)
-        {
-            var content = new StringBuilder();
-            content.AppendFormat("REPLACE INTO `{0}` VALUES (\'{1}\', ",  Name, locale);
-
-            foreach (var field in this.Fields)
-                GetValue(ref content, field);
-
-            return content.
-                Remove(content.Length - 2, 2)
-                .Append(");")
-                .ToString();
-        }
     }
 }

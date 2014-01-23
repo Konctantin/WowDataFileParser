@@ -58,6 +58,7 @@
     <Compile Include="Extension.cs" />
     <Compile Include="Readers\WdbReader.cs" />
     <Compile Include="SqlTable.cs" />
+    <Compile Include="TreeData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="definitions.xml">

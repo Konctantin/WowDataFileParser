@@ -201,7 +201,7 @@
         <field type="string2" name="unk_text"  sizelink="unk_text_len"/>
         <field type="string2" name="icon_name" sizelink="icon_name_len"/>
 
-        <field type="list" maxcount="6" sizelink="quest_item_count">
+        <field type="list" maxsize="6" sizelink="quest_item_count">
             <field type="uint" name="QuestItem"/>
         </field>
     </file>
@@ -250,7 +250,7 @@
         <field type="uint"   name="data30"/>
         <field type="uint"   name="data31"/>
         <field type="float"  name="Size"/>
-        <field type="list"   name="QuestItemCount" size="8" maxcount="6">
+        <field type="list"   name="QuestItemCount" size="8" maxsize="6">
             <field type="int" name="QuestItem" />
         </field>
         <field type="uint"   name="Unk"/>
@@ -327,7 +327,7 @@
             <field type="int"  name="ReqCreatureOrGOId" />
             <field type="int"  name="ReqCreatureOrGOCount" />
             <field type="int"  name="unk_5_6" />
-            <field type="list" name="unk_count" size="32" maxsize="10">
+            <field type="list" name="unk_count" size="32" maxsize="11">
                 <field type="int"  name="condition_unk" />
             </field>
             <field type="pstring" name="ObjectiveText" size="8"/>
