@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.IO.Compression;
 using System.Text;
 using WowDataFileParser.Definitions;
+using System.Globalization;
 
 namespace WowDataFileParser
 {
@@ -21,9 +23,17 @@ namespace WowDataFileParser
         public static int GetValueByName(this IList<Field> collection, string name)
         {
             foreach (var item in collection)
-                if (item.Name == name)
-                    return Convert.ToInt32(item.Value);
+                if (item.Name == name && item.Value != null)
+                    return item.Value.ToInt32(CultureInfo.InvariantCulture);
             return 0;
+        }
+
+        public static string ReadReverseString(this BinaryReader reader, int count)
+        {
+            if (reader.BaseStream.Position + count > reader.BaseStream.Length)
+                throw new ArgumentOutOfRangeException("count");
+
+            return Encoding.ASCII.GetString(reader.ReadBytes(count).Reverse().ToArray());
         }
     }
 }

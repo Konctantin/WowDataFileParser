@@ -10,7 +10,6 @@ namespace WowDataFileParser.Readers
     public class DbcReader : BaseReader
     {
         private const uint HeaderSize = 20;
-        private const uint DBCFmtSig = 0x43424457;  // WDBC
 
         public DbcReader(string fileName)
             : base(fileName)
@@ -20,7 +19,7 @@ namespace WowDataFileParser.Readers
             if (reader.BaseStream.Length < HeaderSize)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
-            if (this.Magic != DBCFmtSig)
+            if (this.Magic != "WDBC")
                 throw new InvalidDataException(string.Format("File {0} isn't valid DBC file!", new FileInfo(fileName).Name));
 
             RecordsCount    = reader.ReadInt32();

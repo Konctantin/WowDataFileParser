@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using MS.Internal.Ink;
 using WowDataFileParser.Definitions;
@@ -23,7 +28,7 @@ namespace WowDataFileParser
         static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
         const string DEF         = "definitions.xml";
         const string OUTPUT_FILE = "output.sql";
-        const string VERSION     = "3.0";
+        const string VERSION     = "4.1";
 
         static Definition definition;
 
@@ -93,7 +98,7 @@ namespace WowDataFileParser
 
             using (var writer = new StreamWriter(OUTPUT_FILE, false))
             {
-                writer.AutoFlush = true;
+                writer.AutoFlush = false;
 
                 foreach (var file in files)
                 {
@@ -107,82 +112,108 @@ namespace WowDataFileParser
                         case ".wdb": baseReader = new WdbReader(file.FullName); break;
                         case ".adb": baseReader = new AdbReader(file.FullName); break;
                         case ".db2": baseReader = new Db2Reader(file.FullName); break;
-                        case ".dbc": baseReader = new DbcReader(file.FullName); break;
+                        //case ".dbc": baseReader = new DbcReader(file.FullName); break;
                         default: continue;
                     }
 
-                    var fstruct = definition[file.Name];
+                    var _fstruct = definition[file.Name, baseReader.Build];
 
-                    if (fstruct == null)
+                    if (_fstruct == null)
                         continue;
 
                     var ssp = 0;
-                    for (int i = 0; i < baseReader.RecordsCount; ++i)
-                    {
-                        var reader = new BitStreamReader(baseReader[i]);
-                        var data   = new TreeData();
+                    var progress = 0;
+                    var tname = _fstruct.Build > 0 ? string.Format("{0}_{1}", _fstruct.TableName, _fstruct.Build) : _fstruct.TableName;
+                    int cp = Console.CursorTop;
+
+                    var sw = new Stopwatch();
+                    sw.Start();
+
+                    var cache = new Dictionary<int, FileStruct>();
+                    Parallel.ForEach(baseReader.Rows, buffer => {
+                        FileStruct fstruct;
+                        lock (cache)
+                        {
+                            int cid = Thread.CurrentThread.ManagedThreadId;
+                            if (!cache.TryGetValue(cid, out fstruct))
+                                cache[cid] = fstruct = _fstruct.Copy();
+                        }
+
+                        var reader = new BitStreamReader(buffer);
+                        var insert = new StringBuilder();
 
                         foreach (var field in fstruct.Fields)
-                            ReadType(fstruct.Fields, field, ref reader, baseReader.StringTable, data);
+                            ReadType(fstruct.Fields, field, reader, baseReader.StringTable, insert, true);
+
+                        lock (writer)
+                            writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\' {2});", tname, baseReader.Locale, insert.ToString());
 
                         if (reader.Remains > 0)
                             throw new Exception("reader.Remains = " + reader.Remains);
 
                         reader.Dispose();
-                        GC.SuppressFinalize(reader);
 
-                        var sql_text = data.ToSqlString(fstruct.TableName, baseReader.Locale);
-                        writer.WriteLine(sql_text);
-
-                        int perc = i * 100 / baseReader.RecordsCount;
+                        Interlocked.Increment(ref progress);
+                        int perc = progress * 100 / baseReader.RecordsCount;
                         if (perc != ssp)
                         {
                             ssp = perc;
-                            int cp = Console.CursorTop;
-                            Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
-                                file.Name, baseReader.Locale, baseReader.Build, i, perc + "%");
+                            Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║", file.Name, baseReader.Locale, baseReader.Build, progress, perc + "%");
                             Console.SetCursorPosition(0, cp);
                         }
-                    }
+                    });
 
+                    sw.Stop();
                     GC.Collect();
 
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     writer.Flush();
+                    Console.SetCursorPosition(0, cp);
                     Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
-                        file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount, "OK");
+                        file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
+                        sw.Elapsed.TotalSeconds.ToString("f", CultureInfo.InvariantCulture) + "sec");
 
                     baseReader.Dispose();
                 }
             }
         }
 
-        static void ReadType(IList<Field> fstore, Field field, ref BitStreamReader reader, Dictionary<int, string> stringTable, TreeData data, bool read = true)
+        static void ReadType(IList<Field> fstore, Field field, BitStreamReader reader, Dictionary<int, string> stringTable, StringBuilder content, bool read = true)
         {
+            Action<IConvertible> SetVal = (value) => {
+                field.Value = value;
+                if (value == null)
+                    content.Append(", NULL");
+                else if (!(value is string))
+                    content.Append(", " + value.ToString(CultureInfo.InvariantCulture));
+                else
+                {
+                    var val = value.ToString(CultureInfo.InvariantCulture);
+                    if (string.IsNullOrWhiteSpace(val))
+                        content.Append(", NULL");
+                    else
+                        content.Append(", \"" + val.Replace(@"'", @"\'").Replace("\"", "\\\"") + "\"");
+                }
+            };
+
             var count = field.Size;
             if (count == 0)
                 count = fstore.GetValueByName(field.SizeLink);
 
-            Action<object> SetVal = (value) => {
-                    field.Value = value;
-                    if (!string.IsNullOrWhiteSpace(field.Name))
-                        data.Add(value);
-            };
-
             switch (field.Type)
             {
-                case DataType.Bool:    SetVal(read ? reader.ReadBit()          : false); break;
-                case DataType.Byte:    SetVal(read ? reader.ReadByte(count)    : 0    ); break;
-                case DataType.Short:   SetVal(read ? reader.ReadInt16(count)   : 0    ); break;
-                case DataType.Ushort:  SetVal(read ? reader.ReadUInt16(count)  : 0    ); break;
-                case DataType.Int:     SetVal(read ? reader.ReadInt32(count)   : 0    ); break;
-                case DataType.Uint:    SetVal(read ? reader.ReadUInt32(count)  : 0    ); break;
-                case DataType.Long:    SetVal(read ? reader.ReadInt64(count)   : 0    ); break;
-                case DataType.Ulong:   SetVal(read ? reader.ReadUInt64(count)  : 0    ); break;
-                case DataType.Float:   SetVal(read ? reader.ReadFloat()        : 0f   ); break;
-                case DataType.Double:  SetVal(read ? reader.ReadDouble()       : 0d   ); break;
-                case DataType.Pstring: SetVal(read ? reader.ReadPString(count) :null  ); break;
-                case DataType.String2: SetVal(read ? reader.ReadString3(count) :null  ); break;
+                case DataType.Bool:    SetVal(read ? reader.ReadBit()          : 0  ); break;
+                case DataType.Byte:    SetVal(read ? reader.ReadByte(count)    : 0  ); break;
+                case DataType.Short:   SetVal(read ? reader.ReadInt16(count)   : 0  ); break;
+                case DataType.Ushort:  SetVal(read ? reader.ReadUInt16(count)  : 0  ); break;
+                case DataType.Int:     SetVal(read ? reader.ReadInt32(count)   : 0  ); break;
+                case DataType.Uint:    SetVal(read ? reader.ReadUInt32(count)  : 0  ); break;
+                case DataType.Long:    SetVal(read ? reader.ReadInt64(count)   : 0  ); break;
+                case DataType.Ulong:   SetVal(read ? reader.ReadUInt64(count)  : 0  ); break;
+                case DataType.Float:   SetVal(read ? reader.ReadFloat()        : 0f ); break;
+                case DataType.Double:  SetVal(read ? reader.ReadDouble()       : 0d ); break;
+                case DataType.Pstring: SetVal(read ? reader.ReadPString(count) :null); break;
+                case DataType.String2: SetVal(read ? reader.ReadString3(count) :null); break;
                 case DataType.String:
                     {
                         if (stringTable != null)
@@ -219,17 +250,17 @@ namespace WowDataFileParser
                             size = field.Maxsize;
                         }
 
-                        var subdata = data.Alloc();
                         for (int i = 0; i < field.Maxsize; ++i)
                         {
                             read = i < size;
                             foreach (var subfield in field.Fields)
                             {
-                                ReadType(field.Fields, subfield, ref reader, stringTable, subdata, read);
+                                ReadType(field.Fields, subfield, reader, stringTable, content, read);
                             }
                         }
                     } break;
-                default: break;
+                default:
+                    break;
             }
         }
     }

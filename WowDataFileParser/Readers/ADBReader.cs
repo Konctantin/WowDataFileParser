@@ -10,7 +10,6 @@ namespace WowDataFileParser.Readers
     public class AdbReader : BaseReader
     {
         private const int HeaderSize = 48;
-        private const uint ADBFmtSig = 0x32484357;          // WCH2
 
         public AdbReader(string fileName)
             : base(fileName)
@@ -20,8 +19,8 @@ namespace WowDataFileParser.Readers
             if (reader.BaseStream.Length < HeaderSize)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
-            if (Magic != ADBFmtSig)
-                throw new InvalidDataException(string.Format("File {0} isn't valid DBC file!", new FileInfo(fileName).Name));
+            if (Magic != "2HCW")
+                throw new InvalidDataException(string.Format("File {0} isn't valid ADB file!", new FileInfo(fileName).Name));
 
             RecordsCount    = reader.ReadInt32();
             FieldsCount     = reader.ReadInt32();                       // not fields count in WCH2

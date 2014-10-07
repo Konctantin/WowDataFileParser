@@ -10,7 +10,6 @@ namespace WowDataFileParser.Readers
     public class Db2Reader : BaseReader
     {
         private const int HeaderSize = 48;
-        private const uint DB2FmtSig = 0x32424457;          // WDB2
 
         public Db2Reader(string fileName)
             : base(fileName)
@@ -20,8 +19,8 @@ namespace WowDataFileParser.Readers
             if (reader.BaseStream.Length < HeaderSize)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
-            if (this.Magic != DB2FmtSig)
-                throw new InvalidDataException(string.Format("File {0} isn't valid DBC file!", new FileInfo(fileName).Name));
+            if (this.Magic != "2BDW")
+                throw new InvalidDataException(string.Format("File {0} isn't valid DB2 file!", new FileInfo(fileName).Name));
 
             RecordsCount        = reader.ReadInt32();
             FieldsCount         = reader.ReadInt32();
@@ -35,14 +34,16 @@ namespace WowDataFileParser.Readers
 
             if (this.Build > 12880) // new extended header
             {
-                int MinId       = reader.ReadInt32();    // new field in WDB2
-                int MaxId       = reader.ReadInt32();    // new field in WDB2
-                this.Locale     = ((Locale)reader.ReadUInt32()).ToString();
-#warning small hack
-                if (this.Locale == "")
-                    Locale = "xxXX";
+                int MinId   = reader.ReadInt32();    // new field in WDB2
+                int MaxId   = reader.ReadInt32();    // new field in WDB2
 
-                int unk5        = reader.ReadInt32();    // new field in WDB2
+                var loc = reader.ReadUInt32();
+                if (loc > (uint)WowDataFileParser.Readers.Locale.ruRU)
+                    this.Locale = "xxXX";
+                else
+                    this.Locale = ((Locale)loc).ToString();
+
+                int unk5    = reader.ReadInt32();    // new field in WDB2
 
                 if (MaxId != 0)
                 {

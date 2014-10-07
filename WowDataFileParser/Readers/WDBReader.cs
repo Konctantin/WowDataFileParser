@@ -9,16 +9,17 @@ namespace WowDataFileParser.Readers
     public class WdbReader : BaseReader
     {
         private const int HeaderSize = 24;
-        private uint[] WDBSigs = new uint[] {
-            0x574D4F42, // creaturecache.wdb
-            0x57474F42, // gameobjectcache.wdb
-            0x57494442, // itemcache.wdb
-            0x574E4442, // itemnamecache.wdb
-            0x57495458, // itemtextcache.wdb
-            0x574E5043, // npccache.wdb
-            0x57505458, // pagetextcache.wdb
-            0x57515354, // questcache.wdb
-            0x5752444E  // wowcache.wdb
+        private string[] WDBSigs = new [] {
+            "WMOB", // creaturecache.wdb
+            "WGOB", // gameobjectcache.wdb
+            "WIDB", // itemcache.wdb
+            "WNDB", // itemnamecache.wdb
+            "WITX", // itemtextcache.wdb
+            "WNPC", // npccache.wdb
+            "WPTX", // pagetextcache.wdb
+            "WQST", // questcache.wdb
+            "WPTN", // petitioncache.wdb
+            "WRDN"  // wowcache.wdb
         };
 
         public WdbReader(string fileName) 
@@ -31,7 +32,7 @@ namespace WowDataFileParser.Readers
                 throw new InvalidDataException(string.Format("File {0} isn't valid WDB file!", new FileInfo(fileName).Name));
 
             Build  = reader.ReadUInt32();
-            Locale = Encoding.ASCII.GetString(reader.ReadBytes(4).Reverse().ToArray());
+            Locale = reader.ReadReverseString(4);
 
             var unk1    = reader.ReadInt32();
             var unk2    = reader.ReadInt32();

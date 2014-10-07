@@ -13,19 +13,18 @@ namespace WowDataFileParser.Definitions
         [XmlElement("file")]
         public List<FileStruct> Files { get; set; }
 
-        [XmlElement("build")]
-        public int Build { get; set; }
-
         public Definition()
         {
             Files = new List<FileStruct>();
         }
 
-        public FileStruct this[string name]
+        public FileStruct this[string name, uint build]
         {
             get
             {
-                var list = Files.Where(n => n.Name == name);
+                var list = Files
+                    .Where(n => n.Name == name && (n.Build == 0 || n.Build <= build))
+                    .OrderByDescending(n => n.Build);
                 if (list.Count() > 0)
                     return list.FirstOrDefault();
                 return null;

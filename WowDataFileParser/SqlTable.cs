@@ -11,18 +11,14 @@ namespace WowDataFileParser
     {
         public static void CreateSqlTable(Definition definition)
         {
-            if (definition.Build == 0)
-                throw new Exception("build is empty");
+            var writer = new StreamWriter(string.Format("table_structure.sql"));
 
-            var writer = new StreamWriter(string.Format("table_structure_{0}.sql", definition.Build));
-
-            writer.WriteLine("DROP DATABASE IF EXISTS `wdb_{0}`;", definition.Build);
-            writer.WriteLine("CREATE DATABASE `wdb_{0}` CHARACTER SET utf8 COLLATE utf8_general_ci;", definition.Build);
-            writer.WriteLine("USE `wdb_{0}`;", definition.Build);
+            writer.WriteLine("CREATE DATABASE IF NOT EXISTS `wdb` CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            writer.WriteLine("USE `wdb`;");
                 
             Console.Write("║ ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.Write("wdb_{0, -30}", definition.Build);
+            Console.Write("wdb".PadRight(34));
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("║ ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -36,22 +32,23 @@ namespace WowDataFileParser
                 var keys = new List<string>();
                 keys.Add("locale");
 
-                writer.WriteLine("-- {0} structure for build {1}", element.TableName, definition.Build);
-                writer.WriteLine("DROP TABLE IF EXISTS `{0}`;", element.TableName);
-                writer.WriteLine("CREATE TABLE `{0}` (", element.TableName);
+                var tableName = element.Build > 0 ? string.Format("{0}_{1}", element.TableName, element.Build) : element.TableName;
+
+                writer.WriteLine("-- {0} structure", tableName);
+                writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", tableName);
                 writer.WriteLine("    `locale`                        char(4) default NULL,");
 
                 foreach (var record in element.Fields)
                     WriteFieldByType(writer, keys, record, string.Empty);
 
                 writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(k => "`" + k + "`")) + ")");
-                writer.WriteLine(") ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Export of {0}';", element.TableName);
+                writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8 COMMENT = 'Export of {0}';", tableName);
                 writer.WriteLine();
                 // hack - last is empty (-1)
                 if (index < element.Fields.Count - 2)
-                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", element.TableName, "table");
+                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", tableName, "table");
                 else
-                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", element.TableName, "table");
+                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", tableName, "table");
                 ++index;
             }
             writer.Flush();

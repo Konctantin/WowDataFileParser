@@ -16,7 +16,8 @@ namespace WowDataFileParser.Readers
         zhTW = 6,
         esES = 7,
         esMX = 8,
-        ruRU = 256,
+        ruRU = 0x100,
+        All  = 0xFFF,
     };
 
     public abstract class BaseReader : IDisposable
@@ -24,7 +25,7 @@ namespace WowDataFileParser.Readers
         protected BinaryReader reader;
         protected Dictionary<int, byte[]> m_rows;
 
-        public uint Magic           { get; protected set; }
+        public string Magic         { get; protected set; }
         public int RecordsCount     { get; protected set; }
         public int FieldsCount      { get; protected set; }
         public int RecordSize       { get; protected set; }
@@ -39,6 +40,11 @@ namespace WowDataFileParser.Readers
             get { return m_rows.ElementAt(row).Value; } 
         }
 
+        public IEnumerable<byte[]> Rows
+        {
+            get { return m_rows.Values; }
+        }
+
         public BaseReader(string fileName)
         {
             this.m_rows = new Dictionary<int, byte[]>();
@@ -47,7 +53,7 @@ namespace WowDataFileParser.Readers
             if (this.reader.BaseStream.Length <= 4)
                 throw new InvalidDataException(string.Format("File {0} is corrupted!", new FileInfo(fileName).Name));
 
-            this.Magic = reader.ReadUInt32();
+            this.Magic = reader.ReadReverseString(4);
         }
 
         public virtual void ReadData()

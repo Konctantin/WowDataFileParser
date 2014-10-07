@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace MS.Internal.Ink
 {
@@ -45,7 +46,7 @@ namespace MS.Internal.Ink
             : this(buffer)
         {
             if ((ulong)bufferLengthInBits > (ulong)((long)(buffer.Length * 8)))
-                throw new ArgumentOutOfRangeException("bufferLengthInBits", "InvalidBufferLength");
+                throw new ArgumentOutOfRangeException("bufferLengthInBits", "Invalid buffer length");
 
             this.countBits = bufferLengthInBits;
         }
@@ -53,7 +54,7 @@ namespace MS.Internal.Ink
         protected long mReadUInt64(int countOfBits)
         {
             if (countOfBits > 64 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             long num = 0L;
             while (countOfBits > 0)
@@ -73,7 +74,7 @@ namespace MS.Internal.Ink
         protected ushort mReadUInt16(int countOfBits)
         {
             if (countOfBits > 16 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             ushort num = 0;
             while (countOfBits > 0)
@@ -93,7 +94,7 @@ namespace MS.Internal.Ink
         protected uint mReadUInt16Reverse(int countOfBits)
         {
             if (countOfBits > 16 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             ushort num = 0;
             int num2 = 0;
@@ -115,7 +116,7 @@ namespace MS.Internal.Ink
         protected uint mReadUInt32(int countOfBits)
         {
             if (countOfBits > 32 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             uint num = 0u;
             while (countOfBits > 0)
@@ -135,7 +136,7 @@ namespace MS.Internal.Ink
         protected uint mReadUInt32Reverse(int countOfBits)
         {
             if (countOfBits > 32 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             uint num = 0u;
             int num2 = 0;
@@ -154,22 +155,21 @@ namespace MS.Internal.Ink
             return num;
         }
 
-        public bool ReadBit()
+        public byte ReadBit()
         {
-            byte b = this.mReadByte(1);
-            return (b & 1) == 1;
+            return this.mReadByte(1);
         }
 
         protected byte mReadByte(int countOfBits)
         {
             if (this.EndOfStream)
-                throw new EndOfStreamException("EndOfStreamReached");
+                throw new EndOfStreamException("End of stream reached");
 
             if (countOfBits > 8 || countOfBits <= 0)
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsOutOfRange");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             if ((long)countOfBits > (long)((ulong)this.countBits))
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "CountOfBitsGreatThanRemainingBits");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits great than remaining bits");
 
             this.countBits -= (uint)countOfBits;
             byte b;
@@ -358,6 +358,14 @@ namespace MS.Internal.Ink
             var str = Encoding.UTF8.GetString(Buffer, Index, len);
             Index += len;
             return (str ?? "").TrimEnd('\0');
+        }
+
+        public string ReadReverseString(int count)
+        {
+            var buff = new byte[count];
+            Array.Copy(Buffer, Index, buff, 0, count);
+            Index += count;
+            return Encoding.ASCII.GetString(buff.Reverse().ToArray());
         }
 
         #endregion
