@@ -431,6 +431,106 @@
         <field type="string" name="CompletedText"       sizelink="sCompletedText"/>
     </file>
 
+    <file name="questcache.wdb" table="questcache" build="17538">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="doubleEntry" />
+        <field type="int"    name="Method" />
+        <field type="int"    name="QuestLevel" />
+        <field type="int"    name="f_5" />
+        <field type="int"    name="MinLevel" />
+        <field type="int"    name="ZoneOrSort" />
+        <field type="int"    name="Type" />
+        <field type="int"    name="SuggestedPlayers" />
+        <field type="int"    name="NextQuestInChain" />
+        <field type="int"    name="RewXPId" />
+        <field type="int"    name="RewOrReqMoney" />
+        <field type="int"    name="RewXPId_2" />
+        <field type="int"    name="RewMoneyMaxLevel" />
+        <field type="int"    name="RewSpell" />
+        <field type="int"    name="RewSpellCast" />
+        <field type="int"    name="RewHonorAddition" />
+        <field type="float"  name="RewHonorMultiplier" />
+        <field type="int"    name="SrcItemId" />
+        <field type="int"    name="QuestFlags" />
+        <field type="int"    name="QuestFlags2" />
+
+        <field name="RewReq" type="list" maxsize="4">
+            <field type="int" name="RewItemId" />
+            <field type="int" name="RewItemCount" />
+            <field type="int" name="ReqSourceId" />
+            <field type="int" name="ReqSourceCount" />
+        </field>
+
+        <field name="RewChoiceItem" type="list" maxsize="6">
+            <field type="int" name="RewChoiceItemId" />
+            <field type="int" name="RewChoiceItemCount" />
+            <field type="int" name="RewChoiceItemUNK" />
+        </field>
+
+        <field type="int"    name="PointMapId" />
+        <field type="float"  name="PointX" />
+        <field type="float"  name="PointY" />
+        <field type="int"    name="PointOpt" />
+        <field type="int"    name="CharTitleId" />
+        <field type="int"    name="BonusTalents_100" />
+        <field type="int"    name="PlayersSlain_25" />
+        <field type="int"    name="RewSkill" />
+        <field type="int"    name="RewSkillValue" />
+        <field type="int"    name="PortraitGiver" />
+        <field type="int"    name="PortraitTurnIn" />
+
+        <field name="RewRep" type="list" maxsize="5">
+            <field type="int" name="RewRepFaction" />
+            <field type="int" name="RewRepValueId" />
+            <field type="int" name="RewRepValue" />
+        </field>
+
+        <field type="int"   name="UNK_541" />
+
+        <field name="RewCurrency" type="list" maxsize="4">
+            <field type="int" name="RewCurrencyId" />
+            <field type="int" name="RewCurrencyCount" />
+        </field>
+
+        <field type="int"    name="SoundAccept" />
+        <field type="int"    name="SoundTurnIn" />
+
+        <field type="int"    name="condition_size" />
+
+        <field type="list" name="condition_count" sizelink="condition_size" maxsize="10">
+            <field type="int"  name="unk_5_1" />
+            <field type="byte" name="condition" />
+            <field type="byte" name="unk_5_3" />
+            <field type="int"  name="ReqCreatureOrGOId" />
+            <field type="int"  name="ReqCreatureOrGOCount" />
+            <field type="int"  name="unk_5_6" />
+            <field type="list" name="unk_count" size="32" maxsize="11">
+                <field type="int"  name="condition_unk" />
+            </field>
+            <field type="pstring" name="ObjectiveText" size="8"/>
+        </field>
+
+        <field type="int" name="sTitle"               size="9" />
+        <field type="int" name="sObjectives"          size="12"/>
+        <field type="int" name="sDetails"             size="12"/>
+        <field type="int" name="sEndText"             size="9" />
+        <field type="int" name="sPortraitGiverText"   size="10"/>
+        <field type="int" name="sPortraitGiverName"   size="8" />
+        <field type="int" name="sPortraitTurnInText"  size="10"/>
+        <field type="int" name="sPortraitTurnInName"  size="8" />
+        <field type="int" name="sCompletedText"       size="11"/>
+
+        <field type="string" name="Title"               sizelink="sTitle"/>
+        <field type="string" name="Objectives"          sizelink="sObjectives"/>
+        <field type="string" name="Details"             sizelink="sDetails"/>
+        <field type="string" name="EndText"             sizelink="sEndText"/>
+        <field type="string" name="PortraitGiverText"   sizelink="sPortraitGiverText"/>
+        <field type="string" name="PortraitGiverName"   sizelink="sPortraitGiverName"/>
+        <field type="string" name="PortraitTurnInText"  sizelink="sPortraitTurnInText"/>
+        <field type="string" name="PortraitTurnInName"  sizelink="sPortraitTurnInName"/>
+        <field type="string" name="CompletedText"       sizelink="sCompletedText"/>
+    </file>
+
     <file name="npccache.wdb" table="npc_text" build="17538">
         <field type="uint"   name="Id" key="true"/>
 
