@@ -20,11 +20,11 @@ namespace WowDataFileParser
             return Encoding.UTF8.GetString(list.ToArray());
         }
 
-        public static int GetValueByName(this IList<Field> collection, string name)
+        public static int GetValueByName(this Dictionary<string, IConvertible> collection, string name)
         {
-            foreach (var item in collection)
-                if (item.Name == name && item.Value != null)
-                    return item.Value.ToInt32(CultureInfo.InvariantCulture);
+            IConvertible val;
+            if (name != null && collection.TryGetValue(name, out val))
+                return val.ToInt32(CultureInfo.InvariantCulture);
             return 0;
         }
 

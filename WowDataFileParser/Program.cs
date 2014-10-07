@@ -116,14 +116,14 @@ namespace WowDataFileParser
                         default: continue;
                     }
 
-                    var _fstruct = definition[file.Name, baseReader.Build];
+                    var fstruct = definition[file.Name, baseReader.Build];
 
-                    if (_fstruct == null)
+                    if (fstruct == null)
                         continue;
 
                     var ssp = 0;
                     var progress = 0;
-                    var tname = _fstruct.Build > 0 ? string.Format("{0}_{1}", _fstruct.TableName, _fstruct.Build) : _fstruct.TableName;
+                    var tname = fstruct.Build > 0 ? string.Format("{0}_{1}", fstruct.TableName, fstruct.Build) : fstruct.TableName;
                     int cp = Console.CursorTop;
 
                     var sw = new Stopwatch();
@@ -131,19 +131,13 @@ namespace WowDataFileParser
 
                     var cache = new Dictionary<int, FileStruct>();
                     Parallel.ForEach(baseReader.Rows, buffer => {
-                        FileStruct fstruct;
-                        lock (cache)
-                        {
-                            int cid = Thread.CurrentThread.ManagedThreadId;
-                            if (!cache.TryGetValue(cid, out fstruct))
-                                cache[cid] = fstruct = _fstruct.Copy();
-                        }
 
                         var reader = new BitStreamReader(buffer);
                         var insert = new StringBuilder();
+                        var valList = new Dictionary<string, IConvertible>();
 
                         foreach (var field in fstruct.Fields)
-                            ReadType(fstruct.Fields, field, reader, baseReader.StringTable, insert, true);
+                            ReadType(field, reader, baseReader.StringTable, insert, valList, true);
 
                         lock (writer)
                             writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\' {2});", tname, baseReader.Locale, insert.ToString());
@@ -178,10 +172,12 @@ namespace WowDataFileParser
             }
         }
 
-        static void ReadType(IList<Field> fstore, Field field, BitStreamReader reader, Dictionary<int, string> stringTable, StringBuilder content, bool read = true)
+        static void ReadType(Field field, BitStreamReader reader, Dictionary<int, string> stringTable, StringBuilder content, Dictionary<string, IConvertible> valList, bool read = true)
         {
             Action<IConvertible> SetVal = (value) => {
-                field.Value = value;
+                if (!string.IsNullOrWhiteSpace(field.Name))
+                    valList[field.Name] = value;
+
                 if (value == null)
                     content.Append(", NULL");
                 else if (!(value is string))
@@ -198,7 +194,7 @@ namespace WowDataFileParser
 
             var count = field.Size;
             if (count == 0)
-                count = fstore.GetValueByName(field.SizeLink);
+                count = valList.GetValueByName(field.SizeLink);
 
             switch (field.Type)
             {
@@ -243,7 +239,7 @@ namespace WowDataFileParser
                         }
                         else if (!string.IsNullOrWhiteSpace(field.SizeLink))
                         {
-                            size = fstore.GetValueByName(field.SizeLink);
+                            size = valList.GetValueByName(field.SizeLink);
                         }
                         else if (field.Maxsize > 0)
                         {
@@ -255,7 +251,7 @@ namespace WowDataFileParser
                             read = i < size;
                             foreach (var subfield in field.Fields)
                             {
-                                ReadType(field.Fields, subfield, reader, stringTable, content, read);
+                                ReadType(subfield, reader, stringTable, content, valList, read);
                             }
                         }
                     } break;

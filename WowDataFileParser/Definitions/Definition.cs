@@ -13,11 +13,6 @@ namespace WowDataFileParser.Definitions
         [XmlElement("file")]
         public List<FileStruct> Files { get; set; }
 
-        public Definition()
-        {
-            Files = new List<FileStruct>();
-        }
-
         public FileStruct this[string name, uint build]
         {
             get
