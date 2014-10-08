@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using WowDataFileParser.Definitions;
 
 namespace WowDataFileParser
@@ -13,7 +12,8 @@ namespace WowDataFileParser
         {
             var writer = new StreamWriter(string.Format("table_structure.sql"));
 
-            writer.WriteLine("CREATE DATABASE IF NOT EXISTS `wdb` CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            writer.WriteLine("DROP DATABASE IF EXISTS `wdb`;");
+            writer.WriteLine("CREATE DATABASE `wdb` CHARACTER SET utf8 COLLATE utf8_general_ci;");
             writer.WriteLine("USE `wdb`;");
                 
             Console.Write("║ ");
@@ -32,23 +32,21 @@ namespace WowDataFileParser
                 var keys = new List<string>();
                 keys.Add("locale");
 
-                var tableName = element.Build > 0 ? string.Format("{0}_{1}", element.TableName, element.Build) : element.TableName;
-
-                writer.WriteLine("-- {0} structure", tableName);
-                writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", tableName);
-                writer.WriteLine("    `locale`                        char(4) default NULL,");
+                writer.WriteLine("-- {0} structure", element.TableName);
+                writer.WriteLine("CREATE TABLE `{0}` (", element.TableName);
+                writer.WriteLine("    `locale`                        char(4) NOT NULL,");
 
                 foreach (var record in element.Fields)
                     WriteFieldByType(writer, keys, record, string.Empty);
 
                 writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(k => "`" + k + "`")) + ")");
-                writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8 COMMENT = 'Export of {0}';", tableName);
+                writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8 COMMENT = 'Export of {0}';", element.TableName);
                 writer.WriteLine();
                 // hack - last is empty (-1)
                 if (index < element.Fields.Count - 2)
-                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", tableName, "table");
+                    Console.WriteLine("║  ╞═ {0, -30}║ {1,-16}║", element.TableName, "table");
                 else
-                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", tableName, "table");
+                    Console.WriteLine("║  ╘═ {0, -30}║ {1,-16}║", element.TableName, "table");
                 ++index;
             }
             writer.Flush();
@@ -126,7 +124,7 @@ namespace WowDataFileParser
                     }
                     break;
                 default:
-                    throw new Exception(string.Format("Unknown field type {0}!", record.Type));
+                    throw new Exception("Unknown field type " + record.Type);
             }
             #endregion
         }

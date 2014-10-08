@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace MS.Internal.Ink
 {
@@ -169,7 +168,7 @@ namespace MS.Internal.Ink
                 throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits out of range");
 
             if ((long)countOfBits > (long)((ulong)this.countBits))
-                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits great than remaining bits");
+                throw new ArgumentOutOfRangeException("countOfBits", countOfBits, "Count of bits great than remaining bits " + this.countBits);
 
             this.countBits -= (uint)countOfBits;
             byte b;
@@ -199,8 +198,14 @@ namespace MS.Internal.Ink
 
         public byte ReadByte(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 1)
+                    throw new ArgumentOutOfRangeException("count", 1, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = Buffer[Index];
                 ++Index;
                 return val;
@@ -211,8 +216,14 @@ namespace MS.Internal.Ink
 
         public short ReadInt16(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 2)
+                    throw new ArgumentOutOfRangeException("count", 2, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToInt16(Buffer, Index);
                 Index += 2;
                 return val;
@@ -223,8 +234,14 @@ namespace MS.Internal.Ink
 
         public ushort ReadUInt16(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 2)
+                    throw new ArgumentOutOfRangeException("count", 2, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToUInt16(Buffer, Index);
                 Index += 2;
                 return val;
@@ -235,8 +252,14 @@ namespace MS.Internal.Ink
 
         public int ReadInt32(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 4)
+                    throw new ArgumentOutOfRangeException("count", 4, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToInt32(Buffer, Index);
                 Index += 4;
                 return val;
@@ -247,8 +270,14 @@ namespace MS.Internal.Ink
 
         public uint ReadUInt32(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 4)
+                    throw new ArgumentOutOfRangeException("count", 4, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToUInt32(Buffer, Index);
                 Index += 4;
                 return val;
@@ -259,8 +288,14 @@ namespace MS.Internal.Ink
 
         public long ReadInt64(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 8)
+                    throw new ArgumentOutOfRangeException("count", 8, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToInt64(Buffer, Index);
                 Index += 8;
                 return val;
@@ -271,8 +306,14 @@ namespace MS.Internal.Ink
 
         public ulong ReadUInt64(int count = 0)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             if (count == 0)
             {
+                if (Buffer.Length - Index < 8)
+                    throw new ArgumentOutOfRangeException("count", 8, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
                 var val = BitConverter.ToUInt64(Buffer, Index);
                 Index += 8;
                 return val;
@@ -283,6 +324,12 @@ namespace MS.Internal.Ink
 
         public float ReadFloat()
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (Buffer.Length - Index < 4)
+                throw new ArgumentOutOfRangeException("count", 4, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
             var val = BitConverter.ToSingle(Buffer, Index);
             Index += 4;
             return val;
@@ -290,6 +337,12 @@ namespace MS.Internal.Ink
 
         public double ReadDouble()
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (Buffer.Length - Index < 8)
+                throw new ArgumentOutOfRangeException("count", 8, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
             var val = BitConverter.ToDouble(Buffer, Index);
             Index += 8;
             return val;
@@ -320,41 +373,62 @@ namespace MS.Internal.Ink
                 return ReadString2(len);
         }
 
-        public string ReadString3(int m_size)
+        public string ReadString3(int count)
         {
-            if (m_size <= 1)
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (count <= 1)
                 return string.Empty;
 
-            var str = Encoding.UTF8.GetString(Buffer, Index, m_size);
-            Index += (int)m_size;
+            if (Buffer.Length - Index < count)
+                throw new ArgumentOutOfRangeException("count", count, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
+            var str = Encoding.UTF8.GetString(Buffer, Index, count);
+            Index += (int)count;
             return (str ?? "").TrimEnd('\0');
         }
 
-        public string ReadString2(int m_size)
+        public string ReadString2(int count)
         {
-            if (m_size <= 1)
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (Buffer.Length - Index < count)
+                throw new ArgumentOutOfRangeException("count", count, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
+            if (count <= 1)
             {
-                if (m_size == 1)
+                if (count == 1)
                     ++Index;
                 return string.Empty;
             }
 
-            var str = Encoding.UTF8.GetString(Buffer, Index, m_size);
-            Index += (int)m_size;
+            var str = Encoding.UTF8.GetString(Buffer, Index, count);
+            Index += (int)count;
             return (str ?? "").TrimEnd('\0');
         }
 
         public string ReadCString()
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
             int start = Index;
             while (Buffer[Index++] != 0);
             var str = Encoding.UTF8.GetString(Buffer, start, Index - start);
             return (str ?? "").TrimEnd('\0');
         }
 
-        public string ReadPString(int size)
+        public string ReadPString(int count)
         {
-            var len = ReadSize(size);
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (Buffer.Length - Index < count)
+                throw new ArgumentOutOfRangeException("count", count, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
+            var len = ReadSize(count);
             var str = Encoding.UTF8.GetString(Buffer, Index, len);
             Index += len;
             return (str ?? "").TrimEnd('\0');
@@ -362,6 +436,12 @@ namespace MS.Internal.Ink
 
         public string ReadReverseString(int count)
         {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (Buffer.Length - Index < count)
+                throw new ArgumentOutOfRangeException("count", count, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
             var buff = new byte[count];
             Array.Copy(Buffer, Index, buff, 0, count);
             Index += count;

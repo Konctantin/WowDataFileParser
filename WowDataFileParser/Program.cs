@@ -26,12 +26,13 @@ namespace WowDataFileParser
     class Program
     {
         static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
-        const string DEF         = "definitions.xml";
+        const string DEFINITIONS = "definitions.xml";
         const string OUTPUT_FILE = "output.sql";
         const string VERSION     = "4.1";
 
         static Definition definition;
 
+        [STAThread]
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += (o, ex) => {
@@ -44,10 +45,10 @@ namespace WowDataFileParser
 
             File.Delete(OUTPUT_FILE);
 
-            if (!File.Exists(DEF))
-                throw new FileNotFoundException(DEF);
+            if (!File.Exists(DEFINITIONS))
+                throw new FileNotFoundException("File not found", DEFINITIONS);
 
-            using (var stream = File.OpenRead(DEF))
+            using (var stream = File.OpenRead(DEFINITIONS))
             {
                 definition = (Definition)new XmlSerializer(typeof(Definition))
                     .Deserialize(stream);
@@ -56,7 +57,7 @@ namespace WowDataFileParser
             Console.Title = "WoW data file parser";
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                 Parser wow cached data files v{0, -24}║", VERSION);
+            Console.WriteLine("║            Parser wow cached data files v{0} for build {1}          ║", VERSION, definition.Build);
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔═══════════════════════════════╦═════════╦═════════╦═════════╦═════════╗");
@@ -93,79 +94,99 @@ namespace WowDataFileParser
             var files = new DirectoryInfo(Environment.CurrentDirectory)
                 .GetFiles("*.*", SearchOption.AllDirectories);
 
-            if (files.Length == 0)
-                throw new Exception("Folder is Empty");
+            var stopwatch = new Stopwatch();
 
             using (var writer = new StreamWriter(OUTPUT_FILE, false))
             {
-                writer.AutoFlush = false;
+                writer.AutoFlush = true;
 
                 foreach (var file in files)
                 {
                     if (!FILE_FILTER.Contains(file.Extension))
                         continue;
 
-                    var file_name = Path.GetFileNameWithoutExtension(file.Name);
                     BaseReader baseReader = null;
                     switch (file.Extension)
                     {
                         case ".wdb": baseReader = new WdbReader(file.FullName); break;
                         case ".adb": baseReader = new AdbReader(file.FullName); break;
                         case ".db2": baseReader = new Db2Reader(file.FullName); break;
-                        //case ".dbc": baseReader = new DbcReader(file.FullName); break;
                         default: continue;
                     }
 
-                    var fstruct = definition[file.Name, baseReader.Build];
+                    //if (baseReader.Build != definition.Build)
+                    //{
+                    //    Console.ForegroundColor = ConsoleColor.Red;
+                    //    Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
+                    //    Console.WriteLine("║  ERROR In {0,-60}║", file.Name + " (build " + baseReader.Build + ")");
+                    //    Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
+                    //    Console.ForegroundColor = ConsoleColor.Cyan;
+                    //    continue;
+                    //}
+
+                    var fstruct = definition[file.Name];
 
                     if (fstruct == null)
                         continue;
 
-                    var ssp = 0;
+                    var storedProgress = 0;
                     var progress = 0;
-                    var tname = fstruct.Build > 0 ? string.Format("{0}_{1}", fstruct.TableName, fstruct.Build) : fstruct.TableName;
-                    int cp = Console.CursorTop;
+                    var cursorPosition = Console.CursorTop;
 
-                    var sw = new Stopwatch();
-                    sw.Start();
+                    stopwatch.Reset();
+                    stopwatch.Start();
 
-                    var cache = new Dictionary<int, FileStruct>();
-                    Parallel.ForEach(baseReader.Rows, buffer => {
-
-                        var reader = new BitStreamReader(buffer);
-                        var insert = new StringBuilder();
-                        var valList = new Dictionary<string, IConvertible>();
-
-                        foreach (var field in fstruct.Fields)
-                            ReadType(field, reader, baseReader.StringTable, insert, valList, true);
-
-                        lock (writer)
-                            writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\' {2});", tname, baseReader.Locale, insert.ToString());
-
-                        if (reader.Remains > 0)
-                            throw new Exception("reader.Remains = " + reader.Remains);
-
-                        reader.Dispose();
-
-                        Interlocked.Increment(ref progress);
-                        int perc = progress * 100 / baseReader.RecordsCount;
-                        if (perc != ssp)
+                    try
+                    {
+                        Parallel.ForEach(baseReader.Rows, buffer =>
                         {
-                            ssp = perc;
-                            Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║", file.Name, baseReader.Locale, baseReader.Build, progress, perc + "%");
-                            Console.SetCursorPosition(0, cp);
-                        }
-                    });
+                            var reader = new BitStreamReader(buffer);
+                            var insert = new StringBuilder();
+                            var valList = new Dictionary<string, IConvertible>();
 
-                    sw.Stop();
-                    GC.Collect();
+                            foreach (var field in fstruct.Fields)
+                                ReadType(field, reader, baseReader.StringTable, insert, valList, true);
+
+                            lock (writer)
+                            {
+                                writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
+                                    fstruct.TableName, baseReader.Locale, insert.ToString());
+                            }
+
+                            if (reader.Remains > 0)
+                                throw new Exception("Remained unread " + reader.Remains + " bytes");
+
+                            reader.Dispose();
+
+                            Interlocked.Increment(ref progress);
+                            int perc = progress * 100 / baseReader.RecordsCount;
+                            if (perc != storedProgress)
+                            {
+                                storedProgress = perc;
+                                Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║", file.Name, baseReader.Locale, baseReader.Build, progress, perc + "%");
+                                Console.SetCursorPosition(0, cursorPosition);
+                            }
+                        });
+                    }
+                    catch (AggregateException ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
+                        Console.WriteLine("║  ERROR In {0,-60}║", file.Name + " (build " + baseReader.Build + ")");
+                        Console.WriteLine(ex.InnerException.Message);
+                        Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        cursorPosition = Console.CursorTop;
+                    }
+
+                    stopwatch.Stop();
+                    writer.Flush();
 
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    writer.Flush();
-                    Console.SetCursorPosition(0, cp);
+                    Console.SetCursorPosition(0, cursorPosition);
                     Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
                         file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
-                        sw.Elapsed.TotalSeconds.ToString("f", CultureInfo.InvariantCulture) + "sec");
+                        stopwatch.Elapsed.TotalSeconds.ToString("F", CultureInfo.InvariantCulture) + "sec");
 
                     baseReader.Dispose();
                 }
