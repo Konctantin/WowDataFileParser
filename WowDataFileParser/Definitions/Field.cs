@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace WowDataFileParser.Definitions
@@ -11,12 +13,6 @@ namespace WowDataFileParser.Definitions
         [XmlAttribute("type")]
         public DataType Type      { get; set; }
 
-        [XmlAttribute("size")]
-        public int Size           { get; set; }
-
-        [XmlAttribute("sizelink")]
-        public string SizeLink    { get; set; }
-
         [XmlAttribute("key")]
         public bool Key           { get; set; }
 
@@ -25,5 +21,29 @@ namespace WowDataFileParser.Definitions
 
         [XmlElement("field")]
         public List<Field> Fields { get; set; }
+
+        [XmlIgnore]
+        public int Size        { get; private set; }
+
+        [XmlIgnore]
+        public string SizeLink { get; private set; }
+
+        private string rawSize;
+        [XmlAttribute("size")]
+        public string RawSize
+        {
+            get { return rawSize; }
+            set
+            {
+                rawSize = value;
+                int size;
+                if (!int.TryParse(value, out size))
+                {
+                    if (!string.IsNullOrWhiteSpace(value))
+                        SizeLink = value;
+                }
+                Size = size;
+            }
+        }
     }
 }

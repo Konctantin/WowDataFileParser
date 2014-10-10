@@ -3,19 +3,16 @@
 
     <!--                     Инструкция
     Описание файла
-     * build - Максимальная версия (build) файла данных
      * name  - Имя файла, для которого указана структура
      * table - Имя таблицы, куда будут складыватся данные
 
     Описание столбцов:
      * name     - Наименование столбца, если имя пустое - тогда данные не будут записаны в базу данных.
-                  Важно: Если на этот столбец будет ссылатся другое поле "sizelink" - тогда имя должно быть указано.
+                  Важно: Если на этот столбец будет ссылатся другое поле "size" - тогда имя должно быть указано.
      * key      - Указывает, что поле является ключевым (необходим для генерации sql скрипта с таблицами)
-     * size     - Размер поля в битах.
-     * sizelink - Ссылка на длину поля.
-     * maxsize  - максимальный размер списка (обязательный параметр для type == list)
+     * size     - Размер поля в битах или имя поля содержащее размер.
+     * maxsize  - Mаксимальный размер списка (обязательный параметр для type == list)
      * type     - Тип данных:
-                    * bool    - 1  bit
                     * byte    - 8  byte и size - количество бит
                     * short   - 16 byte и size - количество бит
                     * ushort  - 16 byte и size - количество бит
@@ -27,9 +24,9 @@
                     * double  - 64 с плавающей запятой
 
                     * string  - строка с '\0' окончанием.
-                                если строка содержит аттрибут sizelink - тогда длинна строки содержится в указанном поле.
-                                если строка содержит аттрибут size - тогда читается строка с указанной длинной.
-                    * string2 - то же самое что и string, только читаются данные если (size | sizelink) > 1
+                                если строка содержит аттрибут size (строка)- тогда длинна строки содержится в указанном поле.
+                                если строка содержит аттрибут size (число) - тогда читается строка с указанной длинной.
+                    * string2 - то же самое что и string, только читаются данные если (size) > 1
 
                     * pstring - (pascalstring) строка которая содержит длинну в начале,
                                 обязательный параметр size - в котором указн размер записи с длинной в битах
@@ -37,8 +34,8 @@
                     * list    - тип данных который сожержит вложенную структуру.
                                 для этого типа обязательный аттрибут maxsize.
                                 Если указан только maxsize - тогда это список с постоянной длиной.
-                                атрибут size - тогда сначала считывается размер списка (указывается в битах).
-                                атрибут sizelink - ссылка на поле с размером списка.
+                                атрибут size (число)  - тогда сначала считывается размер списка (указывается в битах).
+                                атрибут size (строка) - ссылка на поле с размером списка.
     -->
 
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
@@ -179,14 +176,14 @@
         <field type="int"    name="male_names_len_4"   size="11"/>
         <field type="int"    name="female_names_len_4" size="11"/>
 
-        <field type="string2" name="male_name_1"       sizelink="male_names_len_1"/>
-        <field type="string2" name="female_name_1"     sizelink="female_names_len_1"/>
-        <field type="string2" name="male_name_2"       sizelink="male_names_len_2"/>
-        <field type="string2" name="female_name_2"     sizelink="female_names_len_2"/>
-        <field type="string2" name="male_name_3"       sizelink="male_names_len_3"/>
-        <field type="string2" name="female_name_3"     sizelink="female_names_len_3"/>
-        <field type="string2" name="male_name_4"       sizelink="male_names_len_4"/>
-        <field type="string2" name="female_name_4"     sizelink="female_names_len_4"/>
+        <field type="string2" name="male_name_1"       size="male_names_len_1"/>
+        <field type="string2" name="female_name_1"     size="female_names_len_1"/>
+        <field type="string2" name="male_name_2"       size="male_names_len_2"/>
+        <field type="string2" name="female_name_2"     size="female_names_len_2"/>
+        <field type="string2" name="male_name_3"       size="male_names_len_3"/>
+        <field type="string2" name="female_name_3"     size="female_names_len_3"/>
+        <field type="string2" name="male_name_4"       size="male_names_len_4"/>
+        <field type="string2" name="female_name_4"     size="female_names_len_4"/>
 
         <field type="uint"   name="type_flag"/>
         <field type="uint"   name="unk_541"/>
@@ -210,11 +207,11 @@
         <field type="int"    name="unk543"/>
         <field type="int"    name="unk60x"/>
 
-        <field type="string2" name="sub_name"  sizelink="subname_len"/>
-        <field type="string2" name="unk_text"  sizelink="unk_text_len"/>
-        <field type="string2" name="icon_name" sizelink="icon_name_len"/>
+        <field type="string2" name="sub_name"  size="subname_len"/>
+        <field type="string2" name="unk_text"  size="unk_text_len"/>
+        <field type="string2" name="icon_name" size="icon_name_len"/>
 
-        <field Name="quest_items" type="list" maxsize="6" sizelink="quest_item_count">
+        <field Name="quest_items" type="list" maxsize="6" size="quest_item_count">
             <field type="uint" name="QuestItem"/>
         </field>
     </file>
@@ -341,7 +338,7 @@
         <field type="int"    name="condition_size" />
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
-        <field type="list" name="condition_count" sizelink="condition_size" maxsize="10">
+        <field type="list" name="condition_count" size="condition_size" maxsize="10">
             <field type="int"  name="unk_5_1" />
             <field type="byte" name="condition" />
             <field type="byte" name="unk_5_3" />
@@ -365,15 +362,15 @@
         <field type="int" name="sPortraitTurnInName"  size="8" />
         <field type="int" name="sCompletedText"       size="11"/>
 
-        <field type="string" name="Title"               sizelink="sTitle"/>
-        <field type="string" name="Objectives"          sizelink="sObjectives"/>
-        <field type="string" name="Details"             sizelink="sDetails"/>
-        <field type="string" name="EndText"             sizelink="sEndText"/>
-        <field type="string" name="PortraitGiverText"   sizelink="sPortraitGiverText"/>
-        <field type="string" name="PortraitGiverName"   sizelink="sPortraitGiverName"/>
-        <field type="string" name="PortraitTurnInText"  sizelink="sPortraitTurnInText"/>
-        <field type="string" name="PortraitTurnInName"  sizelink="sPortraitTurnInName"/>
-        <field type="string" name="CompletedText"       sizelink="sCompletedText"/>
+        <field type="string" name="Title"               size="sTitle"/>
+        <field type="string" name="Objectives"          size="sObjectives"/>
+        <field type="string" name="Details"             size="sDetails"/>
+        <field type="string" name="EndText"             size="sEndText"/>
+        <field type="string" name="PortraitGiverText"   size="sPortraitGiverText"/>
+        <field type="string" name="PortraitGiverName"   size="sPortraitGiverName"/>
+        <field type="string" name="PortraitTurnInText"  size="sPortraitTurnInText"/>
+        <field type="string" name="PortraitTurnInName"  size="sPortraitTurnInName"/>
+        <field type="string" name="CompletedText"       size="sCompletedText"/>
     </file>
 
     <file name="npccache.wdb" table="npc_text">

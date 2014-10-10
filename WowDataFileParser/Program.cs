@@ -24,13 +24,15 @@ namespace WowDataFileParser
     {
         const string DEFINITIONS = "definitions.xml";
         const string OUTPUT_FILE = "output.sql";
-        const string VERSION     = "4.1";
 
         static Definition definition;
 
         [STAThread]
         static void Main(string[] args)
         {
+            Console.Title = "WoW data file parser";
+            Console.ForegroundColor = ConsoleColor.Magenta;
+
             AppDomain.CurrentDomain.UnhandledException += (o, ex) => {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
@@ -50,38 +52,17 @@ namespace WowDataFileParser
                     .Deserialize(stream);
             }
 
-            Console.Title = "WoW data file parser";
-            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║            Parser wow cached data files v{0} for build {1}          ║", VERSION, definition.Build);
+            Console.WriteLine("║           Parser wow cached data files v4.1 for build {0,-6}          ║", definition.Build);
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔═══════════════════════════════╦═════════╦═════════╦═════════╦═════════╗");
             Console.WriteLine("║           Name                ║ Locale  ║  Build  ║  Count  ║ Status  ║");
             Console.WriteLine("╠═══════════════════════════════╬═════════╬═════════╬═════════╬═════════╣");
 
-            Parse();
+            Program.Parse();
 
             Console.WriteLine("╚═══════════════════════════════╩═════════╩═════════╩═════════╩═════════╝");
-            Console.WriteLine();
-            Console.Write("Please, press the \"F5\" to generate a database structure: ");
-
-            if (Console.ReadKey().Key != ConsoleKey.F5)
-                return;
-
-            Console.WriteLine(); Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("╔═════════════════════════════════════════════════════╗");
-            Console.WriteLine("║          Auto generate db structure v{0, -15}║", VERSION);
-            Console.WriteLine("╚═════════════════════════════════════════════════════╝");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("╔═══════════════════════════════════╦═════════════════╗");
-            Console.WriteLine("║ Element name                      ║      Type       ║");
-            Console.WriteLine("╠═══════════════════════════════════╬═════════════════║");
-
-            SqlTable.CreateSqlTable(definition);
-
-            Console.WriteLine("╚═══════════════════════════════════╩═════════════════╝");
             Console.ReadKey();
         }
 
@@ -98,6 +79,9 @@ namespace WowDataFileParser
             using (var writer = new StreamWriter(OUTPUT_FILE, false))
             {
                 writer.AutoFlush = true;
+
+                // Write structure DB
+                SqlTable.CreateStructure(writer, definition);
 
                 foreach (var file in files)
                 {
@@ -128,6 +112,8 @@ namespace WowDataFileParser
                     var storedProgress = 0;
                     var progress = 0;
                     var cursorPosition = Console.CursorTop;
+
+                    writer.WriteLine("-- {0} statements", file.Name);
 
                     stopwatch.Reset();
                     stopwatch.Start();

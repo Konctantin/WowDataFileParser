@@ -5,7 +5,6 @@ namespace WowDataFileParser.Definitions
     public enum DataType
     {
         [XmlEnum("")]        None,
-        [XmlEnum("bool")]    Bool,
         [XmlEnum("byte")]    Byte,
         [XmlEnum("sbyte")]   Styte,
         [XmlEnum("short")]   Short,
