@@ -18,7 +18,7 @@ namespace WowDataFileParser
             return Encoding.UTF8.GetString(list.ToArray());
         }
 
-        public static int GetValueByName(this Dictionary<string, IConvertible> collection, string name)
+        public static int GetValueByFieldName(this Dictionary<string, IConvertible> collection, string name)
         {
             IConvertible val;
             if (name != null && collection.TryGetValue(name, out val))
