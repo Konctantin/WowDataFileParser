@@ -22,7 +22,6 @@ namespace WowDataFileParser
 {
     class Program
     {
-        static readonly string[] FILE_FILTER = { ".wdb", ".adb", ".dbc", ".db2" };
         const string DEFINITIONS = "definitions.xml";
         const string OUTPUT_FILE = "output.sql";
         const string VERSION     = "4.1";
@@ -88,8 +87,11 @@ namespace WowDataFileParser
 
         static void Parse()
         {
-            var files = new DirectoryInfo(Environment.CurrentDirectory)
-                .GetFiles("*.*", SearchOption.AllDirectories);
+            var directoryInfo = new DirectoryInfo(Environment.CurrentDirectory);
+            var files = directoryInfo.GetFiles("*.wdb", SearchOption.AllDirectories)
+                .Concat(directoryInfo.GetFiles("*.adb", SearchOption.AllDirectories))
+                .Concat(directoryInfo.GetFiles("*.db2", SearchOption.AllDirectories))
+                ;
 
             var stopwatch = new Stopwatch();
 
@@ -99,16 +101,13 @@ namespace WowDataFileParser
 
                 foreach (var file in files)
                 {
-                    if (!FILE_FILTER.Contains(file.Extension))
-                        continue;
-
                     BaseReader baseReader = null;
                     switch (file.Extension)
                     {
                         case ".wdb": baseReader = new WdbReader(file.FullName); break;
                         case ".adb": baseReader = new AdbReader(file.FullName); break;
                         case ".db2": baseReader = new Db2Reader(file.FullName); break;
-                        default: continue;
+                        default: throw new NotImplementedException();
                     }
 
                     if (definition.Build > 0 && baseReader.Build != definition.Build)
@@ -151,8 +150,6 @@ namespace WowDataFileParser
                             if (rowReader.Remains > 0)
                                 throw new Exception("Remained unread " + rowReader.Remains + " bytes");
 
-                            rowReader.Dispose();
-
                             Interlocked.Increment(ref progress);
                             int perc = progress * 100 / baseReader.RecordsCount;
                             if (perc != storedProgress)
@@ -182,8 +179,6 @@ namespace WowDataFileParser
                     Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
                         file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
                         stopwatch.Elapsed.TotalSeconds.ToString("F", CultureInfo.InvariantCulture) + "sec");
-
-                    baseReader.Dispose();
                 }
             }
         }
