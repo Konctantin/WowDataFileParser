@@ -4,7 +4,6 @@
     <!--                     Инструкция
     Описание файла
      * name  - Имя файла, для которого указана структура
-     * table - Имя таблицы, куда будут складыватся данные
 
     Описание столбцов:
      * name     - Наименование столбца, если имя пустое - тогда данные не будут записаны в базу данных.
@@ -41,7 +40,7 @@
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
     <build>0</build>
 
-    <file name="Item.db2" table="item_additional">
+    <file name="Item.db2">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="class"/>
         <field type="uint"   name="subclass"/>
@@ -53,7 +52,19 @@
         <field type="uint"   name="unk"/> <!--wod-->
     </file>
 
-    <file name="Item-sparse.db2" table="item_sparse">
+    <file name="Item.adb">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="class"/>
+        <field type="uint"   name="subclass"/>
+        <field type="int"    name="unk0"/>
+        <field type="int"    name="material"/>
+        <field type="uint"   name="displayid"/>
+        <field type="uint"   name="inventorytype"/>
+        <field type="uint"   name="sheath"/>
+        <field type="uint"   name="unk"/> <!--wod-->
+    </file>
+
+    <file name="Item-sparse.db2">
         <field type="int"    name="field0" key="true" />
         <field type="int"    name="field1" />
         <field type="int"    name="field2" />
@@ -158,7 +169,112 @@
         <field type="int"    name="field101" />
     </file>
 
-    <file name="creaturecache.wdb" table="creature_template">
+    <file name="Item-sparse.adb">
+        <field type="int"    name="field0" key="true" />
+        <field type="int"    name="field1" />
+        <field type="int"    name="field2" />
+        <field type="int"    name="field3" />
+        <field type="int"    name="field4" />
+        <field type="float"  name="field5" />
+        <field type="float"  name="field6" />
+        <field type="int"    name="field7" />
+        <field type="int"    name="field8" />
+        <field type="int"    name="field9" />
+        <field type="int"    name="field10" />
+        <field type="int"    name="field11" />
+        <field type="int"    name="field12" />
+        <field type="int"    name="field13" />
+        <field type="int"    name="field14" />
+        <field type="int"    name="field15" />
+        <field type="int"    name="field16" />
+        <field type="int"    name="field17" />
+        <field type="int"    name="field18" />
+        <field type="int"    name="field19" />
+        <field type="int"    name="field20" />
+        <field type="int"    name="field21" />
+        <field type="int"    name="field22" />
+        <field type="int"    name="field23" />
+        <field type="int"    name="field24" />
+        <field type="int"    name="field25" />
+        <field type="int"    name="field26" />
+        <field type="int"    name="field27" />
+        <field type="int"    name="field28" />
+        <field type="int"    name="field29" />
+        <field type="int"    name="field30" />
+        <field type="int"    name="field31" />
+        <field type="int"    name="field32" />
+        <field type="int"    name="field33" />
+        <field type="int"    name="field34" />
+        <field type="int"    name="field35" />
+        <field type="int"    name="field36" />
+        <field type="int"    name="field37" />
+        <field type="int"    name="field38" />
+        <field type="int"    name="field39" />
+        <field type="int"    name="field40" />
+        <field type="int"    name="field41" />
+        <field type="int"    name="field42" />
+        <field type="int"    name="field43" />
+        <field type="int"    name="field44" />
+        <field type="int"    name="field45" />
+        <field type="int"    name="field46" />
+        <field type="int"    name="field47" />
+        <field type="int"    name="field48" />
+        <field type="int"    name="field49" />
+        <field type="int"    name="field50" />
+        <field type="int"    name="field51" />
+        <field type="int"    name="field52" />
+        <field type="int"    name="field53" />
+        <field type="int"    name="field54" />
+        <field type="int"    name="field55" />
+        <field type="int"    name="field56" />
+        <field type="int"    name="field57" />
+        <field type="int"    name="field58" />
+        <field type="int"    name="field59" />
+        <field type="int"    name="field60" />
+        <field type="int"    name="field61" />
+        <field type="int"    name="field62" />
+        <field type="int"    name="field63" />
+        <field type="int"    name="field64" />
+        <field type="int"    name="field65" />
+        <field type="int"    name="field66" />
+        <field type="int"    name="field67" />
+        <field type="int"    name="field68" />
+        <field type="int"    name="field69" />
+        <field type="string" name="name" />
+        <field type="string" name="name2" />
+        <field type="string" name="name3" />
+        <field type="string" name="name4" />
+        <field type="string" name="description" />
+        <field type="int"    name="field75" />
+        <field type="int"    name="field76" />
+        <field type="int"    name="field77" />
+        <field type="int"    name="field78" />
+        <field type="int"    name="field79" />
+        <field type="int"    name="field80" />
+        <field type="int"    name="field81" />
+        <field type="int"    name="field82" />
+        <field type="int"    name="field83" />
+        <field type="int"    name="field84" />
+        <field type="int"    name="field85" />
+        <field type="int"    name="field86" />
+        <field type="int"    name="field87" />
+        <field type="int"    name="field88" />
+        <field type="int"    name="field89" />
+        <field type="int"    name="field90" />
+        <field type="int"    name="field91" />
+        <field type="int"    name="field92" />
+        <field type="int"    name="field93" />
+        <field type="int"    name="field94" />
+        <field type="int"    name="field95" />
+        <field type="int"    name="field96" />
+        <field type="int"    name="field97" />
+        <field type="float"  name="field98" />
+        <field type="int"    name="field99" />
+        <field type="int"    name="field100" />
+        <field type="int"    name="field101" />
+    </file>
+
+    <file name="creaturecache.wdb">
         <field type="uint"   name="entry" key="true"/>
 
         <field type="int"    name="subname_len"        size="11"/>
@@ -216,7 +332,7 @@
         </field>
     </file>
 
-    <file name="gameobjectcache.wdb" table="gameobjectcache">
+    <file name="gameobjectcache.wdb">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="type"/>
         <field type="uint"   name="displayId"/>
@@ -267,7 +383,7 @@
         <field type="uint"   name="Unk"/>
     </file>
 
-    <file name="questcache.wdb" table="questcache">
+    <file name="questcache.wdb">
         <field type="int"    name="entry" key="true" />
         <field type="int"    name="doubleEntry" />
         <field type="int"    name="Method" />
@@ -338,7 +454,7 @@
         <field type="int"    name="condition_size" />
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
-        <field type="list" name="condition_count" size="condition_size" maxsize="10">
+        <field type="list" size="condition_size" maxsize="10">
             <field type="int"  name="unk_5_1" />
             <field type="byte" name="condition" />
             <field type="byte" name="unk_5_3" />
@@ -373,7 +489,7 @@
         <field type="string" name="CompletedText"       size="sCompletedText"/>
     </file>
 
-    <file name="npccache.wdb" table="npc_text">
+    <file name="npccache.wdb">
         <field type="uint"   name="Id" key="true"/>
 
         <field type="float"  name="prob1"/>
@@ -395,14 +511,14 @@
         <field type="uint"  name="textId8"/>
     </file>
 
-    <file name="pagetextcache.wdb" table="page_text">
+    <file name="pagetextcache.wdb">
         <field type="uint"    name="entry" key="true"/>
         <field type="uint"    name="doubleEntry"/>
         <field type="uint"    name="next_page"/>
         <field type="pstring" name="Text" size="12"/>
     </file>
 
-    <file name="BroadcastText.adb" table="broadcast_text">
+    <file name="BroadcastText.adb">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="lang" />
         <field type="string" name="text1" />
@@ -418,7 +534,7 @@
         <field type="uint"   name="unk9" />
     </file>
 
-    <file name="BattlePetAbility.adb" table="battle_pet_ability">
+    <file name="BattlePetAbility.adb">
         <field type="int"    name="entry" />
         <field type="int"    name="index" />
         <field type="int"    name="newField3" />
@@ -429,7 +545,7 @@
         <field type="string" name="spell_description" />
     </file>
 
-    <file name="SceneScript.adb" table="scene_script">
+    <file name="SceneScript.adb">
         <field type="uint"   name="entry" key="true"/>
         <field type="string" name="Name"/>
         <field type="string" name="Script"/>

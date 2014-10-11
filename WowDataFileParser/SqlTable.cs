@@ -10,14 +10,20 @@ namespace WowDataFileParser
     {
         public static void CreateStructure(StreamWriter writer, Definition definition)
         {
+            var db_name = "wdb";
+            if (definition.Build > 0)
+                db_name += "_" + definition.Build;
+
             writer.WriteLine("-- DB structure");
-            writer.WriteLine("CREATE DATABASE IF NOT EXISTS `wdb` CHARACTER SET utf8 COLLATE utf8_general_ci;");
-            writer.WriteLine("USE `wdb`;");
+            writer.WriteLine("CREATE DATABASE IF NOT EXISTS `{0}` CHARACTER SET utf8 COLLATE utf8_general_ci;", db_name);
+            writer.WriteLine("USE `{0}`;", db_name);
             writer.WriteLine();
 
             foreach (var file in definition.Files)
             {
                 var keys = new List<string> { "locale" };
+
+                var tableName = file.Name.Split('.').FirstOrDefault().Replace('-', '_');
 
                 writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.TableName);
                 writer.WriteLine("    `locale`                        CHAR(4) NOT NULL,");
@@ -26,7 +32,7 @@ namespace WowDataFileParser
                     CreateFieldByType(writer, keys, field, "");
 
                 writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(key => "`" + key + "`")) + ")");
-                writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8 COMMENT = 'Export of {0}';", file.TableName);
+                writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8;");
                 writer.WriteLine();
             }
         }
@@ -76,10 +82,8 @@ namespace WowDataFileParser
                     break;
                 case DataType.List:
                     {
-                        if (!string.IsNullOrWhiteSpace(field.Name))
+                        if (field.Size > 0)
                         {
-                            var counttype = field.Name;
-
                             var fname = field.Name;
                             if (!char.IsDigit(fname[fname.Length - 1]))
                             {

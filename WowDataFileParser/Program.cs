@@ -118,6 +118,8 @@ namespace WowDataFileParser
                     stopwatch.Reset();
                     stopwatch.Start();
 
+                    var tableName = fstruct.TableName;
+
                     try
                     {
                         Parallel.ForEach(baseReader.Rows, buffer =>
@@ -130,7 +132,7 @@ namespace WowDataFileParser
                             lock (writer)
                             {
                                 writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
-                                    fstruct.TableName, baseReader.Locale, rowReader.ToString());
+                                    tableName, baseReader.Locale, rowReader.ToString());
                             }
 
                             if (rowReader.Remains > 0)
@@ -158,6 +160,7 @@ namespace WowDataFileParser
                     }
 
                     stopwatch.Stop();
+                    writer.WriteLine();
                     writer.Flush();
 
                     Console.ForegroundColor = ConsoleColor.Cyan;

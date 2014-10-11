@@ -21,13 +21,7 @@ namespace WowDataFileParser.Definitions
 
         public FileStruct this[string name]
         {
-            get
-            {
-                var list = Files.Where(n => n.Name == name);
-                if (list.Count() > 0)
-                    return list.FirstOrDefault();
-                return null;
-            }
+            get { return Files.Where(n => n.Name == name).FirstOrDefault(); }
         }
     }
 }
