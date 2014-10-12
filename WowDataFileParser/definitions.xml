@@ -343,39 +343,9 @@
         <field type="string" name="name4"/>
         <field type="string" name="castBarCaption"/>
         <field type="string" name="name6"/>
-        <field type="uint"   name="data0"/>
-        <field type="uint"   name="data1"/>
-        <field type="uint"   name="data2"/>
-        <field type="uint"   name="data3"/>
-        <field type="uint"   name="data4"/>
-        <field type="uint"   name="data5"/>
-        <field type="uint"   name="data6"/>
-        <field type="uint"   name="data7"/>
-        <field type="uint"   name="data8"/>
-        <field type="uint"   name="data9"/>
-        <field type="uint"   name="data10"/>
-        <field type="uint"   name="data11"/>
-        <field type="uint"   name="data12"/>
-        <field type="uint"   name="data13"/>
-        <field type="uint"   name="data14"/>
-        <field type="uint"   name="data15"/>
-        <field type="uint"   name="data16"/>
-        <field type="uint"   name="data17"/>
-        <field type="uint"   name="data18"/>
-        <field type="uint"   name="data19"/>
-        <field type="uint"   name="data20"/>
-        <field type="uint"   name="data21"/>
-        <field type="uint"   name="data22"/>
-        <field type="uint"   name="data23"/>
-        <field type="uint"   name="data24"/>
-        <field type="uint"   name="data25"/>
-        <field type="uint"   name="data26"/>
-        <field type="uint"   name="data27"/>
-        <field type="uint"   name="data28"/>
-        <field type="uint"   name="data29"/>
-        <field type="uint"   name="data30"/>
-        <field type="uint"   name="data31"/>
-        <field type="uint"   name="data32"/> <!--6.0.x-->
+        <field type="list" maxsize="33">
+            <field type="uint" name="data"/>
+        </field>
         <field type="float"  name="Size"/>
         <field type="list"   name="QuestItemCount" size="8" maxsize="6">
             <field type="int" name="QuestItem" />
@@ -408,14 +378,14 @@
         <field type="int"    name="QuestFlags" />
         <field type="int"    name="QuestFlags2" />
 
-        <field name="RewReq" type="list" maxsize="4">
+        <field type="list" maxsize="4">
             <field type="int" name="RewItemId" />
             <field type="int" name="RewItemCount" />
             <field type="int" name="ReqSourceId" />
             <field type="int" name="ReqSourceCount" />
         </field>
 
-        <field name="RewChoiceItem" type="list" maxsize="6">
+        <field type="list" maxsize="6">
             <field type="int" name="RewChoiceItemId" />
             <field type="int" name="RewChoiceItemCount" />
             <field type="int" name="RewChoiceItemUNK" />
@@ -433,7 +403,7 @@
         <field type="int"    name="PortraitGiver" />
         <field type="int"    name="PortraitTurnIn" />
 
-        <field name="RewRep" type="list" maxsize="5">
+        <field type="list" maxsize="5">
             <field type="int" name="RewRepFaction" />
             <field type="int" name="RewRepValueId" />
             <field type="int" name="RewRepValue" />
@@ -441,7 +411,7 @@
 
         <field type="int"   name="UNK_541" />
 
-        <field name="RewCurrency" type="list" maxsize="4">
+        <field type="list" maxsize="4">
             <field type="int" name="RewCurrencyId" />
             <field type="int" name="RewCurrencyCount" />
         </field>
@@ -455,15 +425,15 @@
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
         <field type="list" size="condition_size" maxsize="10">
-            <field type="int"  name="unk_5_1" />
-            <field type="byte" name="condition" />
-            <field type="byte" name="unk_5_3" />
-            <field type="int"  name="ReqCreatureOrGOId" />
-            <field type="int"  name="ReqCreatureOrGOCount" />
-            <field type="int"  name="unk_5_6" />
-            <field type="float"  name="unk_6_c" /> <!--wod-->
-            <field type="list" name="unk_count" size="32" maxsize="11">
-                <field type="int"  name="condition_unk" />
+            <field type="int"   name="unk_5_1" />
+            <field type="byte"  name="condition" />
+            <field type="byte"  name="unk_5_3" />
+            <field type="int"   name="ReqCreatureOrGOId" />
+            <field type="int"   name="ReqCreatureOrGOCount" />
+            <field type="int"   name="unk_5_6" />
+            <field type="float" name="unk_6_c" /> <!--wod-->
+            <field type="list"  name="unk_count" size="32" maxsize="11">
+                <field type="int" name="condition_unk" />
             </field>
             <field type="pstring" name="ObjectiveText" size="8"/>
         </field>

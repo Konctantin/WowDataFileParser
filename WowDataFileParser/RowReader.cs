@@ -19,14 +19,14 @@ namespace WowDataFileParser
             this.StringTable = stringTable;
         }
 
-        private void SetVal(Field field, IConvertible value)
+        private void SetVal(Field field, IConvertible value, bool isString = false)
         {
             if (!string.IsNullOrWhiteSpace(field.Name))
                 valList[field.Name] = value;
 
             if (value == null)
                 content.Append(", NULL");
-            else if (!(value is string))
+            else if (!isString)
                 content.Append(", " + value.ToString(CultureInfo.InvariantCulture));
             else
             {
@@ -55,21 +55,22 @@ namespace WowDataFileParser
                 case DataType.Ulong:   SetVal(field, read ? base.ReadUInt64(count)  : 0   ); break;
                 case DataType.Float:   SetVal(field, read ? base.ReadFloat()        : 0f  ); break;
                 case DataType.Double:  SetVal(field, read ? base.ReadDouble()       : 0d  ); break;
-                case DataType.Pstring: SetVal(field, read ? base.ReadPString(count) : null); break;
-                case DataType.String2: SetVal(field, read ? base.ReadString3(count) : null); break;
+
+                case DataType.Pstring: SetVal(field, read ? base.ReadPString(count) : null, true); break;
+                case DataType.String2: SetVal(field, read ? base.ReadString3(count) : null, true); break;
                 case DataType.String:
                     {
                         if (StringTable != null)
                         {
                             var offset = base.ReadInt32();
-                            SetVal(field, StringTable[offset]);
+                            SetVal(field, StringTable[offset], true);
                         }
                         else if (read)
                         {
                             if (count == 0 && field.SizeLink == null)
-                                SetVal(field, base.ReadCString());
+                                SetVal(field, base.ReadCString(), true);
                             else
-                                SetVal(field, base.ReadString2(count));
+                                SetVal(field, base.ReadString2(count), true);
                         }
                         else
                         {

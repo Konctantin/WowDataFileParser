@@ -23,10 +23,8 @@ namespace WowDataFileParser
             {
                 var keys = new List<string> { "locale" };
 
-                var tableName = file.Name.Split('.').FirstOrDefault().Replace('-', '_');
-
                 writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.TableName);
-                writer.WriteLine("    `locale`                        CHAR(4) NOT NULL,");
+                writer.WriteLine("    `locale`                        CHAR(4) NOT NULL DEFAULT 'xxXX',");
 
                 foreach (var field in file.Fields)
                     CreateFieldByType(writer, keys, field, "");
@@ -78,7 +76,10 @@ namespace WowDataFileParser
                 case DataType.String:
                 case DataType.String2:
                 case DataType.Pstring:
-                    writer.WriteLine("    `{0,-30} TEXT,", field.Name + suffix + '`');
+                    if (field.Maxsize > 0)
+                        writer.WriteLine("    `{0,-30} VARCHAR({1}),", field.Name + suffix + '`', field.Maxsize);
+                    else
+                        writer.WriteLine("    `{0,-30} TEXT,", field.Name + suffix + '`');
                     break;
                 case DataType.List:
                     {
