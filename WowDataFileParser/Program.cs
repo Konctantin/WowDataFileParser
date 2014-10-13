@@ -22,14 +22,16 @@ namespace WowDataFileParser
 {
     class Program
     {
-        const string DEFINITIONS = "definitions.xml";
-        const string OUTPUT_FILE = "output.sql";
-
+        static string outputPath = "output.sql";
+        static string definitionPath = "definitions.xml";
         static Definition definition;
 
         [STAThread]
         static void Main(string[] args)
         {
+            if (args.Length > 0)
+                definitionPath = args[0];
+
             Console.Title = "WoW data file parser";
             Console.ForegroundColor = ConsoleColor.Magenta;
 
@@ -41,16 +43,19 @@ namespace WowDataFileParser
                 Console.ForegroundColor = ConsoleColor.Cyan;
             };
 
-            File.Delete(OUTPUT_FILE);
+            if (!File.Exists(definitionPath))
+                throw new FileNotFoundException("File not found", definitionPath);
 
-            if (!File.Exists(DEFINITIONS))
-                throw new FileNotFoundException("File not found", DEFINITIONS);
-
-            using (var stream = File.OpenRead(DEFINITIONS))
+            using (var stream = File.OpenRead(definitionPath))
             {
                 definition = (Definition)new XmlSerializer(typeof(Definition))
                     .Deserialize(stream);
             }
+
+            if (definition.Build > 0)
+                outputPath = string.Format("output_{0}.sql", definition.Build);
+
+            File.Delete(outputPath);
 
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
             Console.WriteLine("║           Parser wow cached data files v4.1 for build {0,-6}          ║", definition.Build);
@@ -76,7 +81,7 @@ namespace WowDataFileParser
 
             var stopwatch = new Stopwatch();
 
-            using (var writer = new StreamWriter(OUTPUT_FILE, false))
+            using (var writer = new StreamWriter(outputPath, false))
             {
                 writer.AutoFlush = true;
 

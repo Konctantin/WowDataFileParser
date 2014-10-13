@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -21,7 +22,7 @@ namespace WowDataFileParser.Definitions
 
         public FileStruct this[string name]
         {
-            get { return Files.Where(n => n.Name == name).FirstOrDefault(); }
+            get { return Files.Where(n => n.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault(); }
         }
     }
 }
