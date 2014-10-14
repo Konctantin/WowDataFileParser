@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0"?>
-<Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <!--                     Инструкция
+<!--                     Инструкция
     Описание файла
      * name  - Имя файла, для которого указана структура
 
@@ -37,6 +36,7 @@
                                 атрибут size (строка) - ссылка на поле с размером списка.
     -->
 
+<Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
     <build>0</build>
 
@@ -327,7 +327,7 @@
         <field type="string2" name="unk_text"  size="unk_text_len"/>
         <field type="string2" name="icon_name" size="icon_name_len"/>
 
-        <field Name="quest_items" type="list" maxsize="6" size="quest_item_count">
+        <field name="quest_items" type="list" maxsize="6" size="quest_item_count">
             <field type="uint" name="QuestItem"/>
         </field>
     </file>

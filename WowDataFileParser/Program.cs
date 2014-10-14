@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using WowDataFileParser.Definitions;
 using WowDataFileParser.Readers;
+
 /*
     9552 = ═    9553 = ║    9554 = ╒    9555 = ╓    9556 = ╔    9557 = ╕    9558 = ╖    9559 = ╗
   
@@ -33,7 +34,6 @@ namespace WowDataFileParser
                 definitionPath = args[0];
 
             Console.Title = "WoW data file parser";
-            Console.ForegroundColor = ConsoleColor.Magenta;
 
             AppDomain.CurrentDomain.UnhandledException += (o, ex) => {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -46,10 +46,22 @@ namespace WowDataFileParser
             if (!File.Exists(definitionPath))
                 throw new FileNotFoundException("File not found", definitionPath);
 
+            Console.ForegroundColor = ConsoleColor.Red;
             using (var stream = File.OpenRead(definitionPath))
             {
-                definition = (Definition)new XmlSerializer(typeof(Definition))
-                    .Deserialize(stream);
+                var serialiser = new XmlSerializer(typeof(Definition));
+
+                serialiser.UnknownAttribute += (o, e) => {
+                    Console.WriteLine("Unknown attribute: '{0}' at line: {1} position: {2}",
+                        e.Attr.Name, e.LineNumber, e.LinePosition);
+                };
+
+                serialiser.UnknownElement += (o, e) => {
+                    Console.WriteLine("Unknown Element: '{0}' at line: {1} position: {2}",
+                        e.Element.Name, e.LineNumber, e.LinePosition);
+                };
+
+                definition = (Definition)serialiser.Deserialize(stream);
             }
 
             if (definition.Build > 0)
@@ -57,6 +69,7 @@ namespace WowDataFileParser
 
             File.Delete(outputPath);
 
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
             Console.WriteLine("║           Parser wow cached data files v4.1 for build {0,-6}          ║", definition.Build);
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
@@ -148,7 +161,8 @@ namespace WowDataFileParser
                             if (perc != storedProgress)
                             {
                                 storedProgress = perc;
-                                Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║", file.Name, baseReader.Locale, baseReader.Build, progress, perc + "%");
+                                Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
+                                    file.Name, baseReader.Locale, baseReader.Build, progress, perc + "%");
                                 Console.SetCursorPosition(0, cursorPosition);
                             }
                         });
@@ -173,6 +187,8 @@ namespace WowDataFileParser
                     Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
                         file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
                         stopwatch.Elapsed.TotalSeconds.ToString("F", CultureInfo.InvariantCulture) + "sec");
+
+                    baseReader.Dispose();
                 }
             }
         }
