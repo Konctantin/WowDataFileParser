@@ -38,7 +38,7 @@
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
-    <build>0</build>
+    <build>19033</build>
 
     <file name="Item.db2">
         <field type="uint"   name="entry" key="true"/>
@@ -521,6 +521,22 @@
         <field type="string" name="Script"/>
         <field type="int"    name="Unk1"/>
         <field type="int"    name="Unk2"/>
+    </file>
+
+    <file name="Toy.db2">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="spellId" /> <!--spellId or itemId ???-->
+        <field type="int"    name="field2" />
+        <field type="string" name="description" /> <!--WTF?-->
+        <field type="int"    name="field4" />
+    </file>
+
+    <file name="Toy.adb">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="spellId" /> <!--spellId or itemId ???-->
+        <field type="int"    name="field2" />
+        <field type="string" name="description" /> <!--WTF?-->
+        <field type="int"    name="field4" />
     </file>
 
 </Definition>
