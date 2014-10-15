@@ -528,7 +528,7 @@
         <field type="int"    name="spellId" /> <!--spellId or itemId ???-->
         <field type="int"    name="field2" />
         <field type="string" name="description" /> <!--WTF?-->
-        <field type="int"    name="field4" />
+        <field type="int"    name="source" /> <!-- -1 - other, 0 - drop, 1 - unk, 2 - vendor-->
     </file>
 
     <file name="Toy.adb">
@@ -536,7 +536,7 @@
         <field type="int"    name="spellId" /> <!--spellId or itemId ???-->
         <field type="int"    name="field2" />
         <field type="string" name="description" /> <!--WTF?-->
-        <field type="int"    name="field4" />
+        <field type="int"    name="source" /> <!-- -1 - other, 0 - drop, 1 - unk, 2 - vendor-->
     </file>
 
 </Definition>
