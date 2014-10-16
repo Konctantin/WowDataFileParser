@@ -50,10 +50,10 @@ namespace WowDataFileParser.Readers
                     .Concat(reader.ReadBytes(size))
                     .ToArray();
 
-                m_rows.Add(entry, row);
+                base.Rows.Add(row);
             }
 
-            RecordsCount = m_rows.Count;
+            RecordsCount = base.Rows.Count;
         }
     }
 }

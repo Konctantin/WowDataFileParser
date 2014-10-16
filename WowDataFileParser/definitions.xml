@@ -38,7 +38,7 @@
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
-    <build>19033</build>
+    <build>19034</build>
 
     <file name="Item.db2">
         <field type="uint"   name="entry" key="true"/>
@@ -424,7 +424,7 @@
         <field type="int"    name="condition_size" />
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
-        <field type="list" size="condition_size" maxsize="10">
+        <field type="list" size="condition_size" maxsize="12">
             <field type="int"   name="unk_5_1" />
             <field type="byte"  name="condition" />
             <field type="byte"  name="unk_5_3" />

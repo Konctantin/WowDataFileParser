@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -69,9 +70,12 @@ namespace WowDataFileParser
 
             File.Delete(outputPath);
 
+            var mj = Assembly.GetExecutingAssembly().GetName().Version.Major;
+            var mi = Assembly.GetExecutingAssembly().GetName().Version.Minor;
+
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║           Parser wow cached data files v4.1 for build {0,-6}          ║", definition.Build);
+            Console.WriteLine("║           Parser wow cached data files v{0}.{1} for build {2,-6}          ║", mj, mi, definition.Build);
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔═══════════════════════════════╦═════════╦═════════╦═════════╦═════════╗");
@@ -142,21 +146,22 @@ namespace WowDataFileParser
                     {
                         Parallel.ForEach(baseReader.Rows, buffer =>
                         {
-                            var rowReader = new RowReader(buffer, baseReader.StringTable);
-
-                            foreach (var field in fstruct.Fields)
-                                rowReader.ReadType(field);
-
-                            lock (writer)
+                            using (var rowReader = new RowReader(buffer, baseReader.StringTable))
                             {
-                                writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
-                                    tableName, baseReader.Locale, rowReader.ToString());
+                                foreach (var field in fstruct.Fields)
+                                    rowReader.ReadType(field);
+
+                                lock (writer) {
+                                    writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
+                                        tableName, baseReader.Locale, rowReader.ToString());
+                                }
+
+                                if (rowReader.Remains > 0)
+                                    throw new Exception("Remained unread " + rowReader.Remains + " bytes");
                             }
 
-                            if (rowReader.Remains > 0)
-                                throw new Exception("Remained unread " + rowReader.Remains + " bytes");
-
                             Interlocked.Increment(ref progress);
+
                             int perc = progress * 100 / baseReader.RecordsCount;
                             if (perc != storedProgress)
                             {
@@ -177,18 +182,20 @@ namespace WowDataFileParser
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         cursorPosition = Console.CursorTop;
                     }
+                    finally
+                    {
+                        stopwatch.Stop();
+                        writer.WriteLine();
+                        writer.Flush();
 
-                    stopwatch.Stop();
-                    writer.WriteLine();
-                    writer.Flush();
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.SetCursorPosition(0, cursorPosition);
+                        Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
+                            file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
+                            stopwatch.Elapsed.TotalSeconds.ToString("F", CultureInfo.InvariantCulture) + "sec");
 
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.SetCursorPosition(0, cursorPosition);
-                    Console.WriteLine("║ {0,-30}║ {1,-8}║ {2,-8}║ {3,-8}║ {4,-8}║",
-                        file.Name, baseReader.Locale, baseReader.Build, baseReader.RecordsCount,
-                        stopwatch.Elapsed.TotalSeconds.ToString("F", CultureInfo.InvariantCulture) + "sec");
-
-                    baseReader.Dispose();
+                        baseReader.Dispose();
+                    }
                 }
             }
         }

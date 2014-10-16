@@ -23,7 +23,7 @@ namespace WowDataFileParser.Readers
     public abstract class BaseReader : IDisposable
     {
         protected BinaryReader reader;
-        protected Dictionary<int, byte[]> m_rows;
+        public List<byte[]> Rows    { get; protected set; }
 
         public string Magic         { get; protected set; }
         public int RecordsCount     { get; protected set; }
@@ -37,17 +37,12 @@ namespace WowDataFileParser.Readers
 
         public byte[] this[int row] 
         {
-            get { return m_rows.ElementAt(row).Value; } 
-        }
-
-        public IEnumerable<byte[]> Rows
-        {
-            get { return m_rows.Values; }
+            get { return this.Rows[row]; }
         }
 
         public BaseReader(string fileName)
         {
-            this.m_rows = new Dictionary<int, byte[]>();
+            this.Rows   = new List<byte[]>();
             this.reader = new BinaryReader(new FileStream(fileName, FileMode.Open), Encoding.UTF8);
 
             if (this.reader.BaseStream.Length <= 4)
@@ -59,7 +54,7 @@ namespace WowDataFileParser.Readers
         public virtual void ReadData()
         {
             for (int i = 0; i < RecordsCount; i++)
-                m_rows[i] = reader.ReadBytes(RecordSize);
+                this.Rows.Add(reader.ReadBytes(RecordSize));
 
             int stringTableStart = (int)reader.BaseStream.Position;
 
@@ -77,20 +72,20 @@ namespace WowDataFileParser.Readers
 
         public void Dispose()
         {
-            if (reader != null)
+            if (this.reader != null)
             {
-                reader.Close();
-                reader.Dispose();                
+                this.reader.Close();
+                this.reader.Dispose();
             }
-            reader = null;
+            this.reader = null;
 
-            if (m_rows != null)
-                m_rows.Clear();
-            m_rows = null;
+            if (this.Rows != null)
+                this.Rows.Clear();
+            this.Rows = null;
 
-            if (StringTable != null)
-                StringTable.Clear();
-            StringTable = null;
+            if (this.StringTable != null)
+                this.StringTable.Clear();
+            this.StringTable = null;
         }
     }
 }

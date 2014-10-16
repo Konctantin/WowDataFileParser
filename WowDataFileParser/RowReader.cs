@@ -46,21 +46,21 @@ namespace WowDataFileParser
 
             switch (field.Type)
             {
-                case DataType.Byte:    SetVal(field, read ? base.ReadByte(count)    : 0   ); break;
-                case DataType.Short:   SetVal(field, read ? base.ReadInt16(count)   : 0   ); break;
-                case DataType.Ushort:  SetVal(field, read ? base.ReadUInt16(count)  : 0   ); break;
-                case DataType.Int:     SetVal(field, read ? base.ReadInt32(count)   : 0   ); break;
-                case DataType.Uint:    SetVal(field, read ? base.ReadUInt32(count)  : 0   ); break;
-                case DataType.Long:    SetVal(field, read ? base.ReadInt64(count)   : 0   ); break;
-                case DataType.Ulong:   SetVal(field, read ? base.ReadUInt64(count)  : 0   ); break;
-                case DataType.Float:   SetVal(field, read ? base.ReadFloat()        : 0f  ); break;
-                case DataType.Double:  SetVal(field, read ? base.ReadDouble()       : 0d  ); break;
+                case DataType.Byte:    SetVal(field, read ? base.ReadByte(count)    : 0 ); break;
+                case DataType.Short:   SetVal(field, read ? base.ReadInt16(count)   : 0 ); break;
+                case DataType.Ushort:  SetVal(field, read ? base.ReadUInt16(count)  : 0 ); break;
+                case DataType.Int:     SetVal(field, read ? base.ReadInt32(count)   : 0 ); break;
+                case DataType.Uint:    SetVal(field, read ? base.ReadUInt32(count)  : 0 ); break;
+                case DataType.Long:    SetVal(field, read ? base.ReadInt64(count)   : 0 ); break;
+                case DataType.Ulong:   SetVal(field, read ? base.ReadUInt64(count)  : 0 ); break;
+                case DataType.Float:   SetVal(field, read ? base.ReadFloat()        : 0f); break;
+                case DataType.Double:  SetVal(field, read ? base.ReadDouble()       : 0d); break;
 
                 case DataType.Pstring: SetVal(field, read ? base.ReadPString(count) : null, true); break;
                 case DataType.String2: SetVal(field, read ? base.ReadString3(count) : null, true); break;
                 case DataType.String:
                     {
-                        if (StringTable != null)
+                        if (StringTable != null) // dbc adb db2
                         {
                             var offset = base.ReadInt32();
                             SetVal(field, StringTable[offset], true);
@@ -92,6 +92,12 @@ namespace WowDataFileParser
                         else if (field.Maxsize > 0)
                         {
                             size = field.Maxsize;
+                        }
+
+                        if (size > field.Maxsize)
+                        {
+                            throw new Exception(string.Format("Field <{0}>'{1}' size '{2}' is great then maxsize '{3}'!",
+                                field.Type, field.Name, size, field.Maxsize));
                         }
 
                         for (int i = 0; i < field.Maxsize; ++i)
