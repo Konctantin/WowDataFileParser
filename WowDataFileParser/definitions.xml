@@ -435,15 +435,15 @@
     <file name="BroadcastText.adb">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="lang" />
-        <field type="string" name="text1" />
-        <field type="string" name="text2" />
-        <field type="uint"   name="unk1" />
-        <field type="uint"   name="unk2" />
-        <field type="uint"   name="unk3" />
-        <field type="uint"   name="unk4" />
-        <field type="uint"   name="unk5" />
-        <field type="uint"   name="unk6" />
-        <field type="uint"   name="unk7" />
+        <field type="string" name="MaleText" />
+        <field type="string" name="FemaleText" />
+        <field type="list" maxsize="3">
+            <field type="uint" name="EmoteId" />
+        </field>
+        <field type="list" maxsize="3">
+            <field type="uint" name="EmoteDelay" />
+        </field>
+        <field type="uint"   name="SoundId" />
         <field type="uint"   name="unk8" />
         <field type="uint"   name="unk9" />
     </file>
@@ -463,8 +463,8 @@
         <field type="uint"   name="entry" key="true"/>
         <field type="string" name="Name"/>
         <field type="string" name="Script"/>
-        <field type="int"    name="Unk1"/>
-        <field type="int"    name="Unk2"/>
+        <field type="int"    name="Prev"/>
+        <field type="int"    name="Next"/>
     </file>
 
     <file name="Toy.db2">
