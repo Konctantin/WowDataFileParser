@@ -12,6 +12,7 @@
      * maxsize  - Mаксимальный размер списка (обязательный параметр для type == list)
      * type     - Тип данных:
                     * byte    - 8  byte и size - количество бит
+                    * sbyte   - 8  byte и size - количество бит
                     * short   - 16 byte и size - количество бит
                     * ushort  - 16 byte и size - количество бит
                     * int     - 32 byte и size - количество бит
