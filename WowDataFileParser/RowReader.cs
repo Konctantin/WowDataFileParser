@@ -47,6 +47,7 @@ namespace WowDataFileParser
             switch (field.Type)
             {
                 case DataType.Byte:    SetVal(field, read ? base.ReadByte(count)    : 0 ); break;
+                case DataType.SByte:   SetVal(field, read ? base.ReadSByte(count)   : 0 ); break;
                 case DataType.Short:   SetVal(field, read ? base.ReadInt16(count)   : 0 ); break;
                 case DataType.Ushort:  SetVal(field, read ? base.ReadUInt16(count)  : 0 ); break;
                 case DataType.Int:     SetVal(field, read ? base.ReadInt32(count)   : 0 ); break;

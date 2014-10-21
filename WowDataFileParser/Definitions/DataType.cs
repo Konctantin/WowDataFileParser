@@ -6,7 +6,7 @@ namespace WowDataFileParser.Definitions
     {
         [XmlEnum("")]        None,
         [XmlEnum("byte")]    Byte,
-        [XmlEnum("sbyte")]   Styte,
+        [XmlEnum("sbyte")]   SByte,
         [XmlEnum("short")]   Short,
         [XmlEnum("ushort")]  Ushort,
         [XmlEnum("int")]     Int,

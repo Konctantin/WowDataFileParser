@@ -214,6 +214,24 @@ namespace MS.Internal.Ink
                 return mReadByte(count);
         }
 
+        public sbyte ReadSByte(int count = 0)
+        {
+            if (this.EndOfStream)
+                throw new EndOfStreamException("End of stream reached");
+
+            if (count == 0)
+            {
+                if (Buffer.Length - Index < 1)
+                    throw new ArgumentOutOfRangeException("count", 1, "Count of bytes great than remaining bytes " + (Buffer.Length - Index));
+
+                var val = (sbyte)Buffer[Index];
+                ++Index;
+                return val;
+            }
+            else
+                return (sbyte)mReadByte(count);
+        }
+
         public short ReadInt16(int count = 0)
         {
             if (this.EndOfStream)
