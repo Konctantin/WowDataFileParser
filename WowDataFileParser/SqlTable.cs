@@ -21,9 +21,12 @@ namespace WowDataFileParser
 
             foreach (var file in definition.Files)
             {
+                if (string.IsNullOrWhiteSpace(file.Table))
+                    throw new NullReferenceException("Table name missing or empty for " + file.Name);
+
                 var keys = new List<string> { "locale" };
 
-                writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.TableName);
+                writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.Table);
                 writer.WriteLine("    `locale` CHAR(4) NOT NULL DEFAULT 'xxXX',");
 
                 foreach (var field in file.Fields)
@@ -43,48 +46,47 @@ namespace WowDataFileParser
             if (field.Key)
                 keys.Add(field.Name);
 
-            var name = field.Name.ToLower() + suffix;
 
             #region Type
             switch (field.Type)
             {
                 case DataType.Long:
-                    writer.WriteLine("    `{0}` BIGINT NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` BIGINT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Ulong:
-                    writer.WriteLine("    `{0}` BIGINT UNSIGNED NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` BIGINT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Int:
-                    writer.WriteLine("    `{0}` INT NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` INT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Uint:
-                    writer.WriteLine("    `{0}` INT UNSIGNED NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` INT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Short:
-                    writer.WriteLine("    `{0}` SMALLINT NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` SMALLINT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Ushort:
-                    writer.WriteLine("    `{0}` SMALLINT UNSIGNED NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` SMALLINT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Byte:
-                    writer.WriteLine("    `{0}` TINYINT NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` TINYINT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.SByte:
-                    writer.WriteLine("    `{0}` TINYINT UNSIGNED NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` TINYINT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Float:
-                    writer.WriteLine("    `{0}` FLOAT NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` FLOAT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Double:
-                    writer.WriteLine("    `{0}` DOUBLE NOT NULL DEFAULT '0',", name);
+                    writer.WriteLine("    `{0}` DOUBLE NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.String:
                 case DataType.String2:
                 case DataType.Pstring:
                     if (field.Maxsize > 0)
-                        writer.WriteLine("    `{0}` VARCHAR({1}),", name, field.Maxsize);
+                        writer.WriteLine("    `{0}` VARCHAR({1}),", field.Name.ToLower() + suffix, field.Maxsize);
                     else
-                        writer.WriteLine("    `{0}` TEXT,", name);
+                        writer.WriteLine("    `{0}` TEXT,", field.Name.ToLower() + suffix);
                     break;
                 case DataType.List:
                     {

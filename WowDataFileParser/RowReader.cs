@@ -22,7 +22,7 @@ namespace WowDataFileParser
         private void SetVal(Field field, IConvertible value, bool isString = false)
         {
             if (!string.IsNullOrWhiteSpace(field.Name))
-                valList[field.Name] = value;
+                this.valList[field.Name] = value;
 
             if (value == null)
                 content.Append(", NULL");

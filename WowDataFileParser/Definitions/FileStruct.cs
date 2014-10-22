@@ -11,16 +11,13 @@ namespace WowDataFileParser.Definitions
         [XmlAttribute("name")]
         public string Name        { get; set; }
 
+        [XmlAttribute("table")]
+        public string Table       { get; set; }
+
         /// <summary>
         /// Field list.
         /// </summary>
         [XmlElement("field")]
         public List<Field> Fields { get; set; }
-
-        [XmlIgnore]
-        public string TableName
-        {
-            get { return Name.Replace('-', '_').Replace('.', '_').ToLower(); }
-        }
     }
 }

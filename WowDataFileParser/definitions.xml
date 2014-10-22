@@ -3,6 +3,7 @@
 <!--                     Инструкция
     Описание файла
      * name  - Имя файла, для которого указана структура
+     * table - Имя таблицы в базе данных
 
     Описание столбцов:
      * name     - Наименование столбца, если имя пустое - тогда данные не будут записаны в базу данных.
@@ -39,9 +40,9 @@
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
-    <build>19034</build>
+    <build>0</build>
 
-    <file name="Item.db2">
+    <file name="Item.(db2|adb)" table="item">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="class"/>
         <field type="uint"   name="subclass"/>
@@ -53,19 +54,7 @@
         <field type="uint"   name="unk"/> <!--wod-->
     </file>
 
-    <file name="Item.adb">
-        <field type="uint"   name="entry" key="true"/>
-        <field type="uint"   name="class"/>
-        <field type="uint"   name="subclass"/>
-        <field type="int"    name="unk0"/>
-        <field type="int"    name="material"/>
-        <field type="uint"   name="displayid"/>
-        <field type="uint"   name="inventorytype"/>
-        <field type="uint"   name="sheath"/>
-        <field type="uint"   name="unk"/> <!--wod-->
-    </file>
-
-    <file name="Item-sparse.db2">
+    <file name="Item-sparse.(db2|adb)" table="item_sparse">
         <field type="int"    name="entry" key="true" />
         <field type="int"    name="quality" />
         <field type="uint"   name="flags1" />
@@ -142,84 +131,7 @@
         <field type="int"    name="itemnamedescription" />
     </file>
 
-    <file name="Item-sparse.adb">
-        <field type="int"    name="entry" key="true" />
-        <field type="int"    name="quality" />
-        <field type="uint"   name="flags1" />
-        <field type="uint"   name="flags2" />
-        <field type="uint"   name="flags3" />
-        <field type="float"  name="unk431" />
-        <field type="float"  name="unk432" />
-        <field type="uint"   name="buycount" />
-        <field type="uint"   name="buyprice" />
-        <field type="uint"   name="sellprice" />
-        <field type="int"    name="inventorytype" />
-        <field type="int"    name="allovedclasses" />
-        <field type="int"    name="allovedraces" />
-        <field type="uint"   name="itemlevel" />
-        <field type="uint"   name="requiredlevel" />
-        <field type="uint"   name="requiredskill" />
-        <field type="uint"   name="requiredskilllevel" />
-        <field type="int"    name="requiredspell" />
-        <field type="uint"   name="requiredhonorrank" />
-        <field type="uint"   name="requiredcityrank" />
-        <field type="uint"   name="requiredrepfaction" />
-        <field type="uint"   name="requiredrepvalue" />
-        <field type="int"    name="maxcount" />
-        <field type="int"    name="maxstacksize" />
-        <field type="uint"   name="containerslots" />
-        <field type="list" maxsize="10">
-            <field type="int" name="stat_type" />
-        </field>
-        <field type="list" maxsize="10">
-            <field type="int" name="stat_value" />
-        </field>
-        <field type="list" maxsize="10">
-            <field type="int" name="stat_unk1" />
-        </field>
-        <field type="list" maxsize="10">
-            <field type="int" name="stat_unk2" />
-        </field>
-        <field type="int"    name="scalingstatdistribution" />
-        <field type="int"    name="damagetype" />
-        <field type="uint"   name="delay" />
-        <field type="float"  name="rangedmod" />
-        <field type="int"    name="bonding" />
-        <field type="string" name="name" />
-        <field type="string" name="name2" />
-        <field type="string" name="name3" />
-        <field type="string" name="name4" />
-        <field type="string" name="description" />
-        <field type="uint"   name="pagetext" />
-        <field type="int"    name="lenguage" />
-        <field type="int"    name="pagematerial" />
-        <field type="int"    name="startquest" />
-        <field type="uint"   name="lockid" />
-        <field type="int"    name="material" />
-        <field type="int"    name="sheath" />
-        <field type="int"    name="randomproperty" />
-        <field type="uint"   name="randomsuffix" />
-        <field type="uint"   name="itemset" />
-        <field type="int"    name="area" />
-        <field type="int"    name="map" />
-        <field type="int"    name="bagfamily" />
-        <field type="int"    name="totemcategory" />
-        <field type="list" maxsize="3">
-            <field type="int" name="socketcolor" />
-        </field>
-        <field type="int"    name="socketbonus" />
-        <field type="int"    name="gemproperties" />
-        <field type="float"  name="armordamagemodifier" />
-        <field type="uint"   name="duration" />
-        <field type="int"    name="itemlimitcategory" />
-        <field type="int"    name="holidayid" />
-        <field type="float"  name="statscalingfactor" />
-        <field type="int"    name="currencysubstitution" />
-        <field type="int"    name="currencysubstitutioncount" />
-        <field type="int"    name="itemnamedescription" />
-    </file>
-
-    <file name="creaturecache.wdb">
+    <file name="creaturecache.wdb" table="creaturecache">
         <field type="uint"   name="entry" key="true"/>
 
         <field type="int"    name="subname_len"        size="11"/>
@@ -277,7 +189,7 @@
         </field>
     </file>
 
-    <file name="gameobjectcache.wdb">
+    <file name="gameobjectcache.wdb" table="gameobjectcache">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="type"/>
         <field type="uint"   name="displayId"/>
@@ -298,7 +210,7 @@
         <field type="uint"   name="Unk"/>
     </file>
 
-    <file name="questcache.wdb">
+    <file name="questcache.wdb" table="questcache">
         <field type="int"    name="entry" key="true" />
         <field type="int"    name="doubleEntry" />
         <field type="int"    name="Method" />
@@ -404,7 +316,7 @@
         <field type="string" name="CompletedText"       size="sCompletedText"/>
     </file>
 
-    <file name="npccache.wdb">
+    <file name="npccache.wdb" table="npccache">
         <field type="uint"   name="Id" key="true"/>
 
         <field type="float"  name="prob1"/>
@@ -426,14 +338,14 @@
         <field type="uint"  name="textId8"/>
     </file>
 
-    <file name="pagetextcache.wdb">
+    <file name="pagetextcache.wdb" table="pagetextcache">
         <field type="uint"    name="entry" key="true"/>
         <field type="uint"    name="doubleEntry"/>
         <field type="uint"    name="next_page"/>
         <field type="pstring" name="Text" size="12"/>
     </file>
 
-    <file name="BroadcastText.adb">
+    <file name="BroadcastText.(db2|adb)" table="broadcasttext">
         <field type="uint"   name="entry" key="true"/>
         <field type="uint"   name="lang" />
         <field type="string" name="MaleText" />
@@ -449,8 +361,8 @@
         <field type="uint"   name="unk9" />
     </file>
 
-    <file name="BattlePetAbility.adb">
-        <field type="int"    name="entry" />
+    <file name="BattlePetAbility.(db2|adb)" table="battlepetability">
+        <field type="int"    name="entry" key="true"/>
         <field type="int"    name="index" />
         <field type="int"    name="newField3" />
         <field type="int"    name="index2" />
@@ -460,7 +372,7 @@
         <field type="string" name="spell_description" />
     </file>
 
-    <file name="SceneScript.adb">
+    <file name="SceneScript.(db2|adb)" table="scenescript">
         <field type="uint"   name="entry" key="true"/>
         <field type="string" name="Name"/>
         <field type="string" name="Script"/>
@@ -468,15 +380,7 @@
         <field type="int"    name="Next"/>
     </file>
 
-    <file name="Toy.db2">
-        <field type="int"    name="entry" key="true" />
-        <field type="int"    name="itemId" />
-        <field type="int"    name="unk" /> <!-- 0 - ???, 2 - ??? -->
-        <field type="string" name="sourceText" />
-        <field type="int"    name="sourceType" /> <!-- -1 - none, 0 - drop, 1 - reward, 2 - vendor, 3 - profession, 5 - achievement, 6 - event, 7 - promotion -->
-    </file>
-
-    <file name="Toy.adb">
+    <file name="Toy.(db2|adb)" table="toy">
         <field type="int"    name="entry" key="true" />
         <field type="int"    name="itemId" />
         <field type="int"    name="unk" /> <!-- 0 - ???, 2 - ??? -->

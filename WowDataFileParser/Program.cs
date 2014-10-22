@@ -4,21 +4,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using WowDataFileParser.Definitions;
 using WowDataFileParser.Readers;
-
-/*
-    9552 = ═    9553 = ║    9554 = ╒    9555 = ╓    9556 = ╔    9557 = ╕    9558 = ╖    9559 = ╗
-  
-    9560 = ╘    9561 = ╙    9562 = ╚    9563 = ╛    9564 = ╜    9565 = ╝    9566 = ╞    9567 = ╟
-  
-    9568 = ╠    9569 = ╡    9570 = ╢    9571 = ╣    9572 = ╤    9573 = ╥    9574 = ╦    9575 = ╧
-  
-    9576 = ╨    9577 = ╩    9578 = ╪    9579 = ╫    9580 = ╬
- */
 
 namespace WowDataFileParser
 {
@@ -126,7 +117,9 @@ namespace WowDataFileParser
                         continue;
                     }
 
-                    var fstruct = definition[file.Name];
+                    var fstruct = definition.Files.Where(
+                        n => Regex.IsMatch(file.Name, n.Name, RegexOptions.IgnoreCase))
+                        .FirstOrDefault();
 
                     if (fstruct == null)
                         continue;
@@ -140,8 +133,6 @@ namespace WowDataFileParser
                     stopwatch.Reset();
                     stopwatch.Start();
 
-                    var tableName = fstruct.TableName;
-
                     try
                     {
                         Parallel.ForEach(baseReader.Rows, buffer =>
@@ -153,7 +144,7 @@ namespace WowDataFileParser
 
                                 lock (writer) {
                                     writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
-                                        tableName, baseReader.Locale, rowReader.ToString());
+                                        fstruct.Table, baseReader.Locale, rowReader.ToString());
                                 }
 
                                 if (rowReader.Remains > 0)
