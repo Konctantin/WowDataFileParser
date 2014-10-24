@@ -159,7 +159,7 @@
         <field type="string2" name="female_name_4"     size="female_names_len_4"/>
 
         <field type="uint"   name="type_flag"/>
-        <field type="uint"   name="unk_541"/>
+        <field type="uint"   name="type_flag2"/>
         <field type="uint"   name="type"/>
         <field type="int"    name="family"/>
         <field type="uint"   name="rank"/>
@@ -177,8 +177,8 @@
 
         <field type="int"    name="quest_item_count"/>
         <field type="int"    name="movement_id"/>
-        <field type="int"    name="unk543"/>
-        <field type="int"    name="unk60x"/>
+        <field type="int"    name="requireExpansion"/>
+        <field type="int"    name="questFlag"/>
 
         <field type="string2" name="sub_name"  size="subname_len"/>
         <field type="string2" name="unk_text"  size="unk_text_len"/>
@@ -207,7 +207,7 @@
         <field type="list"   name="QuestItemCount" size="8" maxsize="6">
             <field type="int" name="QuestItem" />
         </field>
-        <field type="uint"   name="Unk"/>
+        <field type="uint"   name="requireExpansion"/>
     </file>
 
     <file name="questcache.wdb" table="questcache">
