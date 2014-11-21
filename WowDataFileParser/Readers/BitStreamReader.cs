@@ -468,7 +468,7 @@ namespace MS.Internal.Ink
 
         #endregion
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             this.Buffer = null;
             this.Index  = 0;

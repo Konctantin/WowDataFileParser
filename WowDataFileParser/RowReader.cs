@@ -11,12 +11,12 @@ namespace WowDataFileParser
     {
         private StringBuilder content = new StringBuilder();
         private Dictionary<string, IConvertible> valList = new Dictionary<string, IConvertible>();
-        private Dictionary<int, string> StringTable;
+        private Dictionary<int, string> stringTable;
 
         public RowReader(byte[] buffer, Dictionary<int, string> stringTable = null)
             : base (buffer)
         {
-            this.StringTable = stringTable;
+            this.stringTable = stringTable;
         }
 
         private void SetVal(Field field, IConvertible value, bool isString = false)
@@ -61,10 +61,10 @@ namespace WowDataFileParser
                 case DataType.String2: SetVal(field, read ? base.ReadString3(count) : null, true); break;
                 case DataType.String:
                     {
-                        if (StringTable != null) // dbc adb db2
+                        if (stringTable != null) // adb db2
                         {
                             var offset = base.ReadInt32();
-                            SetVal(field, StringTable[offset], true);
+                            SetVal(field, stringTable[offset], true);
                         }
                         else if (read)
                         {
@@ -112,6 +112,29 @@ namespace WowDataFileParser
                     } break;
                 default:
                     break;
+            }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (content != null)
+            {
+                content.Clear();
+                content = null;
+            }
+
+            if (valList != null)
+            {
+                valList.Clear();
+                valList = null;
+            }
+
+            if (stringTable != null)
+            {
+                stringTable.Clear();
+                stringTable = null;
             }
         }
 
