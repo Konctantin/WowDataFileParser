@@ -244,8 +244,8 @@
 
         <field type="list" maxsize="6">
             <field type="int" name="RewChoiceItemId" />
-            <field type="int" name="RewChoiceItemCount" />
-            <field type="int" name="RewChoiceItemUNK" />
+            <field type="int" name="RewChoiceItemQuantity" />
+            <field type="int" name="RewChoiceItemDisplayID" />
         </field>
 
         <field type="int"    name="PointMapId" />
@@ -278,21 +278,21 @@
 
         <field type="int"    name="unk_i_1" /> <!--wod-->
         <field type="int"    name="unk_i_2" /> <!--wod-->
-        <field type="int"    name="condition_size" />
+        <field type="int"    name="objective_size" />
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
-        <field type="list" size="condition_size" maxsize="12">
-            <field type="int"   name="unk_5_1" />
-            <field type="byte"  name="condition" />
-            <field type="byte"  name="unk_5_3" />
-            <field type="int"   name="ReqCreatureOrGOId" />
-            <field type="int"   name="ReqCreatureOrGOCount" />
-            <field type="int"   name="unk_5_6" />
-            <field type="float" name="unk_6_c" /> <!--wod-->
-            <field type="list"  name="unk_count" size="32" maxsize="11">
-                <field type="int" name="condition_unk" />
+        <field type="list" size="objective_size" maxsize="12">
+            <field type="int"   name="ObjectiveId" />
+            <field type="byte"  name="ObjectiveType" />
+            <field type="byte"  name="ObjectiveStorageIndex" />
+            <field type="int"   name="ObjectiveObjectID" />
+            <field type="int"   name="ObjectiveAmount" />
+            <field type="int"   name="ObjectiveFlags" />
+            <field type="float" name="ObjectiveUnk_6_c" /> <!--wod-->
+            <field type="list"  name="ObjectiveVisualEffectsCount" size="32" maxsize="11">
+                <field type="int" name="ObjectiveVisualEffect" />
             </field>
-            <field type="pstring" name="ObjectiveText" size="8"/>
+            <field type="pstring" name="ObjectiveDescription" size="8"/>
         </field>
 
         <field type="int" name="sTitle"               size="9" />
