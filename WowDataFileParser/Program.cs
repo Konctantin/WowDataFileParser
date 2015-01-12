@@ -61,12 +61,11 @@ namespace WowDataFileParser
 
             File.Delete(outputPath);
 
-            var mj = Assembly.GetExecutingAssembly().GetName().Version.Major;
-            var mi = Assembly.GetExecutingAssembly().GetName().Version.Minor;
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
 
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║           Parser wow cached data files v{0}.{1} for build {2,-6}          ║", mj, mi, definition.Build);
+            Console.WriteLine("║           Parser wow cached data files v{0}.{1} for build {2,-6}          ║", version.Major, version.Minor, definition.Build);
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════════════╝");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔═══════════════════════════════╦═════════╦═════════╦═════════╦═════════╗");
