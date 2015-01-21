@@ -278,10 +278,10 @@
 
         <field type="int"    name="unk_i_1" /> <!--wod-->
         <field type="int"    name="unk_i_2" /> <!--wod-->
-        <field type="int"    name="objective_size" />
+        <field type="int"    name="objective_count" />
         <field type="int"    name="unk_i_4" /> <!--wod-->
 
-        <field type="list" size="objective_size" maxsize="12">
+        <field type="list" size="objective_count" maxsize="17">
             <field type="int"   name="ObjectiveId" />
             <field type="byte"  name="ObjectiveType" />
             <field type="byte"  name="ObjectiveStorageIndex" />
@@ -289,7 +289,7 @@
             <field type="int"   name="ObjectiveAmount" />
             <field type="int"   name="ObjectiveFlags" />
             <field type="float" name="ObjectiveUnk_6_c" /> <!--wod-->
-            <field type="list"  name="ObjectiveVisualEffectsCount" size="32" maxsize="11">
+            <field type="list"  name="ObjectiveVisualEffectsCount" size="32" maxsize="12">
                 <field type="int" name="ObjectiveVisualEffect" />
             </field>
             <field type="pstring" name="ObjectiveDescription" size="8"/>
