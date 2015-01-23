@@ -212,28 +212,28 @@
 
     <file name="questcache.wdb" table="questcache">
         <field type="int"    name="entry" key="true" />
-        <field type="int"    name="doubleEntry" />
-        <field type="int"    name="Method" />
+        <field type="int"    name="QuestId" />
+        <field type="int"    name="QuestType" />
         <field type="int"    name="QuestLevel" />
-        <field type="int"    name="f_5" />
-        <field type="int"    name="MinLevel" />
-        <field type="int"    name="ZoneOrSort" />
-        <field type="int"    name="Type" />
-        <field type="int"    name="SuggestedPlayers" />
-        <field type="int"    name="NextQuestInChain" />
-        <field type="int"    name="RewXPId" />
-        <field type="float"  name="unk_f1" /> <!--wod-->
-        <field type="int"    name="RewOrReqMoney" />
-        <field type="int"    name="RewXPId_2" />
-        <field type="float"  name="unk_f2" /> <!--wod-->
-        <field type="int"    name="RewMoneyMaxLevel" />
-        <field type="int"    name="RewSpell" />
-        <field type="int"    name="RewSpellCast" />
-        <field type="int"    name="RewHonorAddition" />
-        <field type="float"  name="RewHonorMultiplier" />
-        <field type="int"    name="SrcItemId" />
+        <field type="int"    name="QuestPackageID" />
+        <field type="int"    name="QuestMinLevel" />
+        <field type="int"    name="QuestSortID" />
+        <field type="int"    name="QuestInfoID" />
+        <field type="int"    name="SuggestedGroupNum" />
+        <field type="int"    name="RewardNextQuest" />
+        <field type="int"    name="RewardXPDifficulty" />
+        <field type="float"  name="unk_f1" /> <!--wod live-->
+        <field type="int"    name="RewardMoney" />
+        <field type="int"    name="RewardMoneyDifficulty" />
+        <field type="float"  name="unk_f2" /> <!--wod live-->
+        <field type="int"    name="RewardBonusMoney" />
+        <field type="int"    name="RewardDisplaySpell" />
+        <field type="int"    name="RewardSpell" />
+        <field type="int"    name="RewardHonor" />
+        <field type="float"  name="RewardKillHonor" />
+        <field type="int"    name="StartItem" />
         <field type="int"    name="QuestFlags" />
-        <field type="int"    name="QuestFlags2" />
+        <field type="int"    name="QuestFlagsEx" />
 
         <field type="list" maxsize="4">
             <field type="int" name="RewItemId" />
@@ -248,38 +248,38 @@
             <field type="int" name="RewChoiceItemDisplayID" />
         </field>
 
-        <field type="int"    name="PointMapId" />
-        <field type="float"  name="PointX" />
-        <field type="float"  name="PointY" />
-        <field type="int"    name="PointOpt" />
-        <field type="int"    name="CharTitleId" />
-        <field type="int"    name="BonusTalents_100" />
-        <field type="int"    name="PlayersSlain_25" />
-        <field type="int"    name="RewSkill" />
-        <field type="int"    name="RewSkillValue" />
+        <field type="int"    name="POIContinent" />
+        <field type="float"  name="POIx" />
+        <field type="float"  name="POIy" />
+        <field type="int"    name="POIPriority" />
+        <field type="int"    name="RewardTitle" />
+        <field type="int"    name="RewardTalents" />
+        <field type="int"    name="RewardArenaPoints" />
+        <field type="int"    name="RewardSkillLineID" />
+        <field type="int"    name="RewardNumSkillUps" />
         <field type="int"    name="PortraitGiver" />
         <field type="int"    name="PortraitTurnIn" />
 
         <field type="list" maxsize="5">
-            <field type="int" name="RewRepFaction" />
-            <field type="int" name="RewRepValueId" />
-            <field type="int" name="RewRepValue" />
+            <field type="int" name="RewardFactionID" />
+            <field type="int" name="RewardFactionValue" />
+            <field type="int" name="RewardFactionOverride" />
         </field>
 
-        <field type="int"   name="UNK_541" />
+        <field type="int"   name="RewardFactionFlags" />
 
         <field type="list" maxsize="4">
-            <field type="int" name="RewCurrencyId" />
-            <field type="int" name="RewCurrencyCount" />
+            <field type="int" name="RewardCurrencyID" />
+            <field type="int" name="RewardCurrencyQty" />
         </field>
 
-        <field type="int"    name="SoundAccept" />
-        <field type="int"    name="SoundTurnIn" />
+        <field type="int"    name="AcceptedSoundKitID" />
+        <field type="int"    name="CompleteSoundKitID" />
 
-        <field type="int"    name="unk_i_1" /> <!--wod-->
-        <field type="int"    name="unk_i_2" /> <!--wod-->
+        <field type="int"    name="AreaGroupID" /> <!--wod beta-->
+        <field type="int"    name="TimeAllowed" /> <!--wod beta-->
         <field type="int"    name="objective_count" />
-        <field type="int"    name="unk_i_4" /> <!--wod-->
+        <field type="int"    name="unk_i_3" /> <!--wod live-->
 
         <field type="list" size="objective_count" maxsize="17">
             <field type="int"   name="ObjectiveId" />
@@ -288,32 +288,32 @@
             <field type="int"   name="ObjectiveObjectID" />
             <field type="int"   name="ObjectiveAmount" />
             <field type="int"   name="ObjectiveFlags" />
-            <field type="float" name="ObjectiveUnk_6_c" /> <!--wod-->
+            <field type="float" name="ObjectiveUnk_1" /> <!--wod live-->
             <field type="list"  name="ObjectiveVisualEffectsCount" size="32" maxsize="12">
                 <field type="int" name="ObjectiveVisualEffect" />
             </field>
             <field type="pstring" name="ObjectiveDescription" size="8"/>
         </field>
 
-        <field type="int" name="sTitle"               size="9" />
-        <field type="int" name="sObjectives"          size="12"/>
-        <field type="int" name="sDetails"             size="12"/>
-        <field type="int" name="sEndText"             size="9" />
+        <field type="int" name="sLogTitle"            size="9" />
+        <field type="int" name="sLogDescription"      size="12"/>
+        <field type="int" name="sQuestDescription"    size="12"/>
+        <field type="int" name="sAreaDescription"     size="9" />
         <field type="int" name="sPortraitGiverText"   size="10"/>
         <field type="int" name="sPortraitGiverName"   size="8" />
         <field type="int" name="sPortraitTurnInText"  size="10"/>
         <field type="int" name="sPortraitTurnInName"  size="8" />
-        <field type="int" name="sCompletedText"       size="11"/>
+        <field type="int" name="sQuestCompletionLog"  size="11"/>
 
-        <field type="string" name="Title"               size="sTitle"/>
-        <field type="string" name="Objectives"          size="sObjectives"/>
-        <field type="string" name="Details"             size="sDetails"/>
-        <field type="string" name="EndText"             size="sEndText"/>
+        <field type="string" name="LogTitle"            size="sLogTitle"/>
+        <field type="string" name="LogDescription"      size="sLogDescription"/>
+        <field type="string" name="QuestDescription"    size="sQuestDescription"/>
+        <field type="string" name="AreaDescription"     size="sAreaDescription"/>
         <field type="string" name="PortraitGiverText"   size="sPortraitGiverText"/>
         <field type="string" name="PortraitGiverName"   size="sPortraitGiverName"/>
         <field type="string" name="PortraitTurnInText"  size="sPortraitTurnInText"/>
         <field type="string" name="PortraitTurnInName"  size="sPortraitTurnInName"/>
-        <field type="string" name="CompletedText"       size="sCompletedText"/>
+        <field type="string" name="QuestCompletionLog"  size="sQuestCompletionLog"/>
     </file>
 
     <file name="npccache.wdb" table="npccache">
