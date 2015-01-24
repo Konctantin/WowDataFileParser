@@ -83,11 +83,13 @@ namespace WowDataFileParser
                 case DataType.String:
                 case DataType.String2:
                 case DataType.Pstring:
-                    if (field.Maxsize > 0)
-                        writer.WriteLine("    `{0}` VARCHAR({1}),", field.Name.ToLower() + suffix, field.Maxsize);
-                    else
-                        writer.WriteLine("    `{0}` TEXT,", field.Name.ToLower() + suffix);
-                    break;
+                    {
+                        var maxLen = (int)Math.Pow(2, field.Size);
+                        if (maxLen > 8000)
+                            writer.WriteLine("    `{0}` TEXT,", field.Name.ToLower() + suffix);
+                        else
+                            writer.WriteLine("    `{0}` VARCHAR({1}),", field.Name.ToLower() + suffix, maxLen);
+                    } break;
                 case DataType.List:
                     {
                         if (field.Size > 0)
