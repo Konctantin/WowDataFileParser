@@ -40,7 +40,7 @@
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
-    <build>0</build>
+    <build>19342</build>
 
     <file name="Item.(db2|adb)" table="item">
         <field type="uint"   name="entry" key="true"/>
