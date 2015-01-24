@@ -279,7 +279,7 @@
         <field type="int"    name="AreaGroupID" /> <!--wod beta-->
         <field type="int"    name="TimeAllowed" /> <!--wod beta-->
         <field type="int"    name="objective_count" />
-        <field type="int"    name="unk_i_3" /> <!--wod live-->
+        <field type="uint"   name="unkFlag" /> <!--wod live-->
 
         <field type="list" size="objective_count" maxsize="17">
             <field type="int"   name="ObjectiveId" />
