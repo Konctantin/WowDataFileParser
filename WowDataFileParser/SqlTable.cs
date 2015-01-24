@@ -113,6 +113,18 @@ namespace WowDataFileParser
                         }
                     }
                     break;
+                case DataType.StringList:
+                    {
+                        foreach (var subField in field.Fields)
+                        {
+                            var maxLen = (int)Math.Pow(2, subField.Size);
+
+                            if (maxLen > 8000)
+                                writer.WriteLine("    `{0}` TEXT,", subField.Name.ToLower() + suffix);
+                            else
+                                writer.WriteLine("    `{0}` VARCHAR({1}),", subField.Name.ToLower() + suffix, maxLen);
+                        }
+                    } break;
                 default:
                     throw new Exception("Unknown field type " + field.Type);
             }

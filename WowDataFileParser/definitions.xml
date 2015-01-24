@@ -36,6 +36,10 @@
                                 Если указан только maxsize - тогда это список с постоянной длиной.
                                 атрибут size (число)  - тогда сначала считывается размер списка (указывается в битах).
                                 атрибут size (строка) - ссылка на поле с размером списка.
+
+                    * slist   - Тип данных который представляет список строковых типов (string, string2).
+                                Особенносью этого типа является то, что сначала идет набор из размеров строк, а потом идут сами строки.
+                                В данном случае атрибут size это количество бит в которых содержится длинна строки.
     -->
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -140,23 +144,16 @@
 
         <field type="byte"   name="racial_leader"      size="1" />
 
-        <field type="int"    name="male_names_len_1"   size="11"/>
-        <field type="int"    name="female_names_len_1" size="11"/>
-        <field type="int"    name="male_names_len_2"   size="11"/>
-        <field type="int"    name="female_names_len_2" size="11"/>
-        <field type="int"    name="male_names_len_3"   size="11"/>
-        <field type="int"    name="female_names_len_3" size="11"/>
-        <field type="int"    name="male_names_len_4"   size="11"/>
-        <field type="int"    name="female_names_len_4" size="11"/>
-
-        <field type="string2" name="male_name_1"       size="male_names_len_1"/>
-        <field type="string2" name="female_name_1"     size="female_names_len_1"/>
-        <field type="string2" name="male_name_2"       size="male_names_len_2"/>
-        <field type="string2" name="female_name_2"     size="female_names_len_2"/>
-        <field type="string2" name="male_name_3"       size="male_names_len_3"/>
-        <field type="string2" name="female_name_3"     size="female_names_len_3"/>
-        <field type="string2" name="male_name_4"       size="male_names_len_4"/>
-        <field type="string2" name="female_name_4"     size="female_names_len_4"/>
+        <field type="slist">
+          <field type="string2" name="male_name_1"    size="11"/>
+          <field type="string2" name="female_name_1"  size="11"/>
+          <field type="string2" name="male_name_2"    size="11"/>
+          <field type="string2" name="female_name_2"  size="11"/>
+          <field type="string2" name="male_name_3"    size="11"/>
+          <field type="string2" name="female_name_3"  size="11"/>
+          <field type="string2" name="male_name_4"    size="11"/>
+          <field type="string2" name="female_name_4"  size="11"/>
+        </field>
 
         <field type="uint"   name="type_flag"/>
         <field type="uint"   name="type_flag2"/>
@@ -295,25 +292,17 @@
             <field type="pstring" name="ObjectiveDescription" size="8"/>
         </field>
 
-        <field type="int" name="sLogTitle"            size="9" />
-        <field type="int" name="sLogDescription"      size="12"/>
-        <field type="int" name="sQuestDescription"    size="12"/>
-        <field type="int" name="sAreaDescription"     size="9" />
-        <field type="int" name="sPortraitGiverText"   size="10"/>
-        <field type="int" name="sPortraitGiverName"   size="8" />
-        <field type="int" name="sPortraitTurnInText"  size="10"/>
-        <field type="int" name="sPortraitTurnInName"  size="8" />
-        <field type="int" name="sQuestCompletionLog"  size="11"/>
-
-        <field type="string" name="LogTitle"            size="sLogTitle"/>
-        <field type="string" name="LogDescription"      size="sLogDescription"/>
-        <field type="string" name="QuestDescription"    size="sQuestDescription"/>
-        <field type="string" name="AreaDescription"     size="sAreaDescription"/>
-        <field type="string" name="PortraitGiverText"   size="sPortraitGiverText"/>
-        <field type="string" name="PortraitGiverName"   size="sPortraitGiverName"/>
-        <field type="string" name="PortraitTurnInText"  size="sPortraitTurnInText"/>
-        <field type="string" name="PortraitTurnInName"  size="sPortraitTurnInName"/>
-        <field type="string" name="QuestCompletionLog"  size="sQuestCompletionLog"/>
+        <field type="slist">
+          <field type="string" name="LogTitle"            size="9"/>
+          <field type="string" name="LogDescription"      size="12"/>
+          <field type="string" name="QuestDescription"    size="12"/>
+          <field type="string" name="AreaDescription"     size="9"/>
+          <field type="string" name="PortraitGiverText"   size="10"/>
+          <field type="string" name="PortraitGiverName"   size="8"/>
+          <field type="string" name="PortraitTurnInText"  size="10"/>
+          <field type="string" name="PortraitTurnInName"  size="8"/>
+          <field type="string" name="QuestCompletionLog"  size="11"/>
+        </field>
     </file>
 
     <file name="npccache.wdb" table="npccache">

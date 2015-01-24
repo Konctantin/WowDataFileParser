@@ -18,6 +18,7 @@ namespace WowDataFileParser.Definitions
         [XmlEnum("string")]  String,
         [XmlEnum("string2")] String2,
         [XmlEnum("pstring")] Pstring,
-        [XmlEnum("list")]    List
+        [XmlEnum("list")]    List,
+        [XmlEnum("slist")]   StringList,
     }
 }

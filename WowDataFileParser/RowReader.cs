@@ -110,6 +110,31 @@ namespace WowDataFileParser
                             }
                         }
                     } break;
+                case DataType.StringList:
+                    {
+                        var dic = new Dictionary<string, int>();
+                        foreach (var subField in field.Fields)
+                        {
+                            if (string.IsNullOrWhiteSpace(subField.Name))
+                                throw new NullReferenceException("StringList: field name is empty!");
+
+                            if (subField.Size == 0)
+                                throw new NullReferenceException("StringList: field <" + subField.Name + "> has a size of zero!");
+
+                            if (subField.Type != DataType.String && subField.Type != DataType.String2)
+                                throw new NotImplementedException("StringList: field <" + subField.Name + "|" + subField.Type + "> is not supported!");
+
+                            dic[subField.Name] = (int)mReadUInt32(subField.Size);
+                        }
+
+                        foreach (var subField in field.Fields)
+                        {
+                            var len = dic[subField.Name];
+                            SetVal(subField, read ? base.ReadString2(len) : null, true);
+                        }
+
+                        dic.Clear();
+                    } break;
                 default:
                     break;
             }
