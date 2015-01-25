@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,12 +139,49 @@ namespace WowDataFileParser
                         {
                             using (var rowReader = new RowReader(buffer, baseReader.StringTable))
                             {
+                                var content = new StringBuilder();
                                 foreach (var field in fstruct.Fields)
-                                    rowReader.ReadType(field);
+                                {
+                                    if (field.Type == DataType.TableList)
+                                    {
+                                        var size = 0;
+                                        if (field.Size > 0)
+                                            size = rowReader.ReadSize(field.Size);
+                                        if (!string.IsNullOrWhiteSpace(field.SizeLink))
+                                            size = rowReader.GetValueByFiedName(field.SizeLink);
+                                        else if (field.Maxsize > 0)
+                                            size = field.Maxsize;
+
+                                        var entry = rowReader.GetValueByFiedName(field.KeyFieldName);
+
+                                        if (entry < 1)
+                                            throw new Exception();
+
+                                        for (int i = 0; i < size; ++i)
+                                        {
+                                            var subContent = new StringBuilder();
+
+                                            foreach (var subfield in field.Fields)
+                                            {
+                                                rowReader.ReadField(ref subContent, subfield);
+                                            }
+
+                                            lock (writer)
+                                            {
+                                                writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\', {2}, {3}{4});",
+                                                    field.Name, baseReader.Locale, entry, i+1, subContent.ToString());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        rowReader.ReadField(ref content, field);
+                                    }
+                                }
 
                                 lock (writer) {
                                     writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
-                                        fstruct.Table, baseReader.Locale, rowReader.ToString());
+                                        fstruct.Table, baseReader.Locale, content.ToString());
                                 }
 
                                 if (rowReader.Remains > 0)

@@ -9,7 +9,8 @@ namespace WowDataFileParser
 {
     public class RowReader : BitStreamReader
     {
-        private StringBuilder content = new StringBuilder();
+        private StringBuilder content;
+        private List<string> subcontent = new List<string>();
         private Dictionary<string, IConvertible> valList = new Dictionary<string, IConvertible>();
         private Dictionary<int, string> stringTable;
 
@@ -17,6 +18,21 @@ namespace WowDataFileParser
             : base (buffer)
         {
             this.stringTable = stringTable;
+        }
+
+        public void ReadField(ref StringBuilder content, Field field)
+        {
+            this.content = content;
+
+            this.ReadType(field);
+        }
+
+        public int GetValueByFiedName(string name)
+        {
+            IConvertible val;
+            if (name != null && valList.TryGetValue(name, out val))
+                return val.ToInt32(CultureInfo.InvariantCulture);
+            return 0;
         }
 
         private void SetVal(Field field, IConvertible value, bool isString = false)
@@ -41,11 +57,11 @@ namespace WowDataFileParser
             //content.Append(" /* " + field.Name + " */");
         }
 
-        public void ReadType(Field field, bool read = true)
+        private void ReadType(Field field, bool read = true)
         {
             var count = field.Size;
             if (count == 0)
-                count = valList.GetValueByFieldName(field.SizeLink);
+                count = GetValueByFiedName(field.SizeLink);
 
             switch (field.Type)
             {
@@ -91,7 +107,7 @@ namespace WowDataFileParser
                         }
                         else if (!string.IsNullOrWhiteSpace(field.SizeLink))
                         {
-                            size = valList.GetValueByFieldName(field.SizeLink);
+                            size = GetValueByFiedName(field.SizeLink);
                         }
                         else if (field.Maxsize > 0)
                         {
@@ -147,12 +163,6 @@ namespace WowDataFileParser
         {
             base.Dispose();
 
-            if (content != null)
-            {
-                content.Clear();
-                content = null;
-            }
-
             if (valList != null)
             {
                 valList.Clear();
@@ -164,11 +174,6 @@ namespace WowDataFileParser
                 stringTable.Clear();
                 stringTable = null;
             }
-        }
-
-        public override string ToString()
-        {
-            return content.ToString();
         }
     }
 }

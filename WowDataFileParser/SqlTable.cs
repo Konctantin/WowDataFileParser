@@ -19,6 +19,7 @@ namespace WowDataFileParser
             writer.WriteLine("USE `{0}`;", db_name);
             writer.WriteLine();
 
+            // create main tables
             foreach (var file in definition.Files)
             {
                 if (string.IsNullOrWhiteSpace(file.Table))
@@ -29,16 +30,45 @@ namespace WowDataFileParser
                 writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.Table);
                 writer.WriteLine("    `locale` CHAR(4) NOT NULL DEFAULT 'xxXX',");
 
-                foreach (var field in file.Fields)
-                    CreateFieldByType(writer, keys, field, "");
+                foreach (var field in file.Fields.Where(n => n.Type != DataType.TableList))
+                    CreateFieldByType(writer, keys, field);
 
                 writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(key => "`" + key + "`")) + ")");
                 writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8;");
                 writer.WriteLine();
             }
+
+            // create sub tables
+            foreach (var file in definition.Files)
+            {
+                if (string.IsNullOrWhiteSpace(file.Table))
+                    throw new NullReferenceException("Table name missing or empty for " + file.Name);
+
+                var keys = new List<string> { "locale", "m_entry", "m_index" };
+
+                foreach (var field in file.Fields.Where(n => n.Type == DataType.TableList))
+                {
+                    if (string.IsNullOrWhiteSpace(field.Name))
+                        throw new NullReferenceException("TableList: field name is empty!");
+
+                    writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", field.Name.ToLower());
+                    writer.WriteLine("    `locale` CHAR(4) NOT NULL DEFAULT 'xxXX',");
+                    writer.WriteLine("    `m_entry` INT UNSIGNED NOT NULL DEFAULT '0',");
+                    writer.WriteLine("    `m_index` INT UNSIGNED NOT NULL DEFAULT '0',");
+
+                    foreach (var subField in field.Fields)
+                    {
+                        CreateFieldByType(writer, keys, subField);
+                    }
+
+                    writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(key => "`" + key + "`")) + ")");
+                    writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8;");
+                    writer.WriteLine();
+                }
+            }
         }
 
-        private static void CreateFieldByType(StreamWriter writer, List<string> keys, Field field, string suffix)
+        private static void CreateFieldByType(StreamWriter writer, List<string> keys, Field field, string suffix = "")
         {
             if (field.Type == DataType.None)
                 return;

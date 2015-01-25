@@ -14,6 +14,9 @@ namespace WowDataFileParser.Definitions
         [XmlAttribute("key")]
         public bool Key           { get; set; }
 
+        [XmlAttribute("entry")]
+        public string KeyFieldName { get; set; }
+
         [XmlAttribute("maxsize")]
         public int Maxsize        { get; set; }
 

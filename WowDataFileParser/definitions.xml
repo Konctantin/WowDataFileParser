@@ -40,6 +40,10 @@
                     * slist   - Тип данных который представляет список строковых типов (string, string2).
                                 Особенносью этого типа является то, что сначала идет набор из размеров строк, а потом идут сами строки.
                                 В данном случае атрибут size это количество бит в которых содержится длинна строки.
+
+                    * tlist   - Тип данных который повторяет list но выделяет записи в отдельную таблицу.
+                                Аттрибут name - используется для указания имени таблицы.
+                                Аттрибут entry - используется для связи с основной таблицей.
     -->
 
 <Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -278,18 +282,18 @@
         <field type="int"    name="objective_count" />
         <field type="uint"   name="unkFlag" /> <!--wod live-->
 
-        <field type="list" size="objective_count" maxsize="17">
-            <field type="int"   name="ObjectiveId" />
-            <field type="byte"  name="ObjectiveType" />
-            <field type="byte"  name="ObjectiveStorageIndex" />
-            <field type="int"   name="ObjectiveObjectID" />
-            <field type="int"   name="ObjectiveAmount" />
-            <field type="int"   name="ObjectiveFlags" />
-            <field type="float" name="ObjectiveUnk_1" /> <!--wod live-->
-            <field type="list"  name="ObjectiveVisualEffectsCount" size="32" maxsize="12">
-                <field type="int" name="ObjectiveVisualEffect" />
+        <field type="tlist" name="quest_objectives" size="objective_count" entry="entry">
+            <field type="int"   name="Id" />
+            <field type="byte"  name="Type" />
+            <field type="byte"  name="StorageIndex" />
+            <field type="int"   name="ObjectID" />
+            <field type="int"   name="Amount" />
+            <field type="int"   name="Flags" />
+            <field type="float" name="Unk_1" /> <!--wod live-->
+            <field type="list"  name="VisualEffectsCount" size="32" maxsize="12">
+                <field type="int" name="VisualEffect" />
             </field>
-            <field type="pstring" name="ObjectiveDescription" size="8"/>
+            <field type="pstring" name="Description" size="8"/>
         </field>
 
         <field type="slist">
