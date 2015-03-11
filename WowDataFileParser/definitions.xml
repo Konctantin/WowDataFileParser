@@ -1,0 +1,384 @@
+﻿<?xml version="1.0"?>
+
+<!--                     Инструкция
+    Описание файла
+     * name  - Имя файла, для которого указана структура
+     * table - Имя таблицы в базе данных
+
+    Описание столбцов:
+     * name     - Наименование столбца, если имя пустое - тогда данные не будут записаны в базу данных.
+                  Важно: Если на этот столбец будет ссылатся другое поле "size" - тогда имя должно быть указано.
+     * key      - Указывает, что поле является ключевым (необходим для генерации sql скрипта с таблицами)
+     * size     - Размер поля в битах или имя поля содержащее размер.
+     * maxsize  - Mаксимальный размер списка (обязательный параметр для type == list)
+     * type     - Тип данных:
+                    * byte    - 8  byte и size - количество бит
+                    * sbyte   - 8  byte и size - количество бит
+                    * short   - 16 byte и size - количество бит
+                    * ushort  - 16 byte и size - количество бит
+                    * int     - 32 byte и size - количество бит
+                    * uint    - 32 byte и size - количество бит
+                    * long    - 64 byte и size - количество бит
+                    * ulong   - 64 byte и size - количество бит
+                    * float   - 32 с плавающей запятой
+                    * double  - 64 с плавающей запятой
+
+                    * string  - строка с '\0' окончанием.
+                                если строка содержит аттрибут size (строка)- тогда длинна строки содержится в указанном поле.
+                                если строка содержит аттрибут size (число) - тогда читается строка с указанной длинной.
+                    * string2 - то же самое что и string, только читаются данные если (size) > 1
+
+                    * pstring - (pascalstring) строка которая содержит длинну в начале,
+                                обязательный параметр size - в котором указн размер записи с длинной в битах
+
+                    * list    - тип данных который сожержит вложенную структуру.
+                                для этого типа обязательный аттрибут maxsize.
+                                Если указан только maxsize - тогда это список с постоянной длиной.
+                                атрибут size (число)  - тогда сначала считывается размер списка (указывается в битах).
+                                атрибут size (строка) - ссылка на поле с размером списка.
+
+                    * slist   - Тип данных который представляет список строковых типов (string, string2).
+                                Особенносью этого типа является то, что сначала идет набор из размеров строк, а потом идут сами строки.
+                                В данном случае атрибут size это количество бит в которых содержится длинна строки.
+
+                    * tlist   - Тип данных который повторяет list но выделяет записи в отдельную таблицу.
+                                Аттрибут name - используется для указания имени таблицы.
+                                Аттрибут entry - используется для связи с основной таблицей.
+    -->
+
+<Definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- Провека на билд кеша, если значение равно 0 - тогда проверки нету -->
+    <build>19342</build>
+
+    <file name="Item.(db2|adb)" table="item">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="class"/>
+        <field type="uint"   name="subclass"/>
+        <field type="int"    name="unk0"/>
+        <field type="int"    name="material"/>
+        <field type="uint"   name="displayid"/>
+        <field type="uint"   name="inventorytype"/>
+        <field type="uint"   name="sheath"/>
+        <field type="uint"   name="unk"/> <!--wod-->
+    </file>
+
+    <file name="Item-sparse.(db2|adb)" table="item_sparse">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="quality" />
+        <field type="uint"   name="flags1" />
+        <field type="uint"   name="flags2" />
+        <field type="uint"   name="flags3" />
+        <field type="float"  name="unk431" />
+        <field type="float"  name="unk432" />
+        <field type="uint"   name="buycount" />
+        <field type="uint"   name="buyprice" />
+        <field type="uint"   name="sellprice" />
+        <field type="int"    name="inventorytype" />
+        <field type="int"    name="allovedclasses" />
+        <field type="int"    name="allovedraces" />
+        <field type="uint"   name="itemlevel" />
+        <field type="uint"   name="requiredlevel" />
+        <field type="uint"   name="requiredskill" />
+        <field type="uint"   name="requiredskilllevel" />
+        <field type="int"    name="requiredspell" />
+        <field type="uint"   name="requiredhonorrank" />
+        <field type="uint"   name="requiredcityrank" />
+        <field type="uint"   name="requiredrepfaction" />
+        <field type="uint"   name="requiredrepvalue" />
+        <field type="int"    name="maxcount" />
+        <field type="int"    name="maxstacksize" />
+        <field type="uint"   name="containerslots" />
+        <field type="list" maxsize="10">
+            <field type="int" name="stat_type" />
+        </field>
+        <field type="list" maxsize="10">
+            <field type="int" name="stat_value" />
+        </field>
+        <field type="list" maxsize="10">
+            <field type="int" name="stat_unk1" />
+        </field>
+        <field type="list" maxsize="10">
+            <field type="int" name="stat_unk2" />
+        </field>
+        <field type="int"    name="scalingstatdistribution" />
+        <field type="int"    name="damagetype" />
+        <field type="uint"   name="delay" />
+        <field type="float"  name="rangedmod" />
+        <field type="int"    name="bonding" />
+        <field type="string" name="name" />
+        <field type="string" name="name2" />
+        <field type="string" name="name3" />
+        <field type="string" name="name4" />
+        <field type="string" name="description" />
+        <field type="uint"   name="pagetext" />
+        <field type="int"    name="lenguage" />
+        <field type="int"    name="pagematerial" />
+        <field type="int"    name="startquest" />
+        <field type="uint"   name="lockid" />
+        <field type="int"    name="material" />
+        <field type="int"    name="sheath" />
+        <field type="int"    name="randomproperty" />
+        <field type="uint"   name="randomsuffix" />
+        <field type="uint"   name="itemset" />
+        <field type="int"    name="area" />
+        <field type="int"    name="map" />
+        <field type="int"    name="bagfamily" />
+        <field type="int"    name="totemcategory" />
+        <field type="list" maxsize="3">
+            <field type="int" name="socketcolor" />
+        </field>
+        <field type="int"    name="socketbonus" />
+        <field type="int"    name="gemproperties" />
+        <field type="float"  name="armordamagemodifier" />
+        <field type="uint"   name="duration" />
+        <field type="int"    name="itemlimitcategory" />
+        <field type="int"    name="holidayid" />
+        <field type="float"  name="statscalingfactor" />
+        <field type="int"    name="currencysubstitution" />
+        <field type="int"    name="currencysubstitutioncount" />
+        <field type="int"    name="itemnamedescription" />
+    </file>
+
+    <file name="creaturecache.wdb" table="creaturecache">
+        <field type="uint"   name="entry" key="true"/>
+
+        <field type="int"    name="title_len"      size="11"/>
+        <field type="int"    name="titleAlt_len"   size="11"/>
+        <field type="int"    name="cursorName_len" size="6"/>
+
+        <field type="byte"   name="racial_leader"  size="1" />
+
+        <field type="slist">
+          <field type="string2" name="name1"     size="11"/>
+          <field type="string2" name="nameAlt1"  size="11"/>
+          <field type="string2" name="name2"     size="11"/>
+          <field type="string2" name="nameAlt2"  size="11"/>
+          <field type="string2" name="name3"     size="11"/>
+          <field type="string2" name="nameAlt3"  size="11"/>
+          <field type="string2" name="name"      size="11"/>
+          <field type="string2" name="nameAlt4"  size="11"/>
+        </field>
+
+        <field type="uint"   name="Flag1"/>
+        <field type="uint"   name="Flag2"/>
+        <field type="uint"   name="CreatureType"/>
+        <field type="int"    name="CreatureFamily"/>
+        <field type="uint"   name="Classification"/>
+
+        <field type="list" maxsize="2">
+          <field type="uint" name="ProxyCreatureID"/>
+        </field>
+
+        <field type="list" maxsize="4">
+          <field type="uint" name="CreatureDisplayID"/>
+        </field>
+
+        <field type="float"  name="HpMulti"/>
+        <field type="float"  name="EnergyMulti"/>
+
+        <field type="int"    name="quest_item_count"/>
+        <field type="int"    name="creatureMovementInfoID"/>
+        <field type="int"    name="requireExpansion"/>
+        <field type="int"    name="questFlag"/>
+
+        <field type="string2" name="title"      size="title_len"/>
+        <field type="string2" name="titleAlt"   size="titleAlt_len"/>
+        <field type="string2" name="cursorName" size="cursorName_len"/>
+
+        <field name="quest_items" type="list" maxsize="6" size="quest_item_count">
+            <field type="uint" name="QuestItem"/>
+        </field>
+    </file>
+
+    <file name="gameobjectcache.wdb" table="gameobjectcache">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="type"/>
+        <field type="uint"   name="displayId"/>
+        <field type="string" name="name"/>
+        <field type="string" name="name1"/>
+        <field type="string" name="name2"/>
+        <field type="string" name="name3"/>
+        <field type="string" name="name4"/>
+        <field type="string" name="castBarCaption"/>
+        <field type="string" name="name6"/>
+        <field type="list" maxsize="33">
+            <field type="uint" name="data"/>
+        </field>
+        <field type="float"  name="Size"/>
+        <field type="list"   name="QuestItemCount" size="8" maxsize="6">
+            <field type="int" name="QuestItem" />
+        </field>
+        <field type="uint"   name="requireExpansion"/>
+    </file>
+
+    <file name="questcache.wdb" table="questcache">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="QuestId" />
+        <field type="int"    name="QuestType" />
+        <field type="int"    name="QuestLevel" />
+        <field type="int"    name="QuestPackageID" />
+        <field type="int"    name="QuestMinLevel" />
+        <field type="int"    name="QuestSortID" />
+        <field type="int"    name="QuestInfoID" />
+        <field type="int"    name="SuggestedGroupNum" />
+        <field type="int"    name="RewardNextQuest" />
+        <field type="int"    name="RewardXPDifficulty" />
+        <field type="float"  name="unk_f1" /> <!--wod live-->
+        <field type="int"    name="RewardMoney" />
+        <field type="int"    name="RewardMoneyDifficulty" />
+        <field type="float"  name="unk_f2" /> <!--wod live-->
+        <field type="int"    name="RewardBonusMoney" />
+        <field type="int"    name="RewardDisplaySpell" />
+        <field type="int"    name="RewardSpell" />
+        <field type="int"    name="RewardHonor" />
+        <field type="float"  name="RewardKillHonor" />
+        <field type="int"    name="StartItem" />
+        <field type="int"    name="QuestFlags" />
+        <field type="int"    name="QuestFlagsEx" />
+
+        <field type="list" maxsize="4">
+            <field type="int" name="RewItemId" />
+            <field type="int" name="RewItemCount" />
+            <field type="int" name="ReqSourceId" />
+            <field type="int" name="ReqSourceCount" />
+        </field>
+
+        <field type="list" maxsize="6">
+            <field type="int" name="RewChoiceItemId" />
+            <field type="int" name="RewChoiceItemQuantity" />
+            <field type="int" name="RewChoiceItemDisplayID" />
+        </field>
+
+        <field type="int"    name="POIContinent" />
+        <field type="float"  name="POIx" />
+        <field type="float"  name="POIy" />
+        <field type="int"    name="POIPriority" />
+        <field type="int"    name="RewardTitle" />
+        <field type="int"    name="RewardTalents" />
+        <field type="int"    name="RewardArenaPoints" />
+        <field type="int"    name="RewardSkillLineID" />
+        <field type="int"    name="RewardNumSkillUps" />
+        <field type="int"    name="PortraitGiver" />
+        <field type="int"    name="PortraitTurnIn" />
+
+        <field type="list" maxsize="5">
+            <field type="int" name="RewardFactionID" />
+            <field type="int" name="RewardFactionValue" />
+            <field type="int" name="RewardFactionOverride" />
+        </field>
+
+        <field type="int"   name="RewardFactionFlags" />
+
+        <field type="list" maxsize="4">
+            <field type="int" name="RewardCurrencyID" />
+            <field type="int" name="RewardCurrencyQty" />
+        </field>
+
+        <field type="int"    name="AcceptedSoundKitID" />
+        <field type="int"    name="CompleteSoundKitID" />
+
+        <field type="int"    name="AreaGroupID" /> <!--wod beta-->
+        <field type="int"    name="TimeAllowed" /> <!--wod beta-->
+        <field type="int"    name="objective_count" />
+        <field type="int"    name="unkFlag" /> <!--wod live-->
+
+        <field type="tlist" name="quest_objectives" size="objective_count" entry="entry">
+            <field type="int"   name="Id" />
+            <field type="byte"  name="Type" />
+            <field type="sbyte" name="StorageIndex" />
+            <field type="int"   name="ObjectID" />
+            <field type="int"   name="Amount" />
+            <field type="int"   name="Flags" />
+            <field type="float" name="Unk_1" /> <!--wod live-->
+            <field type="list"  name="VisualEffectsCount" size="32" maxsize="12">
+                <field type="int" name="VisualEffect" />
+            </field>
+            <field type="pstring" name="Description" size="8"/>
+        </field>
+
+        <field type="slist">
+          <field type="string" name="LogTitle"            size="9"/>
+          <field type="string" name="LogDescription"      size="12"/>
+          <field type="string" name="QuestDescription"    size="12"/>
+          <field type="string" name="AreaDescription"     size="9"/>
+          <field type="string" name="PortraitGiverText"   size="10"/>
+          <field type="string" name="PortraitGiverName"   size="8"/>
+          <field type="string" name="PortraitTurnInText"  size="10"/>
+          <field type="string" name="PortraitTurnInName"  size="8"/>
+          <field type="string" name="QuestCompletionLog"  size="11"/>
+        </field>
+    </file>
+
+    <file name="npccache.wdb" table="npccache">
+        <field type="uint"   name="Id" key="true"/>
+
+        <field type="float"  name="prob1"/>
+        <field type="float"  name="prob2"/>
+        <field type="float"  name="prob3"/>
+        <field type="float"  name="prob4"/>
+        <field type="float"  name="prob5"/>
+        <field type="float"  name="prob6"/>
+        <field type="float"  name="prob7"/>
+        <field type="float"  name="prob8"/>
+
+        <field type="uint"  name="textId1"/>
+        <field type="uint"  name="textId2"/>
+        <field type="uint"  name="textId3"/>
+        <field type="uint"  name="textId4"/>
+        <field type="uint"  name="textId5"/>
+        <field type="uint"  name="textId6"/>
+        <field type="uint"  name="textId7"/>
+        <field type="uint"  name="textId8"/>
+    </file>
+
+    <file name="pagetextcache.wdb" table="pagetextcache">
+        <field type="uint"    name="entry" key="true"/>
+        <field type="uint"    name="doubleEntry"/>
+        <field type="uint"    name="next_page"/>
+        <field type="pstring" name="Text" size="12"/>
+    </file>
+
+    <file name="BroadcastText.(db2|adb)" table="broadcasttext">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="uint"   name="lang" />
+        <field type="string" name="MaleText" />
+        <field type="string" name="FemaleText" />
+        <field type="list" maxsize="3">
+            <field type="uint" name="EmoteId" />
+        </field>
+        <field type="list" maxsize="3">
+            <field type="uint" name="EmoteDelay" />
+        </field>
+        <field type="uint"   name="SoundId" />
+        <field type="uint"   name="unk8" />
+        <field type="uint"   name="unk9" />
+    </file>
+
+    <file name="BattlePetAbility.(db2|adb)" table="battlepetability">
+        <field type="int"    name="entry" key="true"/>
+        <field type="int"    name="index" />
+        <field type="int"    name="newField3" />
+        <field type="int"    name="index2" />
+        <field type="int"    name="newField5" />
+        <field type="int"    name="newField6" />
+        <field type="string" name="spell_name" />
+        <field type="string" name="spell_description" />
+    </file>
+
+    <file name="SceneScript.(db2|adb)" table="scenescript">
+        <field type="uint"   name="entry" key="true"/>
+        <field type="string" name="Name"/>
+        <field type="string" name="Script"/>
+        <field type="int"    name="Prev"/>
+        <field type="int"    name="Next"/>
+    </file>
+
+    <file name="Toy.(db2|adb)" table="toy">
+        <field type="int"    name="entry" key="true" />
+        <field type="int"    name="itemId" />
+        <field type="int"    name="unk" /> <!-- 0 - ???, 2 - ??? -->
+        <field type="string" name="sourceText" />
+        <field type="int"    name="sourceType" /> <!-- -1 - none, 0 - drop, 1 - reward, 2 - vendor, 3 - profession, 5 - achievement, 6 - event, 7 - promotion -->
+    </file>
+
+</Definition>

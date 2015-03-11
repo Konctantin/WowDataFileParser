@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="DataType" type="DataType" />
+  <xs:simpleType name="DataType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="" />
+      <xs:enumeration value="byte" />
+      <xs:enumeration value="sbyte" />
+      <xs:enumeration value="short" />
+      <xs:enumeration value="ushort" />
+      <xs:enumeration value="int" />
+      <xs:enumeration value="uint" />
+      <xs:enumeration value="long" />
+      <xs:enumeration value="ulong" />
+      <xs:enumeration value="float" />
+      <xs:enumeration value="double" />
+      <xs:enumeration value="string" />
+      <xs:enumeration value="string2" />
+      <xs:enumeration value="pstring" />
+      <xs:enumeration value="list" />
+      <xs:enumeration value="slist" />
+      <xs:enumeration value="tlist" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Definition" nillable="true" type="Definition" />
+  <xs:complexType name="Definition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="build" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="file" type="FileStruct" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FileStruct">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="field" type="Field" />
+    </xs:sequence>
+    <xs:attribute name="name"  type="xs:string" />
+    <xs:attribute name="table" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="Field">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="field" type="Field" />
+    </xs:sequence>
+    <xs:attribute name="name"    type="xs:string" />
+    <xs:attribute name="type"    type="DataType" use="required" />
+    <xs:attribute name="key"     type="xs:boolean" />
+    <xs:attribute name="entry"   type="xs:string" />
+    <xs:attribute name="maxsize" type="xs:int" />
+    <xs:attribute name="size"    type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Field"      nillable="true" type="Field" />
+  <xs:element name="FileStruct" nillable="true" type="FileStruct" />
+</xs:schema>
