@@ -142,48 +142,48 @@
     <file name="creaturecache.wdb" table="creaturecache">
         <field type="uint"   name="entry" key="true"/>
 
-        <field type="int"    name="subname_len"        size="11"/>
-        <field type="int"    name="unk_text_len"       size="11"/>
-        <field type="int"    name="icon_name_len"      size="6"/>
+        <field type="int"    name="title_len"      size="11"/>
+        <field type="int"    name="titleAlt_len"   size="11"/>
+        <field type="int"    name="cursorName_len" size="6"/>
 
-        <field type="byte"   name="racial_leader"      size="1" />
+        <field type="byte"   name="racial_leader"  size="1" />
 
         <field type="slist">
-          <field type="string2" name="male_name_1"    size="11"/>
-          <field type="string2" name="female_name_1"  size="11"/>
-          <field type="string2" name="male_name_2"    size="11"/>
-          <field type="string2" name="female_name_2"  size="11"/>
-          <field type="string2" name="male_name_3"    size="11"/>
-          <field type="string2" name="female_name_3"  size="11"/>
-          <field type="string2" name="male_name_4"    size="11"/>
-          <field type="string2" name="female_name_4"  size="11"/>
+          <field type="string2" name="name1"     size="11"/>
+          <field type="string2" name="nameAlt1"  size="11"/>
+          <field type="string2" name="name2"     size="11"/>
+          <field type="string2" name="nameAlt2"  size="11"/>
+          <field type="string2" name="name3"     size="11"/>
+          <field type="string2" name="nameAlt3"  size="11"/>
+          <field type="string2" name="name"      size="11"/>
+          <field type="string2" name="nameAlt4"  size="11"/>
         </field>
 
-        <field type="uint"   name="type_flag"/>
-        <field type="uint"   name="type_flag2"/>
-        <field type="uint"   name="type"/>
-        <field type="int"    name="family"/>
-        <field type="uint"   name="rank"/>
+        <field type="uint"   name="Flag1"/>
+        <field type="uint"   name="Flag2"/>
+        <field type="uint"   name="CreatureType"/>
+        <field type="int"    name="CreatureFamily"/>
+        <field type="uint"   name="Classification"/>
 
-        <field type="uint"   name="KillCredit1"/>
-        <field type="uint"   name="KillCredit2"/>
+        <field type="list" maxsize="2">
+          <field type="uint" name="ProxyCreatureID"/>
+        </field>
 
-        <field type="uint"   name="modelId1"/>
-        <field type="uint"   name="modelId2"/>
-        <field type="uint"   name="modelId3"/>
-        <field type="uint"   name="modelId4"/>
+        <field type="list" maxsize="4">
+          <field type="uint" name="CreatureDisplayID"/>
+        </field>
 
-        <field type="float"  name="HealthModifier"/>
-        <field type="float"  name="PowerModifier"/>
+        <field type="float"  name="HpMulti"/>
+        <field type="float"  name="EnergyMulti"/>
 
         <field type="int"    name="quest_item_count"/>
-        <field type="int"    name="movement_id"/>
+        <field type="int"    name="creatureMovementInfoID"/>
         <field type="int"    name="requireExpansion"/>
         <field type="int"    name="questFlag"/>
 
-        <field type="string2" name="sub_name"  size="subname_len"/>
-        <field type="string2" name="unk_text"  size="unk_text_len"/>
-        <field type="string2" name="icon_name" size="icon_name_len"/>
+        <field type="string2" name="title"      size="title_len"/>
+        <field type="string2" name="titleAlt"   size="titleAlt_len"/>
+        <field type="string2" name="cursorName" size="cursorName_len"/>
 
         <field name="quest_items" type="list" maxsize="6" size="quest_item_count">
             <field type="uint" name="QuestItem"/>
@@ -280,12 +280,12 @@
         <field type="int"    name="AreaGroupID" /> <!--wod beta-->
         <field type="int"    name="TimeAllowed" /> <!--wod beta-->
         <field type="int"    name="objective_count" />
-        <field type="uint"   name="unkFlag" /> <!--wod live-->
+        <field type="int"    name="unkFlag" /> <!--wod live-->
 
         <field type="tlist" name="quest_objectives" size="objective_count" entry="entry">
             <field type="int"   name="Id" />
             <field type="byte"  name="Type" />
-            <field type="byte"  name="StorageIndex" />
+            <field type="sbyte" name="StorageIndex" />
             <field type="int"   name="ObjectID" />
             <field type="int"   name="Amount" />
             <field type="int"   name="Flags" />
