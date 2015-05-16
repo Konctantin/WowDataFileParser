@@ -45,20 +45,18 @@ namespace WowDataFileParser
                 var serialiser = new XmlSerializer(typeof(Definition));
 
                 serialiser.UnknownAttribute += (o, e) => {
-                    Console.WriteLine("Unknown attribute: '{0}' at line: {1} position: {2}",
-                        e.Attr.Name, e.LineNumber, e.LinePosition);
+                    Console.WriteLine($"Unknown attribute: '{e.Attr.Name}' at line: {e.LineNumber} position: {e.LinePosition}");
                 };
 
                 serialiser.UnknownElement += (o, e) => {
-                    Console.WriteLine("Unknown Element: '{0}' at line: {1} position: {2}",
-                        e.Element.Name, e.LineNumber, e.LinePosition);
+                    Console.WriteLine($"Unknown Element: '{e.Element.Name}' at line: {e.LineNumber} position: {e.LinePosition}");
                 };
 
                 definition = (Definition)serialiser.Deserialize(stream);
             }
 
             if (definition.Build > 0)
-                outputPath = string.Format("output_{0}.sql", definition.Build);
+                outputPath = string.Format($"output_{definition.Build}.sql");
 
             File.Delete(outputPath);
 
@@ -128,7 +126,7 @@ namespace WowDataFileParser
                     var progress = 0;
                     var cursorPosition = Console.CursorTop;
 
-                    writer.WriteLine("-- {0} statements", file.Name);
+                    writer.WriteLine($"-- {file.Name} statements");
 
                     stopwatch.Reset();
                     stopwatch.Start();
@@ -168,8 +166,7 @@ namespace WowDataFileParser
 
                                             lock (writer)
                                             {
-                                                writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\', {2}, {3}{4});",
-                                                    field.Name, baseReader.Locale, entry, i+1, subContent.ToString());
+                                                writer.WriteLine($"REPLACE INTO `{field.Name}` VALUES (\'{baseReader.Locale}\', {entry}, {i + 1}{subContent});");
                                             }
                                         }
                                     }
@@ -180,12 +177,11 @@ namespace WowDataFileParser
                                 }
 
                                 lock (writer) {
-                                    writer.WriteLine("REPLACE INTO `{0}` VALUES (\'{1}\'{2});",
-                                        fstruct.Table, baseReader.Locale, content.ToString());
+                                    writer.WriteLine($"REPLACE INTO `{fstruct.Table}` VALUES (\'{baseReader.Locale}\'{content}");
                                 }
 
                                 if (rowReader.Remains > 0)
-                                    throw new Exception("Remained unread " + rowReader.Remains + " bytes");
+                                    throw new Exception($"Remained unread {rowReader.Remains} bytes");
                             }
 
                             Interlocked.Increment(ref progress);
