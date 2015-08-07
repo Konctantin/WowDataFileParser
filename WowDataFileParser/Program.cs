@@ -19,12 +19,21 @@ namespace WowDataFileParser
         static string outputPath = "output.sql";
         static string definitionPath = "definitions.xml";
         static Definition definition;
+        public static bool DebugOutput = false;
 
         [STAThread]
         static void Main(string[] args)
         {
             if (args.Length > 0)
-                definitionPath = args[0];
+            {
+                DebugOutput = args.Any(n => n.ToLower() == "/debug");
+
+                foreach (var arg in args)
+                {
+                    if (arg.IndexOf("/p") != -1)
+                        definitionPath = arg.Substring(2);
+                }
+            }
 
             Console.Title = "WoW data file parser";
 

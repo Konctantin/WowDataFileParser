@@ -53,8 +53,8 @@ namespace WowDataFileParser
                     content.Append(", \"" + val.Replace(@"'", @"\'").Replace("\"", "\\\"") + "\"");
             }
 
-            // for debugging only
-            //content.Append(" /* " + field.Name + " */");
+            if (Program.DebugOutput)
+                content.Append(" /* " + field.Name + " */");
         }
 
         private void ReadType(Field field, bool read = true)
