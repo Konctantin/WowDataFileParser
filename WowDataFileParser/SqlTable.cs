@@ -15,8 +15,8 @@ namespace WowDataFileParser
                 db_name += "_" + definition.Build;
 
             writer.WriteLine("-- DB structure");
-            writer.WriteLine("CREATE DATABASE IF NOT EXISTS `{0}` CHARACTER SET utf8 COLLATE utf8_general_ci;", db_name);
-            writer.WriteLine("USE `{0}`;", db_name);
+            writer.WriteLine($"CREATE DATABASE IF NOT EXISTS `{db_name}` CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            writer.WriteLine($"USE `{db_name}`;");
             writer.WriteLine();
 
             // create main tables
@@ -27,13 +27,14 @@ namespace WowDataFileParser
 
                 var keys = new List<string> { "locale" };
 
-                writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", file.Table);
+                writer.WriteLine($"CREATE TABLE IF NOT EXISTS `{file.Table}` (");
                 writer.WriteLine("    `locale` CHAR(4) NOT NULL DEFAULT 'xxXX',");
 
                 foreach (var field in file.Fields.Where(n => n.Type != DataType.TableList))
                     CreateFieldByType(writer, keys, field);
 
-                writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(key => "`" + key + "`")) + ")");
+                var key_list = string.Join(", ", keys.Select(key => "`" + key + "`"));
+                writer.WriteLine($"    PRIMARY KEY ({key_list})");
                 writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8;");
                 writer.WriteLine();
             }
@@ -51,7 +52,7 @@ namespace WowDataFileParser
                     if (string.IsNullOrWhiteSpace(field.Name))
                         throw new NullReferenceException("TableList: field name is empty!");
 
-                    writer.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", field.Name.ToLower());
+                    writer.WriteLine($"CREATE TABLE IF NOT EXISTS `{field.Name.ToLower()}` (");
                     writer.WriteLine("    `locale` CHAR(4) NOT NULL DEFAULT 'xxXX',");
                     writer.WriteLine("    `m_entry` INT UNSIGNED NOT NULL DEFAULT '0',");
                     writer.WriteLine("    `m_index` INT UNSIGNED NOT NULL DEFAULT '0',");
@@ -61,7 +62,8 @@ namespace WowDataFileParser
                         CreateFieldByType(writer, keys, subField);
                     }
 
-                    writer.WriteLine("    PRIMARY KEY (" + string.Join(", ", keys.Select(key => "`" + key + "`")) + ")");
+                    var key_list = string.Join(", ", keys.Select(key => "`" + key + "`"));
+                    writer.WriteLine($"    PRIMARY KEY ({key_list})");
                     writer.WriteLine(") ENGINE = MyISAM DEFAULT CHARSET = utf8;");
                     writer.WriteLine();
                 }
@@ -115,7 +117,7 @@ namespace WowDataFileParser
                 case DataType.Pstring:
                     {
                         var maxLen = (int)Math.Pow(2, field.Size);
-                        if (maxLen > 8000 || maxLen == 1)
+                        if (maxLen > 8000 || maxLen <= 1)
                             writer.WriteLine("    `{0}` TEXT,", field.Name.ToLower() + suffix);
                         else
                             writer.WriteLine("    `{0}` VARCHAR({1}),", field.Name.ToLower() + suffix, maxLen);
@@ -151,7 +153,7 @@ namespace WowDataFileParser
                         {
                             var maxLen = (int)Math.Pow(2, subField.Size);
 
-                            if (maxLen > 8000 || maxLen == 1)
+                            if (maxLen > 8000 || maxLen <= 1)
                                 writer.WriteLine("    `{0}` TEXT,", subField.Name.ToLower() + suffix);
                             else
                                 writer.WriteLine("    `{0}` VARCHAR({1}),", subField.Name.ToLower() + suffix, maxLen);

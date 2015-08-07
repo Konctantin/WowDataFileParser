@@ -1,12 +1,12 @@
 
 !*/Profiles/*
-.vs/*
 *.suo
 *.user
 bin/*
 */bin/*
 */obj/*
 obj/*
+.vs/*
 *.orig
 *.rej
 *.patch
@@ -14,3 +14,4 @@ obj/*
 *.opensdf
 *.sdf
 *.rar
+*.sln.ide/*
