@@ -223,10 +223,10 @@
         <field type="int"    name="SuggestedGroupNum" />
         <field type="int"    name="RewardNextQuest" />
         <field type="int"    name="RewardXPDifficulty" />
-        <field type="float"  name="unk_f1" /> <!--wod live-->
+        <field type="float"  name="RevardXPMultiplier" />
         <field type="int"    name="RewardMoney" />
         <field type="int"    name="RewardMoneyDifficulty" />
-        <field type="float"  name="unk_f2" /> <!--wod live-->
+        <field type="float"  name="RewardMoneyMultiplier" />
         <field type="int"    name="RewardBonusMoney" />
         <field type="int"    name="RewardDisplaySpell" />
         <field type="int"    name="RewardSpell" />
@@ -277,10 +277,10 @@
         <field type="int"    name="AcceptedSoundKitID" />
         <field type="int"    name="CompleteSoundKitID" />
 
-        <field type="int"    name="AreaGroupID" /> <!--wod beta-->
-        <field type="int"    name="TimeAllowed" /> <!--wod beta-->
+        <field type="int"    name="AreaGroupID" />
+        <field type="int"    name="TimeAllowed" />
         <field type="int"    name="objective_count" />
-        <field type="int"    name="unkFlag" /> <!--wod live-->
+        <field type="int"    name="AllowableRaces" />
 
         <field type="tlist" name="quest_objectives" size="objective_count" entry="entry">
             <field type="int"   name="Id" />
