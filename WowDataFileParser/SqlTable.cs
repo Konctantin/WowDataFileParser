@@ -100,10 +100,10 @@ namespace WowDataFileParser
                 case DataType.Ushort:
                     writer.WriteLine("    `{0}` SMALLINT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
-                case DataType.Byte:
+                case DataType.SByte:
                     writer.WriteLine("    `{0}` TINYINT NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
-                case DataType.SByte:
+                case DataType.Byte:
                     writer.WriteLine("    `{0}` TINYINT UNSIGNED NOT NULL DEFAULT '0',", field.Name.ToLower() + suffix);
                     break;
                 case DataType.Float:
