@@ -105,6 +105,13 @@ namespace WowDataFileParser
 
                 foreach (var file in files)
                 {
+                    var fstruct = definition.Files.Where(
+                        n => Regex.IsMatch(file.Name, n.Name, RegexOptions.IgnoreCase))
+                        .FirstOrDefault();
+
+                    if (fstruct == null)
+                        continue;
+
                     BaseReader baseReader = null;
                     switch (file.Extension)
                     {
@@ -123,13 +130,6 @@ namespace WowDataFileParser
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         continue;
                     }
-
-                    var fstruct = definition.Files.Where(
-                        n => Regex.IsMatch(file.Name, n.Name, RegexOptions.IgnoreCase))
-                        .FirstOrDefault();
-
-                    if (fstruct == null)
-                        continue;
 
                     var storedProgress = 0;
                     var progress = 0;
@@ -186,7 +186,7 @@ namespace WowDataFileParser
                                 }
 
                                 lock (writer) {
-                                    writer.WriteLine($"REPLACE INTO `{fstruct.Table}` VALUES (\'{baseReader.Locale}\'{content}");
+                                    writer.WriteLine($"REPLACE INTO `{fstruct.Table}` VALUES (\'{baseReader.Locale}\'{content});");
                                 }
 
                                 if (rowReader.Remains > 0)
